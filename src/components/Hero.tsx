@@ -8,46 +8,47 @@ import HeroWidget from "./HeroWidget";
 // Custom Bezier for smooth "slide in"
 const smoothEase: [number, number, number, number] = [0.16, 1, 0.3, 1]; // Custom cubic-bezier for premium feel
 
-const slideUp = {
-    hidden: { y: 100, opacity: 0 },
+const slideUpText = {
+    hidden: { y: 60, opacity: 0 },
     visible: {
         y: 0,
         opacity: 1,
         transition: {
-            duration: 0.8,
+            duration: 1.0,
             ease: smoothEase
         }
     }
 };
 
-const slideRight = {
-    hidden: { x: -100, opacity: 0 },
+const slideUpImage = {
+    hidden: { y: 60, opacity: 0 },
     visible: {
-        x: 0,
+        y: 0,
         opacity: 1,
         transition: {
-            duration: 0.8,
-            ease: smoothEase
-        }
-    }
-};
-
-const slideLeft = {
-    hidden: { x: 100, opacity: 0 },
-    visible: {
-        x: 0,
-        opacity: 1,
-        transition: {
-            duration: 0.8,
+            duration: 1.0,
             ease: smoothEase,
             delay: 0.2
         }
     }
 };
 
+const slideUpWidget = {
+    hidden: { y: 60, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: {
+            duration: 1.0,
+            ease: smoothEase,
+            delay: 0.4
+        }
+    }
+};
+
 export default function Hero() {
     return (
-        <section className="relative w-full flex justify-center items-center pt-24 pb-40 bg-transparent">
+        <section className="relative w-full flex justify-center items-center py-40 bg-transparent">
 
             {/* Main Content Frame */}
             <div className="w-full max-w-[1200px] min-h-[700px] flex flex-col justify-center items-center gap-spacing-12 px-spacing-06 relative z-10">
@@ -57,7 +58,7 @@ export default function Hero() {
                     {/* Left Content - Text */}
                     <div className="space-y-8">
                         <motion.h1
-                            variants={slideRight}
+                            variants={slideUpText}
                             initial="hidden"
                             animate="visible"
                             className="font-display text-4xl md:text-[72px] font-medium text-white leading-[1.1]"
@@ -70,7 +71,7 @@ export default function Hero() {
                         </motion.h1>
 
                         <motion.p
-                            variants={slideRight}
+                            variants={slideUpText}
                             initial="hidden"
                             animate="visible"
                             transition={{ delay: 0.1 }}
@@ -85,7 +86,7 @@ export default function Hero() {
                     {/* Right Content - Image */}
                     <div className="relative w-full flex items-center justify-end">
                         <motion.div
-                            variants={slideLeft}
+                            variants={slideUpImage}
                             initial="hidden"
                             animate="visible"
                             className="relative w-full max-w-[500px] aspect-[4/3] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white/10"
@@ -122,10 +123,9 @@ export default function Hero() {
 
                 {/* Bottom Widget */}
                 <motion.div
-                    variants={slideUp}
+                    variants={slideUpWidget}
                     initial="hidden"
                     animate="visible"
-                    transition={{ delay: 0.4 }}
                     className="w-full mt-24 lg:mt-40 relative z-20"
                 >
                     <HeroWidget />

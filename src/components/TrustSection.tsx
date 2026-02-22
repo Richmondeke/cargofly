@@ -7,12 +7,14 @@ import { motion } from "framer-motion";
 
 export default function TrustSection() {
     return (
-        <section className="bg-transparent py-24 border-t border-white/10 mt-12">
+        <section className="bg-transparent py-40 border-t border-white/10">
             <div className="container mx-auto px-spacing-06">
                 <div className="text-center mb-spacing-10">
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                         className="font-display text-3xl md:text-4xl text-white mb-spacing-05"
                     >
                         Trusted by freight forwarders, exporters,
@@ -20,9 +22,10 @@ export default function TrustSection() {
                         and growing businesses worldwide.
                     </motion.h2>
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
                         className="text-white/60 text-lg font-body"
                     >
                         Your shipments deserve full visibility, faster processing, and a system you can rely on.

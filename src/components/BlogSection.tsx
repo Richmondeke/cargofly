@@ -30,7 +30,7 @@ const BLOG_POSTS = [
 
 export default function BlogSection() {
     return (
-        <section className="pt-24 pb-32 bg-transparent relative z-10">
+        <section className="py-40 bg-transparent relative z-10 border-t border-white/10">
             <div className="container mx-auto px-spacing-06">
                 <div className="flex flex-col mb-spacing-08">
                     <p className="text-white/60 font-body text-sm uppercase tracking-widest mb-2 px-1">Read News</p>
@@ -40,9 +40,10 @@ export default function BlogSection() {
                     {BLOG_POSTS.map((post, idx) => (
                         <motion.div
                             key={idx}
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 60 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: idx * 0.1 }}
                             className="bg-white/5 backdrop-blur-md rounded-3xl overflow-hidden shadow-xl border border-white/10 group cursor-pointer hover:bg-white/10 transition-colors"
                         >
                             <div className="p-8">

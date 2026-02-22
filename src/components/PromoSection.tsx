@@ -6,13 +6,13 @@ import { motion } from "framer-motion";
 
 export default function PromoSection() {
     return (
-        <section className="relative py-32 bg-transparent border-t border-white/10">
+        <section className="relative py-40 bg-transparent border-t border-white/10">
             <div className="container mx-auto px-spacing-06">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 60 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="bg-white rounded-[40px] p-spacing-05 md:p-spacing-07 shadow-2xl overflow-hidden"
                 >
                     <div className="relative rounded-[32px] overflow-hidden aspect-[21/9] w-full">
