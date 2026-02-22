@@ -47,7 +47,7 @@ const slideLeft = {
 
 export default function Hero() {
     return (
-        <section className="relative w-full flex justify-center items-center py-spacing-11 bg-[#003399]">
+        <section className="relative w-full flex justify-center items-center py-spacing-11 bg-transparent">
 
             {/* Main Content Frame */}
             <div className="w-full max-w-[1200px] min-h-[700px] flex flex-col justify-center items-center gap-spacing-12 px-spacing-06 relative z-10">
