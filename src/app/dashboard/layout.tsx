@@ -8,6 +8,9 @@ import LoadingAnimation from '@/components/LoadingAnimation';
 import { useAuth } from '@/contexts/AuthContext';
 
 
+import { NotificationProvider } from '@/contexts/NotificationContext';
+import NotificationSidebar from '@/components/dashboard/NotificationSidebar';
+
 export default function DashboardLayout({
     children,
 }: {
@@ -32,12 +35,15 @@ export default function DashboardLayout({
     }
 
     return (
-        <div className="flex h-screen w-full flex-row overflow-hidden bg-background-light dark:bg-background-dark" style={{ fontFamily: "'Inter', sans-serif" }}>
-            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-            <main className="flex-1 flex flex-col h-full overflow-hidden relative">
-                <MobileHeader onOpenConfig={() => setIsSidebarOpen(true)} />
-                {children}
-            </main>
-        </div>
+        <NotificationProvider>
+            <div className="flex h-screen w-full flex-row overflow-hidden bg-background-light dark:bg-background-dark" style={{ fontFamily: "'Inter', sans-serif" }}>
+                <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+                <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+                    <MobileHeader onOpenConfig={() => setIsSidebarOpen(true)} />
+                    {children}
+                </main>
+                <NotificationSidebar />
+            </div>
+        </NotificationProvider>
     );
 }

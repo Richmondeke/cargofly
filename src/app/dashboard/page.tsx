@@ -11,6 +11,7 @@ import {
     DashboardShipment,
 } from '@/lib/dashboard-service';
 import RiveAnimation from '@/components/ui/RiveAnimation';
+import { useNotifications } from '@/contexts/NotificationContext';
 
 // --- Components ---
 
@@ -80,6 +81,7 @@ export default function DashboardPage() {
     const [stats, setStats] = useState({ totalShipments: 0, inTransit: 0, delivered: 0, totalRevenue: 0, pending: 0 });
     const [shipments, setShipments] = useState<DashboardShipment[]>([]);
     const [showTrackModal, setShowTrackModal] = useState(false);
+    const { toggleSidebar, unreadCount } = useNotifications();
 
     useEffect(() => {
         if (authLoading || !user) return;
@@ -117,9 +119,14 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button className="relative p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                        <button
+                            onClick={toggleSidebar}
+                            className="relative p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                        >
                             <span className="material-symbols-outlined text-[24px]">notifications</span>
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#F8FAFC]"></span>
+                            {unreadCount > 0 && (
+                                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#F8FAFC]"></span>
+                            )}
                         </button>
                         <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
                             {(userProfile?.displayName?.[0] || 'BO').toUpperCase()}
