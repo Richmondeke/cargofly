@@ -8,11 +8,13 @@ import { motion } from "framer-motion";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 import { slideDown } from "@/lib/animations";
 
 export default function Navbar() {
     const { theme, toggleTheme } = useTheme();
+    const { user } = useAuth();
     const [scrolled, setScrolled] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -55,29 +57,11 @@ export default function Navbar() {
                 {/* Logo */}
                 <TransitionLink href="/" className="relative z-50 flex items-center gap-2 group">
                     <div className="relative w-32 md:w-40 h-10 md:h-12">
-                        {/* Dark Mode Logo (White) - Visible when dark OR when transparent navbar on dark hero (default) */}
                         <Image
-                            src="/logo-dark.png"
-                            alt="Caverton Helicopters"
+                            src={theme === "dark" ? "/logo-dark.png" : "/logo-light.png"}
+                            alt="Cargofly"
                             fill
-                            className={cn(
-                                "object-contain transition-opacity duration-300",
-                                // Show white logo if:
-                                // 1. Dark mode active
-                                // 2. Not scrolled (transparent bg on dark hero)
-                                (theme === "dark" || !scrolled) ? "opacity-100" : "opacity-0"
-                            )}
-                            priority
-                        />
-                        {/* Light Mode Logo (Blue) - Visible ONLY when scrolled on light mode */}
-                        <Image
-                            src="/logo-light.png"
-                            alt="Caverton Helicopters"
-                            fill
-                            className={cn(
-                                "object-contain transition-opacity duration-300 absolute inset-0",
-                                (theme === "light" && scrolled) ? "opacity-100" : "opacity-0"
-                            )}
+                            className="object-contain transition-opacity duration-300"
                             priority
                         />
                     </div>
@@ -100,7 +84,7 @@ export default function Navbar() {
                                             ? "text-gold-500 dark:text-gold-400"
                                             : scrolled
                                                 ? "text-navy-900/70 dark:text-white/70 hover:text-navy-900 dark:hover:text-white"
-                                                : "text-white/90 hover:text-white"
+                                                : "text-navy-900/90 dark:text-white/90 hover:text-navy-900 dark:hover:text-white"
                                     )}
                                 >
                                     {link.name}
@@ -116,27 +100,13 @@ export default function Navbar() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        {/* Theme Toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            className={cn(
-                                "p-2 rounded-full transition-colors",
-                                scrolled
-                                    ? "text-navy-900 dark:text-white hover:bg-navy-900/5 dark:hover:bg-white/10"
-                                    : "text-white hover:bg-white/10"
-                            )}
-                            aria-label="Toggle theme"
-                        >
-                            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                        </button>
-
                         <TransitionLink
                             href="/login"
                             className={cn(
                                 "text-sm font-body transition-colors border border-white/30 px-6 py-2 rounded-lg hover:bg-white/10",
                                 scrolled
                                     ? "text-navy-900 border-navy-900/30 dark:text-white dark:border-white/30"
-                                    : "text-white"
+                                    : "text-navy-900 border-navy-900/30 dark:text-white dark:border-white/30"
                             )}
                         >
                             Log in
@@ -157,14 +127,6 @@ export default function Navbar() {
 
                 {/* Mobile Menu Button - Moved right */}
                 <div className="flex items-center gap-4 md:hidden">
-                    {/* Mobile Theme Toggle */}
-                    <button
-                        onClick={toggleTheme}
-                        className="p-2 rounded-full hover:bg-white/10 transition-colors text-navy-900 dark:text-white"
-                    >
-                        {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                    </button>
-
                     <button
                         className="z-50 text-navy-900 dark:text-white p-2"
                         onClick={() => setIsOpen(!isOpen)}
@@ -203,6 +165,7 @@ export default function Navbar() {
                         transition={{ delay: 0.5 }}
                         className="flex flex-col items-center gap-6 mt-4"
                     >
+
                         <TransitionLink
                             href="/login"
                             onClick={() => setIsOpen(false)}

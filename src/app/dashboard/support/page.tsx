@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { getUserTickets, Ticket } from '@/lib/ticket-service';
-import RiveAnimation from '@/components/ui/RiveAnimation';
+import EmptyState from '@/components/common/EmptyState';
 
 export default function SupportPage() {
     const { user } = useAuth();
@@ -93,21 +93,21 @@ export default function SupportPage() {
                         ))}
                     </div>
                 ) : filteredTickets.length === 0 ? (
-                    <div className="p-12 text-center flex flex-col items-center">
-                        <div className="w-48 h-48 mb-4">
-                            <RiveAnimation src="/icons/empty-state.riv" />
-                        </div>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No tickets yet</h3>
-                        <p className="text-slate-500 dark:text-slate-400 mb-6">
-                            Need help? Create a support ticket and we&apos;ll get back to you.
-                        </p>
-                        <Link
-                            href="/dashboard/support/new"
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all"
-                        >
-                            <span className="material-symbols-outlined">add</span>
-                            Create Ticket
-                        </Link>
+                    <div className="p-4">
+                        <EmptyState
+                            title="No tickets yet"
+                            description="Need help? Create a support ticket and we'll get back to you."
+                            imageSrc="/images/illustrations/ground_crew.jpg"
+                            action={
+                                <Link
+                                    href="/dashboard/support/new"
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all"
+                                >
+                                    <span className="material-symbols-outlined">add</span>
+                                    Create Ticket
+                                </Link>
+                            }
+                        />
                     </div>
                 ) : (
                     <div className="divide-y divide-slate-100 dark:divide-slate-700">

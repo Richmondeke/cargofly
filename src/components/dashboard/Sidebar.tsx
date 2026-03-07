@@ -87,6 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
                 <SidebarLink to="/dashboard" icon="dashboard" label="Dashboard" active={pathname === '/dashboard'} onClick={onClose} />
                 <SidebarLink to="/dashboard/shipments" icon="inventory_2" label="Shipments" active={pathname?.startsWith('/dashboard/shipments')} onClick={onClose} />
                 <SidebarLink to="/dashboard/new-booking" icon="add_circle" label="New Booking" active={pathname === '/dashboard/new-booking'} onClick={onClose} />
+                <SidebarLink to="/dashboard/wallet" icon="account_balance_wallet" label="Wallet" active={pathname === '/dashboard/wallet'} onClick={onClose} />
                 <SidebarLink to="/dashboard/support" icon="support_agent" label="Support" active={pathname?.startsWith('/dashboard/support') && !pathname?.includes('admin')} onClick={onClose} />
 
                 {userProfile?.role === 'admin' && (
@@ -97,21 +98,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
                         <SidebarLink to="/dashboard/admin" icon="admin_panel_settings" label="Operations" active={pathname === '/dashboard/admin'} onClick={onClose} />
                         <SidebarLink to="/dashboard/admin/users" icon="group" label="Users" active={pathname === '/dashboard/admin/users'} onClick={onClose} />
                         <SidebarLink to="/dashboard/admin/support" icon="confirmation_number" label="Tickets" active={pathname?.startsWith('/dashboard/admin/support')} onClick={onClose} />
+                        <SidebarLink to="/dashboard/admin/rates" icon="currency_exchange" label="Shipping Rates" active={pathname === '/dashboard/admin/rates'} onClick={onClose} />
+                        <SidebarLink to="/dashboard/admin/blog" icon="article" label="Blog Posts" active={pathname?.startsWith('/dashboard/admin/blog')} onClick={onClose} />
                     </>
                 )}
                 <SidebarLink to="/dashboard/settings" icon="settings" label="Settings" active={pathname === '/dashboard/settings'} onClick={onClose} />
             </div>
 
             <div className="mt-auto pt-6 border-t border-white/10">
-                <button
-                    onClick={toggleTheme}
-                    className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors"
-                >
-                    <span className="material-symbols-outlined text-xl">
-                        {darkMode ? 'light_mode' : 'dark_mode'}
-                    </span>
-                    <span className="text-sm font-medium">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
-                </button>
                 <div className="flex items-center gap-3 mt-4 px-3">
                     <div className="size-9 rounded-full bg-white/20 overflow-hidden bg-cover bg-center flex items-center justify-center text-white font-bold" >
                         {userProfile?.displayName?.charAt(0) || 'U'}

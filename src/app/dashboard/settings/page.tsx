@@ -27,7 +27,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import SuccessModal from "@/components/ui/SuccessModal";
 
 export default function SettingsPage() {
-    const { user, userProfile } = useAuth();
+    const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [pushStatus, setPushStatus] = useState<'checking' | 'unsupported' | 'denied' | 'granted' | 'default'>('checking');
@@ -59,6 +59,7 @@ export default function SettingsPage() {
         email: '',
         phone: '',
         company: '',
+        location: '',
         timezone: 'UTC',
         notifications: {
             email: true,
@@ -78,6 +79,7 @@ export default function SettingsPage() {
                         email: settings.email || '',
                         phone: settings.phone || '',
                         company: settings.company || '',
+                        location: settings.location || '',
                         timezone: settings.timezone || 'UTC',
                         notifications: settings.notifications || { email: true, sms: false, push: true },
                     });
@@ -125,7 +127,7 @@ export default function SettingsPage() {
     }, [pushStatus]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
+        const { name, value } = e.target;
         if (name.startsWith('notifications.')) {
             const key = name.split('.')[1] as keyof typeof formData.notifications;
             setFormData(prev => ({
@@ -148,6 +150,7 @@ export default function SettingsPage() {
                 displayName: formData.displayName,
                 phone: formData.phone,
                 company: formData.company,
+                location: formData.location,
                 timezone: formData.timezone,
                 notifications: formData.notifications,
             });
@@ -387,6 +390,17 @@ export default function SettingsPage() {
                                 </div>
                             </div>
                             <div>
+                                <Label htmlFor="location">Location</Label>
+                                <Input
+                                    id="location"
+                                    type="text"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    placeholder="City, State, Country"
+                                />
+                            </div>
+                            <div>
                                 <Label htmlFor="timezone">Timezone</Label>
                                 <Select
                                     id="timezone"
@@ -421,7 +435,7 @@ export default function SettingsPage() {
                             <Checkbox
                                 name="notifications.email"
                                 checked={formData.notifications.email}
-                                onChange={(e) => handleChange({ target: { name: 'notifications.email', value: e.target.checked } } as any)}
+                                onChange={(e) => handleChange({ target: { name: 'notifications.email', value: e.target.checked } } as unknown as React.ChangeEvent<HTMLInputElement>)}
                             />
                         </label>
 
@@ -433,7 +447,7 @@ export default function SettingsPage() {
                             <Checkbox
                                 name="notifications.sms"
                                 checked={formData.notifications.sms}
-                                onChange={(e) => handleChange({ target: { name: 'notifications.sms', value: e.target.checked } } as any)}
+                                onChange={(e) => handleChange({ target: { name: 'notifications.sms', value: e.target.checked } } as unknown as React.ChangeEvent<HTMLInputElement>)}
                             />
                         </label>
 

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import EmptyState from '@/components/common/EmptyState';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -153,7 +154,7 @@ export default function DashboardPage() {
                     <div className="w-full lg:w-[45%] bg-blue-50 relative h-[220px] lg:h-full">
                         <div
                             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                            style={{ backgroundImage: 'url(/images/dashboard-banner.png)' }}
+                            style={{ backgroundImage: 'url(/images/illustrations/aircraft_hangar.jpg)' }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-r from-[#003399]/10 to-transparent"></div>
                     </div>
@@ -252,24 +253,19 @@ export default function DashboardPage() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={7} className="py-12 text-center">
-                                            <div className="flex flex-col items-center gap-4">
-                                                <div className="w-[200px] h-[200px]">
-                                                    <RiveAnimation src="/icons/empty-state.riv" />
-                                                </div>
-                                                <p className="text-slate-500">No shipments found.</p>
-                                                <Link href="/dashboard/new-booking">
-                                                    <button className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold">Create Order</button>
-                                                </Link>
-                                            </div>
+                                        <td colSpan={7} className="py-4">
+                                            <EmptyState
+                                                title="No shipments found"
+                                                description="You haven't made any bookings yet."
+                                            />
                                         </td>
                                     </tr>
                                 )}
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div >
+            </div >
+        </div >
     );
 }

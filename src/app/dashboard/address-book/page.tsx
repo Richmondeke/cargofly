@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getAddresses, addAddress, deleteAddress, SavedAddress } from '@/lib/dashboard-service';
-import LottieAnimation from '@/components/ui/LottieAnimation';
+import EmptyState from '@/components/common/EmptyState';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AddressBookPage() {
@@ -229,22 +229,19 @@ export default function AddressBookPage() {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-24 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 border-dashed">
-                    <div className="w-48 h-48 mx-auto mb-4">
-                        <LottieAnimation
-                            src="https://assets3.lottiefiles.com/packages/lf20_9wjm14ni.json"
-                            width="100%"
-                            height="100%"
-                        />
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No saved addresses</h3>
-                    <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">Add addresses to your book to autofill booking details.</p>
-                    <button
-                        onClick={() => setShowAddForm(true)}
-                        className="px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-                    >
-                        Add Address
-                    </button>
+                <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 border-dashed">
+                    <EmptyState
+                        title="No saved addresses"
+                        description="Add addresses to your book to autofill booking details."
+                        action={
+                            <button
+                                onClick={() => setShowAddForm(true)}
+                                className="px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                            >
+                                Add Address
+                            </button>
+                        }
+                    />
                 </div>
             )}
         </div>

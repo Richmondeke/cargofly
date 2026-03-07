@@ -55,7 +55,7 @@ function LoginContent() {
         <AuthLayout
             title="Welcome back to Cargofly"
             subtitle="Sign in to track your shipments, manage bookings, and view your logistics analytics."
-            imageSrc="/images/cargofly-truck.jpg" // Cargofly truck
+            imageSrc="/images/illustrations/warehouse_workers.jpg"
         >
             {/* Header */}
             <div className="text-center mb-8">
@@ -69,10 +69,10 @@ function LoginContent() {
                         priority
                     />
                 </Link>
-                <h1 className="text-2xl font-bold text-slate-900 mb-2">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                     Log in to your account
                 </h1>
-                <p className="text-slate-500 text-sm">
+                <p className="text-slate-500 dark:text-slate-400 text-sm">
                     Enter your details to access your dashboard
                 </p>
             </div>
@@ -144,7 +144,7 @@ function LoginContent() {
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
                     />
-                    <label htmlFor="remember" className="ml-2 text-sm text-slate-600 cursor-pointer">
+                    <label htmlFor="remember" className="ml-2 text-sm text-slate-600 dark:text-slate-400 cursor-pointer">
                         Remember me for 30 days
                     </label>
                 </div>
@@ -167,10 +167,10 @@ function LoginContent() {
 
             <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-100" />
+                    <div className="w-full border-t border-slate-100 dark:border-slate-800" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-4 text-slate-400 tracking-wider">
+                    <span className="bg-white dark:bg-slate-900 px-4 text-slate-400 dark:text-slate-500 tracking-wider">
                         Or continue with
                     </span>
                 </div>
@@ -189,7 +189,7 @@ function LoginContent() {
                         setIsLoading(false);
                     }
                 }}
-                className="w-full h-12 flex items-center justify-center gap-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-all active:scale-[0.98]"
+                className="w-full h-12 flex items-center justify-center gap-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-[0.98]"
             >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path

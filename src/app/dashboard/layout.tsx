@@ -4,9 +4,9 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/dashboard/Sidebar';
 import MobileHeader from '@/components/dashboard/MobileHeader';
-import LoadingAnimation from '@/components/LoadingAnimation';
+import LoadingAnimation from '@/components/common/LoadingAnimation';
 import { useAuth } from '@/contexts/AuthContext';
-
+import { useTransition } from '@/contexts/TransitionContext';
 
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import NotificationSidebar from '@/components/dashboard/NotificationSidebar';
@@ -17,6 +17,7 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     const { user, loading } = useAuth();
+    const { isLoading } = useTransition();
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const router = useRouter();
 
@@ -39,6 +40,7 @@ export default function DashboardLayout({
             <div className="flex h-screen w-full flex-row overflow-hidden bg-background-light dark:bg-background-dark" style={{ fontFamily: "'Inter', sans-serif" }}>
                 <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
                 <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+                    {isLoading && <LoadingAnimation />}
                     <MobileHeader onOpenConfig={() => setIsSidebarOpen(true)} />
                     {children}
                 </main>

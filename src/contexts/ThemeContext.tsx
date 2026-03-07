@@ -1,39 +1,42 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 type Theme = "dark" | "light";
 
 interface ThemeContextType {
     theme: Theme;
-    toggleTheme: () => void;
+    toggleTheme: () => void; // Keeping in interface for backwards compatibility if needed, though unused
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+    // Default to dark, but we will override based on route
     const [theme, setTheme] = useState<Theme>("dark");
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        // Check local storage or system preference
-        const savedTheme = localStorage.getItem("theme") as Theme;
-        if (savedTheme) {
-            setTheme(savedTheme);
-            document.documentElement.classList.toggle("dark", savedTheme === "dark");
-        } else {
-            // Default to dark for this app
-            setTheme("dark");
-            document.documentElement.classList.add("dark");
-        }
         setMounted(true);
     }, []);
 
+    useEffect(() => {
+        // Determine enforced theme based on path
+        const isDashboard = pathname?.startsWith('/dashboard');
+        const enforcedTheme: Theme = isDashboard ? "light" : "dark";
+
+        setTheme(enforcedTheme);
+        document.documentElement.classList.toggle("dark", enforcedTheme === "dark");
+
+        // Remove saved theme logic as we are strictly enforcing by route now
+        localStorage.removeItem("theme");
+    }, [pathname]);
+
     const toggleTheme = () => {
-        const newTheme = theme === "dark" ? "light" : "dark";
-        setTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
-        document.documentElement.classList.toggle("dark", newTheme === "dark");
+        // Disabled manually toggling - theme is enforced by route
+        console.warn("Manual theme toggling is disabled. Theme is enforced by route.");
     };
 
     return (

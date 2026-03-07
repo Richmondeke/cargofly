@@ -129,10 +129,7 @@ export default function LandingPageVariantC() {
                       <span className="material-symbols-outlined">arrow_forward</span>
                     </button>
                   </form>
-                  <p className="mt-6 text-sm text-white/70 flex items-center justify-center gap-2 font-medium">
-                    <span className="material-symbols-outlined text-[16px]">info</span>
-                    Popular trackers: DHL, FedEx, UPS, and Cargofly Express.
-                  </p>
+
                 </motion.div>
               ) : (
                 <motion.div

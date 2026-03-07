@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getClaims, createClaim, Claim, getActiveShipments, DashboardShipment } from '@/lib/dashboard-service';
+import EmptyState from '@/components/common/EmptyState';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ClaimsPage() {
@@ -191,12 +192,12 @@ export default function ClaimsPage() {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-24 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 border-dashed">
-                    <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span className="material-symbols-outlined text-3xl text-slate-400">verified_user</span>
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No active claims</h3>
-                    <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">Your shipments are all safe and sound.</p>
+                <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm border-dashed">
+                    <EmptyState
+                        title="No active claims"
+                        description="Your shipments are all safe and sound."
+                        imageSrc="/images/illustrations/warehouse_workers.jpg"
+                    />
                 </div>
             )}
         </div>

@@ -13,6 +13,7 @@ import {
     Linkedin,
     ArrowRight,
 } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const footerLinks = {
     company: [
@@ -36,6 +37,7 @@ import { cn } from "@/lib/utils";
 import { fadeInUp } from "@/lib/animations";
 
 export default function Footer({ isLanding }: { isLanding?: boolean }) {
+    const { theme } = useTheme();
     return (
         <motion.footer
             initial="hidden"
@@ -45,7 +47,7 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
             className={cn("relative border-t border-white/5 py-40", isLanding ? "bg-transparent" : "bg-navy-900")}
         >
             {/* Background Effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-navy-800/50 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-navy-800/50 via-transparent to-transparent pointer-events-none opacity-0 dark:opacity-100 transition-opacity duration-300" />
 
             <div className="container mx-auto px-spacing-06 relative z-10">
                 <div className="py-spacing-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-spacing-09 border-b border-navy-800/50">
@@ -53,7 +55,7 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
                     <div className="lg:col-span-4">
                         <div className="mb-6">
                             <Image
-                                src="/logo-dark.png"
+                                src={theme === 'dark' ? '/logo-dark.png' : '/logo-light.png'}
                                 alt="Cargofly"
                                 width={160}
                                 height={40}
@@ -148,7 +150,7 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
                 {/* Bottom Bar */}
                 <div className="py-spacing-07 border-t border-navy-900/10 flex flex-col md:flex-row items-center justify-between gap-spacing-05">
                     <p className="text-[#003399]/60 text-xs font-body">
-                        (c) Caverton, 2024
+                        (c) Cargofly, 2026
                     </p>
                 </div>
             </div>

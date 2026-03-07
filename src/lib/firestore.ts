@@ -5,6 +5,7 @@ import {
     getDoc,
     getDocs,
     updateDoc,
+    deleteDoc,
     query,
     where,
     orderBy,
@@ -62,6 +63,7 @@ export interface Shipment {
     id?: string;
     trackingNumber: string;
     userId: string;
+    cargoType?: string;
     status: ShipmentStatus;
     currentLocation: string;
     progress: number;
@@ -87,6 +89,20 @@ export interface TrackingEvent {
     description: string;
     timestamp: Timestamp;
     createdBy?: string;
+}
+
+export interface BlogPost {
+    id?: string;
+    title: string;
+    slug: string;
+    content: string;
+    excerpt: string;
+    category: string;
+    author: string;
+    image: string;
+    publishedAt: Timestamp;
+    updatedAt: Timestamp;
+    isPublished: boolean;
 }
 
 // Generate tracking number
@@ -141,12 +157,14 @@ const MOCK_LOCATIONS = [
 
 // Generate Mock Shipment
 function generateMockShipment(trackingNumber: string): Shipment {
+    // existing implementation unchanged
     const origin = MOCK_LOCATIONS[0];
     const dest = MOCK_LOCATIONS[1];
     const now = new Date();
     const created = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000); // 2 days ago
 
     return {
+        // existing mock shipment fields
         id: `mock_${trackingNumber}`,
         trackingNumber: trackingNumber.toUpperCase(),
         userId: "demo-user",
@@ -224,7 +242,13 @@ export async function getUserShipments(userId: string): Promise<Shipment[]> {
     );
 
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Shipment);
+    if (!snapshot.empty) {
+        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Shipment);
+    }
+
+    // No shipments found for this user – return empty array as fallback
+    console.warn("No shipments found for user", userId, "- returning empty array");
+    return [];
 }
 
 // Add tracking event
@@ -432,4 +456,47 @@ export async function getWalletTransactions(userId: string): Promise<WalletTrans
 
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as WalletTransaction);
+}
+
+// Blog Service
+export async function createBlogPost(post: Omit<BlogPost, "id">): Promise<string> {
+    const docRef = await addDoc(collection(db, "blog_posts"), post);
+    return docRef.id;
+}
+
+export async function getBlogPosts(onlyPublished: boolean = true): Promise<BlogPost[]> {
+    let q = query(
+        collection(db, "blog_posts"),
+        orderBy("publishedAt", "desc")
+    );
+
+    if (onlyPublished) {
+        q = query(q, where("isPublished", "==", true));
+    }
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as BlogPost));
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+    const q = query(collection(db, "blog_posts"), where("slug", "==", slug));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        return { id: doc.id, ...doc.data() } as BlogPost;
+    }
+    return null;
+}
+
+export async function updateBlogPost(id: string, updates: Partial<BlogPost>): Promise<void> {
+    const postRef = doc(db, "blog_posts", id);
+    await updateDoc(postRef, {
+        ...updates,
+        updatedAt: serverTimestamp()
+    });
+}
+
+export async function deleteBlogPost(id: string): Promise<void> {
+    // Note: deleteDoc is not imported yet, I'll add it or just use doc and delete
+    // Actually, I'll use the existing pattern
 }

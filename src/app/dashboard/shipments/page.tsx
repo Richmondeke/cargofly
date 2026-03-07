@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getActiveShipments, getUserById, DashboardShipment } from '@/lib/dashboard-service';
-import LottieAnimation from '@/components/ui/LottieAnimation';
+import EmptyState from '@/components/common/EmptyState';
 
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -213,23 +213,17 @@ export default function ShipmentsPage() {
                                     </tr>
                                 ))
                             ) : (
-                                <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center">
-                                        <div className="flex flex-col items-center gap-3">
-                                            <div className="w-48 h-48">
-                                                <LottieAnimation
-                                                    src="https://assets9.lottiefiles.com/packages/lf20_s2lryxtd.json"
-                                                    width="100%"
-                                                    height="100%"
-                                                />
-                                            </div>
-                                            <p className="text-slate-500 font-medium">No shipments found</p>
-                                            <Link href="/dashboard/new-booking" className="text-primary hover:underline font-medium">
+                                <td colSpan={5} className="px-6 py-4">
+                                    <EmptyState
+                                        title="No shipments found"
+                                        description="You don't have any cargo in transit at the moment."
+                                        action={
+                                            <Link href="/dashboard/new-booking" className="text-primary hover:underline">
                                                 Create your first booking
                                             </Link>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        }
+                                    />
+                                </td>
                             )}
                         </tbody>
                     </table>

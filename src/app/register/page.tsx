@@ -52,7 +52,7 @@ export default function RegisterPage() {
         <AuthLayout
             title="Start shipping with Cargofly"
             subtitle="Join thousands of businesses managing their logistics efficiently."
-            imageSrc="/images/cargofly-truck.jpg" // Cargofly truck
+            imageSrc="/images/illustrations/courier_plane.jpg"
         >
             <div className="text-center mb-8">
                 <Link href="/" className="inline-flex items-center gap-3 mb-6">

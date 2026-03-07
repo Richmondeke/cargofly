@@ -11,6 +11,7 @@ import {
     Printer,
     Search,
 } from "lucide-react";
+import Image from "next/image";
 import TrackingTimeline, { TrackingEvent as UITrackingEvent } from "@/components/TrackingTimeline";
 import FlightPath from "@/components/FlightPath";
 import {
@@ -91,6 +92,42 @@ function TrackPageContent() {
         }
     };
 
+    const handleShare = async () => {
+        const shareData = {
+            title: 'Cargofly Shipment Tracking',
+            text: `Track shipment ${trackingId || ''} on Cargofly`,
+            url: typeof window !== 'undefined' ? window.location.href : '',
+        };
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {
+                if ((err as Error).name !== 'AbortError') {
+                    console.error('Error sharing:', err);
+                }
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            } catch (err) {
+                console.error('Error copying to clipboard:', err);
+            }
+        }
+    };
+
+    const handlePrint = () => {
+        if (typeof window !== 'undefined') {
+            window.print();
+        }
+    };
+
+    const handleViewInvoice = () => {
+        alert("Invoice viewing functionality is coming soon! For now, please check your email for the official receipt.");
+    };
+
     const getProgress = (status: string) => {
         switch (status) {
             case "pending": return 10;
@@ -134,27 +171,44 @@ function TrackPageContent() {
                 >
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="flex-1 max-w-2xl">
-                            <div className="relative group">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-gold-500 transition-colors" />
-                                <input
-                                    type="text"
-                                    placeholder="Track another Shipment ID (e.g. CF-8829341029)"
-                                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white dark:bg-navy-800/50 border border-gray-200 dark:border-navy-700 focus:outline-none focus:ring-2 focus:ring-gold-500/20 focus:border-gold-500 transition-all text-navy-900 dark:text-white font-body"
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            const val = (e.target as HTMLInputElement).value;
-                                            if (val) setTrackingId(val);
-                                        }
-                                    }}
-                                />
-                            </div>
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const val = (e.currentTarget.elements.namedItem('trackingId') as HTMLInputElement).value;
+                                    if (val.trim()) setTrackingId(val.trim());
+                                }}
+                                className="relative group flex items-center gap-2"
+                            >
+                                <div className="relative flex-grow">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-gold-500 transition-colors" />
+                                    <input
+                                        name="trackingId"
+                                        type="text"
+                                        placeholder="Track another Shipment ID (e.g. CF-8829341029)"
+                                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white dark:bg-navy-800/50 border border-gray-200 dark:border-navy-700 focus:outline-none focus:ring-2 focus:ring-gold-500/20 focus:border-gold-500 transition-all text-navy-900 dark:text-white font-body shadow-sm"
+                                        defaultValue={trackingId || ''}
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold px-8 py-4 rounded-2xl transition-all shadow-md active:scale-95 whitespace-nowrap"
+                                >
+                                    Track Result
+                                </button>
+                            </form>
                         </div>
                         <div className="flex items-center gap-3">
-                            <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 dark:bg-navy-800 border border-gray-200 dark:border-navy-700 text-navy-900 dark:text-white hover:bg-gray-200 dark:hover:bg-navy-700 transition-colors text-sm font-bold font-body">
+                            <button
+                                onClick={handleShare}
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 dark:bg-navy-800 border border-gray-200 dark:border-navy-700 text-navy-900 dark:text-white hover:bg-gray-200 dark:hover:bg-navy-700 transition-colors text-sm font-bold font-body relative"
+                            >
                                 <Share2 className="w-4 h-4" />
-                                Share
+                                {copied ? "Link Copied!" : "Share"}
                             </button>
-                            <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-900 dark:bg-gold-500 text-white dark:text-navy-900 hover:bg-navy-800 dark:hover:bg-gold-400 transition-colors text-sm font-bold font-body">
+                            <button
+                                onClick={handlePrint}
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-900 dark:bg-gold-500 text-white dark:text-navy-900 hover:bg-navy-800 dark:hover:bg-gold-400 transition-colors text-sm font-bold font-body"
+                            >
                                 <Printer className="w-4 h-4" />
                                 Print
                             </button>
@@ -189,12 +243,23 @@ function TrackPageContent() {
                 {/* Error State */}
                 {error && !loading && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-center py-12 bg-red-500/10 rounded-xl border border-red-500/20 max-w-2xl mx-auto"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="text-center py-20 bg-white dark:bg-navy-800/50 rounded-[32px] border border-slate-200 dark:border-white/10 max-w-2xl mx-auto shadow-xl"
                     >
-                        <Info className="w-8 h-8 text-red-500 mx-auto mb-4" />
-                        <p className="text-red-200 font-body">{error}</p>
+                        <div className="w-20 h-20 bg-slate-100 dark:bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Info className="w-10 h-10 text-slate-400 dark:text-slate-500" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-navy-900 dark:text-white mb-4">Shipment Not Found</h2>
+                        <p className="text-slate-500 dark:text-gray-400 px-8 mb-8 font-body leading-relaxed">
+                            {error}. Please verify the tracking number and try again. If the problem persists, contact our support team.
+                        </p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="text-gold-500 font-bold hover:underline flex items-center justify-center gap-2 mx-auto"
+                        >
+                            <Search className="w-4 h-4" /> Try a Different ID
+                        </button>
                     </motion.div>
                 )}
 
@@ -217,35 +282,42 @@ function TrackPageContent() {
                         {/* Right Column: Details & Map */}
                         <div className="lg:col-span-8 space-y-8">
                             {/* Cargo Info Card */}
-                            <div className="bg-navy-900 rounded-3xl overflow-hidden text-white shadow-2xl">
-                                <div className="bg-navy-800/50 px-8 py-4 border-b border-white/5 flex items-center justify-between">
-                                    <div>
+                            <div className="bg-white dark:bg-navy-800 rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-white/5">
+                                <div className="bg-slate-100 dark:bg-navy-900 relative h-48 border-b border-slate-200 dark:border-white/5 overflow-hidden">
+                                    <Image
+                                        src="/images/illustrations/ground_crew.jpg"
+                                        alt="Ground Crew"
+                                        fill
+                                        className="object-cover opacity-60"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-navy-900 to-transparent" />
+                                    <div className="absolute bottom-6 left-8">
                                         <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase mb-1">Cargo Information</p>
-                                        <h3 className="font-display text-xl">Shipment Details</h3>
+                                        <h3 className="font-display text-2xl">Shipment Details</h3>
                                     </div>
-                                    <Package className="w-5 h-5 text-gold-500" />
+                                    <Package className="absolute bottom-6 right-8 w-6 h-6 text-gold-500" />
                                 </div>
                                 <div className="p-8">
                                     <div className="grid md:grid-cols-2 gap-y-10 gap-x-12 mb-10">
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Origin</p>
-                                            <p className="text-lg font-display">{shipment.sender.city}, {shipment.sender.country}</p>
+                                            <p className="text-[10px] text-slate-400 dark:text-gray-400 font-bold tracking-widest uppercase">Origin</p>
+                                            <p className="text-lg font-display text-navy-900 dark:text-white">{shipment.sender.city}, {shipment.sender.country}</p>
                                         </div>
                                         <div className="space-y-1 md:text-right">
-                                            <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Destination</p>
-                                            <p className="text-lg font-display">{shipment.recipient.city}, {shipment.recipient.country}</p>
+                                            <p className="text-[10px] text-slate-400 dark:text-gray-400 font-bold tracking-widest uppercase">Destination</p>
+                                            <p className="text-lg font-display text-navy-900 dark:text-white">{shipment.recipient.city}, {shipment.recipient.country}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Est. Delivery</p>
-                                            <p className="text-lg font-display text-gold-400">{formatDate(shipment.estimatedDelivery)}</p>
+                                            <p className="text-[10px] text-slate-400 dark:text-gray-400 font-bold tracking-widest uppercase">Est. Delivery</p>
+                                            <p className="text-lg font-display text-gold-500">{formatDate(shipment.estimatedDelivery)}</p>
                                         </div>
                                         <div className="space-y-1 md:text-right">
-                                            <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Weight</p>
-                                            <p className="text-lg font-display">{shipment.package.weight} kg</p>
+                                            <p className="text-[10px] text-slate-400 dark:text-gray-400 font-bold tracking-widest uppercase">Weight</p>
+                                            <p className="text-lg font-display text-navy-900 dark:text-white">{shipment.package.weight} kg</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Cargo Type</p>
-                                            <p className="text-lg font-display">{shipment.package.description}</p>
+                                            <p className="text-[10px] text-slate-400 dark:text-gray-400 font-bold tracking-widest uppercase">Cargo Type</p>
+                                            <p className="text-lg font-display text-navy-900 dark:text-white">{shipment.package.description}</p>
                                         </div>
                                         <div className="space-y-1 md:text-right">
                                             <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Service Level</p>
@@ -255,11 +327,14 @@ function TrackPageContent() {
                                         </div>
                                     </div>
 
-                                    <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                        <p className="text-gray-400 font-mono text-sm tracking-wider">
+                                    <div className="pt-8 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                        <p className="text-slate-400 dark:text-gray-400 font-mono text-sm tracking-wider">
                                             Invoice #INV-2023-8829
                                         </p>
-                                        <button className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition-colors text-sm font-bold font-body">
+                                        <button
+                                            onClick={handleViewInvoice}
+                                            className="px-6 py-3 rounded-xl bg-navy-900 dark:bg-blue-600 hover:bg-navy-800 dark:hover:bg-blue-500 text-white transition-colors text-sm font-bold font-body"
+                                        >
                                             View Invoice
                                         </button>
                                     </div>

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { createQuote } from "@/lib/dashboard-service";
+import Image from "next/image";
+import { createQuote, getRoutes, Route } from "@/lib/dashboard-service";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Package, MapPin, Scale, Zap, Loader2, ArrowRight, Truck, Plane } from "lucide-react";
+import { Package, MapPin, Scale, Zap, Loader2, ArrowRight, Truck, Plane, Shield, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface QuoteResult {
@@ -17,19 +18,37 @@ interface QuoteResult {
 export default function PricingCalculator() {
     const { user } = useAuth();
     const router = useRouter();
-    const [origin, setOrigin] = useState("");
+    const [origin, setOrigin] = useState("Lagos");
     const [destination, setDestination] = useState("");
     const [weight, setWeight] = useState("");
     const [dimensions, setDimensions] = useState({ length: "", width: "", height: "" });
     const [service, setService] = useState<"express" | "standard" | "economy">("standard");
     const [isCalculating, setIsCalculating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [cargoType, setCargoType] = useState("general");
     const [quote, setQuote] = useState<QuoteResult | null>(null);
+    const [availableRoutes, setAvailableRoutes] = useState<Route[]>([]);
+
+    useEffect(() => {
+        const fetchRoutes = async () => {
+            const routes = await getRoutes();
+            setAvailableRoutes(routes);
+        };
+        fetchRoutes();
+    }, []);
 
     const services = [
         { id: "express", name: "Express Air", icon: Plane, days: "1-2 days" },
         { id: "standard", name: "Standard Air", icon: Zap, days: "3-5 days" },
         { id: "economy", name: "Ground", icon: Truck, days: "7-10 days" },
+    ];
+
+    const cargoTypes = [
+        { id: "general", name: "General Cargo" },
+        { id: "perishable", name: "Perishable" },
+        { id: "hazardous", name: "Hazardous" },
+        { id: "live_animals", name: "Live Animals" },
+        { id: "healthcare", name: "Healthcare" },
     ];
 
     const calculateQuote = async () => {
@@ -38,17 +57,31 @@ export default function PricingCalculator() {
         setIsCalculating(true);
         setQuote(null);
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        // Simulate API call delay for UX
+        await new Promise((resolve) => setTimeout(resolve, 800));
 
-        const baseRates = { express: 85, standard: 45, economy: 25 };
+        const selectedRoute = availableRoutes.find(
+            (r) => r.origin.toLowerCase() === origin.toLowerCase() &&
+                r.destination.toLowerCase() === destination.toLowerCase()
+        );
+
+        if (!selectedRoute) {
+            alert("No route found for this selection.");
+            setIsCalculating(false);
+            return;
+        }
+
         const weightNum = parseFloat(weight) || 1;
-        const calculatedPrice = baseRates[service] * weightNum;
+        const baseRate = selectedRoute.rate;
+
+        // Simple multiplier for service types if not explicitly defined in route
+        const multiplier = service === 'express' ? 1.5 : (service === 'standard' ? 1 : 0.8);
+        const calculatedPrice = baseRate * weightNum * multiplier;
 
         setQuote({
-            price: calculatedPrice,
-            currency: "USD",
-            estimatedDays: services.find((s) => s.id === service)?.days || "3-5 days",
+            price: Math.round(calculatedPrice),
+            currency: selectedRoute.currency,
+            estimatedDays: selectedRoute.transitTime || (services.find((s) => s.id === service)?.days || "3-5 days"),
             service: services.find((s) => s.id === service)?.name || "Standard",
             serviceId: service,
         });
@@ -75,11 +108,10 @@ export default function PricingCalculator() {
                     height: parseFloat(dimensions.height) || 0,
                 },
                 price: quote.price,
+                cargoType,
             });
 
-            // Show feedback and close
             setQuote(null);
-            // Optionally could show a toast here
             router.push("/dashboard/quotes");
         } catch (error) {
             console.error("Failed to save quote:", error);
@@ -109,23 +141,34 @@ export default function PricingCalculator() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="relative">
                             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold-500/70" />
-                            <input
-                                type="text"
+                            <select
                                 value={origin}
                                 onChange={(e) => setOrigin(e.target.value)}
-                                placeholder="Origin (City, Country)"
-                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body"
-                            />
+                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-gold-500/50 transition-all font-body appearance-none"
+                            >
+                                <option value="" className="bg-navy-900">Select Origin</option>
+                                {[...new Set(availableRoutes.map(r => r.origin))].map(o => (
+                                    <option key={o} value={o} className="bg-navy-900">{o}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="relative">
                             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
-                            <input
-                                type="text"
+                            <select
                                 value={destination}
                                 onChange={(e) => setDestination(e.target.value)}
-                                placeholder="Destination (City, Country)"
-                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body"
-                            />
+                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-gold-500/50 transition-all font-body appearance-none"
+                            >
+                                <option value="" className="bg-navy-900">Select Destination</option>
+                                {availableRoutes
+                                    .filter(r => r.origin === origin)
+                                    .map(r => (
+                                        <option key={r.id} value={r.destination} className="bg-navy-900">
+                                            {r.destination} ({r.type})
+                                        </option>
+                                    ))
+                                }
+                            </select>
                         </div>
                     </div>
 
@@ -143,6 +186,57 @@ export default function PricingCalculator() {
                                 className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body"
                             />
                         </div>
+
+                        {/* Cargo Type Selection */}
+                        <div className="md:col-span-2">
+                            <label className="block text-sm text-white/40 mb-3 font-body uppercase tracking-wider">
+                                Cargo Type
+                            </label>
+                            <div className="grid grid-cols-2 lg:grid-cols-5 gap-2">
+                                {cargoTypes.map((type) => (
+                                    <button
+                                        key={type.id}
+                                        type="button"
+                                        onClick={() => setCargoType(type.id)}
+                                        className={cn(
+                                            "p-3 rounded-xl border transition-all text-center group",
+                                            cargoType === type.id
+                                                ? "bg-gold-500/20 border-gold-500/50 text-white shadow-[0_0_15px_rgba(202,138,4,0.15)]"
+                                                : "bg-white/5 border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
+                                        )}
+                                    >
+                                        <span className="text-xs font-bold uppercase tracking-wide font-body truncate block">
+                                            {type.name === "Live Animals" ? "Live Animals" : type.name}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* MSDS Warning */}
+                        <AnimatePresence>
+                            {cargoType === "hazardous" && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="md:col-span-2 overflow-hidden"
+                                >
+                                    <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 flex gap-3 items-start">
+                                        <AlertTriangle className="w-5 h-5 text-orange-400 shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-orange-400 text-sm font-bold uppercase tracking-wider mb-1">
+                                                MSDS Required
+                                            </p>
+                                            <p className="text-orange-400/80 text-xs font-body leading-relaxed">
+                                                A Material Safety Data Sheet (MSDS) is mandatory for hazardous cargo. Please ensure you have this document ready for tender.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
                         <div className="grid grid-cols-3 gap-2">
                             <div className="relative">
                                 <input
@@ -269,9 +363,15 @@ export default function PricingCalculator() {
                                     </svg>
                                 </button>
 
-                                {/* Success Icon */}
-                                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gold-500 flex items-center justify-center">
-                                    <Package className="w-8 h-8 text-navy-900" />
+                                {/* Success Illustration */}
+                                <div className="w-full h-40 mx-auto mb-6 rounded-2xl overflow-hidden relative border border-white/10">
+                                    <Image
+                                        src="/images/illustrations/logistics_checklist.jpg"
+                                        alt="Quote Ready"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 to-transparent" />
                                 </div>
 
                                 <h3 className="font-display text-2xl text-white text-center mb-2">

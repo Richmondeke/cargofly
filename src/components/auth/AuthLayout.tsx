@@ -15,7 +15,7 @@ export default function AuthLayout({
     subtitle
 }: AuthLayoutProps) {
     return (
-        <div className="min-h-screen w-full flex bg-slate-50">
+        <div className="min-h-screen w-full flex bg-slate-50 dark:bg-slate-950">
             {/* Left Side - Image */}
             <div className="hidden lg:block w-1/2 relative bg-slate-900">
                 <Image
@@ -38,7 +38,7 @@ export default function AuthLayout({
 
             {/* Right Side - Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12">
-                <div className="w-full max-w-[480px] space-y-8 bg-white p-10 rounded-2xl shadow-sm border border-slate-100">
+                <div className="w-full max-w-[480px] space-y-8 bg-white dark:bg-slate-900 p-10 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
                     {children}
                 </div>
             </div>

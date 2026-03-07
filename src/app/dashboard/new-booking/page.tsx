@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { createBooking } from '@/lib/dashboard-service';
+import { createBooking, getRoutes, Route } from '@/lib/dashboard-service';
 import LottieAnimation from '@/components/ui/LottieAnimation';
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -108,6 +108,12 @@ export default function NewBookingPage() {
                     phone: formData.recipientPhone,
                     email: formData.recipientEmail,
                 },
+                price: {
+                    base: basePrice,
+                    fuel: 25,
+                    total: totalPrice,
+                    currency: currency,
+                },
             }, "paid");
 
             setTrackingNumber(tracking);
@@ -127,10 +133,36 @@ export default function NewBookingPage() {
         { number: 4, label: 'Confirm' },
     ];
 
+    const [availableRoutes, setAvailableRoutes] = useState<Route[]>([]);
+
+    useEffect(() => {
+        const fetchRoutes = async () => {
+            const routes = await getRoutes();
+            setAvailableRoutes(routes);
+        };
+        fetchRoutes();
+    }, []);
+
+    // Find current route
+    const currentRoute = availableRoutes.find(
+        r => r.origin.toLowerCase().includes(formData.origin.toLowerCase().split(',')[0]) &&
+            r.destination.toLowerCase().includes(formData.destination.toLowerCase().split(',')[0])
+    );
+
     // Calculate estimated price
-    const basePrice = formData.serviceType === 'express' ? 250 : (formData.serviceType === 'standard' ? 150 : 100);
-    const weightPrice = (parseFloat(formData.weight) || 0) * 10;
-    const totalPrice = basePrice + weightPrice + 25; // + fees
+    const calculatePrices = () => {
+        if (!currentRoute) {
+            const base = formData.serviceType === 'express' ? 250 : (formData.serviceType === 'standard' ? 150 : 100);
+            const weightP = (parseFloat(formData.weight) || 0) * 10;
+            return { base, total: base + weightP + 25, currency: 'USD' };
+        }
+
+        const multiplier = formData.serviceType === 'express' ? 1.5 : (formData.serviceType === 'standard' ? 1 : 0.8);
+        const base = currentRoute.rate * (parseFloat(formData.weight) || 1) * multiplier;
+        return { base, total: base + 25, currency: currentRoute.currency };
+    };
+
+    const { base: basePrice, total: totalPrice, currency } = calculatePrices();
 
     return (
         <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
@@ -334,7 +366,9 @@ export default function NewBookingPage() {
                                 <div className="p-6 rounded-xl bg-gold-50 dark:bg-gold-900/10 border border-gold-200 dark:border-gold-800/30">
                                     <div className="flex justify-between items-center mb-2">
                                         <span className="text-slate-600 dark:text-slate-400">Total Estimated Cost</span>
-                                        <span className="text-3xl font-black text-slate-900 dark:text-white">${totalPrice.toFixed(2)}</span>
+                                        <span className="text-3xl font-black text-slate-900 dark:text-white">
+                                            {currency === 'NGN' ? '₦' : '$'}{totalPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        </span>
                                     </div>
                                     <p className="text-xs text-slate-500">Includes base rate, weight charges, and fuel surcharge.</p>
                                 </div>

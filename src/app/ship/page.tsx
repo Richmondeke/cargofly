@@ -1,6 +1,7 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Package,
@@ -13,17 +14,21 @@ import {
     Shield,
     Clock,
     Plane,
+    AlertTriangle,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import PricingCalculator from "@/components/PricingCalculator";
+import dynamicImport from "next/dynamic";
+const PricingCalculator = dynamicImport(() => import("@/components/PricingCalculator"), { ssr: false });
 import { cn } from "@/lib/utils";
 import { createShipment, ShipmentAddress, ShipmentPackage } from "@/lib/firestore";
+import { getRoutes, Route } from "@/lib/dashboard-service";
 import { useAuth } from "@/contexts/AuthContext";
 import { Timestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Textarea } from "@/components/ui/Textarea";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { Select } from "@/components/ui/Select";
 
 type ViewMode = "quote" | "book";
 type PaymentMethod = "card";
@@ -35,6 +40,14 @@ const steps = [
     { id: 4, title: "Payment", icon: CreditCard },
 ];
 
+const cargoTypes = [
+    { id: "general", name: "General Cargo" },
+    { id: "perishable", name: "Perishable" },
+    { id: "hazardous", name: "Hazardous" },
+    { id: "live_animals", name: "Live Animals" },
+    { id: "healthcare", name: "Healthcare" },
+];
+
 export default function ShipPage() {
     const [viewMode, setViewMode] = useState<ViewMode>("quote");
     const [currentStep, setCurrentStep] = useState(1);
@@ -42,6 +55,35 @@ export default function ShipPage() {
     const { user } = useAuth();
     const [isBooking, setIsBooking] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
+
+    const [availableRoutes, setAvailableRoutes] = useState<Route[]>([]);
+    const [currentRoute, setCurrentRoute] = useState<Route | undefined>(undefined);
+
+    useEffect(() => {
+        const fetchRoutes = async () => {
+            const routes = await getRoutes();
+            setAvailableRoutes(routes);
+        };
+        fetchRoutes();
+    }, []);
+
+
+
+
+    const calculatePrices = () => {
+        if (!currentRoute) {
+            const base = 40 * (parseFloat(packageDetails.weight) || 1);
+            const insuranceP = packageDetails.insurance ? 20 : 0;
+            return { base, total: base + insuranceP + 25, currency: 'USD' };
+        }
+
+        const multiplier = 1.0; // Express by default in this flow or based on some other field
+        const base = currentRoute.rate * (parseFloat(packageDetails.weight) || 1) * multiplier;
+        const insuranceP = packageDetails.insurance ? 20 : 0;
+        return { base, total: base + insuranceP + 25, currency: currentRoute.currency };
+    };
+
+    const { base: basePrice, total: totalPrice, currency } = calculatePrices();
 
     // Form State
     const [packageDetails, setPackageDetails] = useState({
@@ -53,7 +95,10 @@ export default function ShipPage() {
         isFragile: false,
         requiresSignature: false,
         insurance: false,
+        cargoType: "general",
     });
+    // State for MSDS file when hazardous cargo is selected
+    const [msdsFile, setMsdsFile] = useState<File | null>(null);
 
     const [sender, setSender] = useState({
         name: "",
@@ -80,6 +125,11 @@ export default function ShipPage() {
         // Basic validation
         if (!packageDetails.weight || !sender.name || !recipient.name) {
             alert("Please fill in all required fields.");
+            return;
+        }
+        // Hazardous cargo requires MSDS file
+        if (packageDetails.cargoType === "hazardous" && !msdsFile) {
+            alert("Please upload the MSDS file for hazardous cargo.");
             return;
         }
 
@@ -132,10 +182,11 @@ export default function ShipPage() {
                     fuel: 25,
                     insurance: insurancePrice,
                     total: totalPrice,
-                    currency: "USD"
+                    currency: currency
                 },
                 estimatedDelivery: Timestamp.fromDate(estimatedDelivery),
-                paymentStatus: "paid"
+                paymentStatus: "paid",
+                cargoType: packageDetails.cargoType
             });
 
             if (user) {
@@ -275,6 +326,55 @@ export default function ShipPage() {
                                             <h2 className="font-display text-2xl text-navy-900 dark:text-white mb-6">
                                                 Package Details
                                             </h2>
+                                            <div className="space-y-4">
+                                                <div>
+                                                    <Label htmlFor="cargoType">Cargo Type</Label>
+                                                    <Select
+                                                        id="cargoType"
+                                                        value={packageDetails.cargoType}
+                                                        onChange={(e) => setPackageDetails({ ...packageDetails, cargoType: e.target.value })}
+                                                    >
+                                                        {cargoTypes.map((type) => (
+                                                            <option key={type.id} value={type.id} className="bg-white dark:bg-navy-900">
+                                                                {type.name}
+                                                            </option>
+                                                        ))}
+                                                    </Select>
+                                                </div>
+
+                                                <AnimatePresence>
+                                                    {packageDetails.cargoType === "hazardous" && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: "auto" }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            className="overflow-hidden"
+                                                        >
+                                                            <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 flex gap-3 items-start">
+                                                                <AlertTriangle className="w-5 h-5 text-orange-400 shrink-0 mt-0.5" />
+                                                                <div>
+                                                                    <p className="text-orange-400 text-sm font-bold uppercase tracking-wider mb-1">
+                                                                        MSDS Required
+                                                                    </p>
+                                                                    <p className="text-orange-400/80 text-xs font-body leading-relaxed">
+                                                                        A Material Safety Data Sheet (MSDS) is mandatory for hazardous cargo. Please upload the file below.
+                                                                    </p>
+                                                                    <Input
+                                                                        type="file"
+                                                                        accept=".pdf,.doc,.docx"
+                                                                        onChange={e => {
+                                                                            const file = e.target.files?.[0] ?? null;
+                                                                            setMsdsFile(file);
+                                                                        }}
+                                                                        className="mt-2"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+
                                             <div className="grid grid-cols-3 gap-4">
                                                 <div>
                                                     <Label htmlFor="weight">Weight (kg)</Label>
@@ -492,7 +592,7 @@ export default function ShipPage() {
                                                         Estimated Total
                                                     </span>
                                                     <span className="font-display text-3xl text-navy-900 dark:text-white">
-                                                        ${(40 * (parseFloat(packageDetails.weight) || 1) + (packageDetails.insurance ? 20 : 0) + 25).toFixed(2)}
+                                                        {currency === 'NGN' ? '₦' : '$'}{totalPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                     </span>
                                                 </div>
                                                 <p className="text-xs text-navy-900/40 dark:text-white/40 font-body">

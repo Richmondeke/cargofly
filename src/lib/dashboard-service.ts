@@ -14,7 +14,6 @@ import {
     limit,
     Timestamp,
     serverTimestamp,
-    onSnapshot,
     QueryConstraint,
 } from "firebase/firestore";
 import { db } from "./firebase";
@@ -31,7 +30,7 @@ export interface DashboardShipment {
     progress: number;
     eta: string;
     price?: { total: number; currency: string };
-    package?: { description: string; weight: number; dimensions?: any };
+    package?: { description: string; weight: number; dimensions?: { length: number; width: number; height: number } };
     category: string;
     weight: string;
     createdAt?: Timestamp;
@@ -86,6 +85,7 @@ export interface Quote {
     destination: string;
     serviceType: "express" | "standard" | "economy";
     weight: number;
+    cargoType?: string;
     dimensions: { length: number; width: number; height: number };
     price: number;
     expiresAt: Timestamp;
@@ -126,6 +126,10 @@ export interface Route {
     origin: string;
     destination: string;
     transitTime: string;
+    distance?: string;
+    rate: number;
+    currency: string;
+    type: "local" | "regional";
     modes: string[];
     frequency: string;
     status: "active" | "suspended";
@@ -362,8 +366,6 @@ export async function updateShipmentStatus(
         await logActivity(userId, userName, `${action}: ${status}`, "shipment", shipmentId);
     }
 }
-
-// ============== MONTHLY VOLUME ==============
 
 // ============== MONTHLY VOLUME ==============
 
@@ -792,6 +794,12 @@ export async function createBooking(
             phone: string;
             email?: string;
         };
+        price: {
+            base: number;
+            fuel: number;
+            total: number;
+            currency: string;
+        };
     },
     paymentStatus: Shipment['paymentStatus'] = "pending"
 ): Promise<string> {
@@ -845,12 +853,7 @@ export async function createBooking(
         estimatedDelivery: Timestamp.fromDate(
             new Date(Date.now() + (bookingData.serviceType === "express" ? 3 : 7) * 24 * 60 * 60 * 1000)
         ),
-        price: {
-            base: bookingData.serviceType === "express" ? 250 : 150,
-            fuel: 25,
-            total: bookingData.serviceType === "express" ? 275 : 175,
-            currency: "USD",
-        },
+        price: bookingData.price,
         paymentStatus,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -870,17 +873,22 @@ export async function seedInitialData(): Promise<void> {
     // Seed locations
     const locationsRef = collection(db, "locations");
     const locSnapshot = await getDocs(locationsRef);
+    const existingLocNames = new Set(locSnapshot.docs.map(d => d.data().name));
 
-    if (locSnapshot.empty) {
-        const locations = [
-            { name: "Lagos Hub", code: "LOS", type: "hub", city: "Lagos", country: "Nigeria", status: "active", capacity: 5000 },
-            { name: "London Warehouse", code: "LHR", type: "warehouse", city: "London", country: "UK", status: "active", capacity: 8000 },
-            { name: "Dubai Airport", code: "DXB", type: "airport", city: "Dubai", country: "UAE", status: "active", capacity: 12000 },
-            { name: "New York Hub", code: "JFK", type: "hub", city: "New York", country: "USA", status: "active", capacity: 10000 },
-            { name: "Shanghai Port", code: "SHA", type: "port", city: "Shanghai", country: "China", status: "active", capacity: 15000 },
-        ];
+    const locations = [
+        { name: "Lagos Hub", code: "LOS", type: "hub", city: "Lagos", country: "Nigeria", status: "active", capacity: 5000 },
+        { name: "London Warehouse", code: "LHR", type: "warehouse", city: "London", country: "UK", status: "active", capacity: 8000 },
+        { name: "Dubai Airport", code: "DXB", type: "airport", city: "Dubai", country: "UAE", status: "active", capacity: 12000 },
+        { name: "New York Hub", code: "JFK", type: "hub", city: "New York", country: "USA", status: "active", capacity: 10000 },
+        { name: "Shanghai Port", code: "SHA", type: "port", city: "Shanghai", country: "China", status: "active", capacity: 15000 },
+        { name: "Accra", code: "ACC", type: "airport", city: "Accra", country: "Ghana", status: "active", capacity: 2000 },
+        { name: "Cotonou", code: "COO", type: "airport", city: "Cotonou", country: "Benin", status: "active", capacity: 1500 },
+        { name: "Lomé", code: "LFW", type: "airport", city: "Lomé", country: "Togo", status: "active", capacity: 1500 },
+        { name: "Abidjan", code: "ABJ", type: "airport", city: "Abidjan", country: "Ivory Coast", status: "active", capacity: 2500 },
+    ];
 
-        for (const loc of locations) {
+    for (const loc of locations) {
+        if (!existingLocNames.has(loc.name)) {
             await addDoc(locationsRef, { ...loc, createdAt: serverTimestamp() });
         }
     }
@@ -888,17 +896,51 @@ export async function seedInitialData(): Promise<void> {
     // Seed routes
     const routesRef = collection(db, "routes");
     const routeSnapshot = await getDocs(routesRef);
+    const existingRouteDestinations = new Set(routeSnapshot.docs.map(d => d.data().destination));
 
-    if (routeSnapshot.empty) {
-        const routes = [
-            { origin: "Lagos", destination: "London", transitTime: "3-5 days", modes: ["Air"], frequency: "Daily", status: "active" },
-            { origin: "Lagos", destination: "Dubai", transitTime: "2-3 days", modes: ["Air"], frequency: "Daily", status: "active" },
-            { origin: "New York", destination: "Lagos", transitTime: "5-7 days", modes: ["Air", "Sea"], frequency: "3x Weekly", status: "active" },
-            { origin: "Shanghai", destination: "Lagos", transitTime: "14-21 days", modes: ["Sea"], frequency: "Weekly", status: "active" },
-        ];
+    const routes = [
+        // LOCAL
+        { origin: "Lagos", destination: "North - Central", transitTime: "1.5HRS", distance: "1.5HRS", rate: 2500, currency: "NGN", type: "local", modes: ["Air"], frequency: "Daily", status: "active" },
+        { origin: "Lagos", destination: "North - East", transitTime: "2.6HRS", distance: "2.6HRS", rate: 3500, currency: "NGN", type: "local", modes: ["Air"], frequency: "Daily", status: "active" },
+        { origin: "Lagos", destination: "North-West", transitTime: "2.4HRS", distance: "2.4HRS", rate: 3500, currency: "NGN", type: "local", modes: ["Air"], frequency: "Daily", status: "active" },
+        { origin: "Lagos", destination: "South - East", transitTime: "1.2HRS", distance: "1.2HRS", rate: 2500, currency: "NGN", type: "local", modes: ["Air"], frequency: "Daily", status: "active" },
+        { origin: "Lagos", destination: "South - South", transitTime: "0.9HRS", distance: "0.9HRS", rate: 2500, currency: "NGN", type: "local", modes: ["Air"], frequency: "Daily", status: "active" },
+        // REGIONAL
+        { origin: "Lagos", destination: "Ghana", transitTime: "1.18HRS", distance: "1.18HRS", rate: 8, currency: "USD", type: "regional", modes: ["Air"], frequency: "Daily", status: "active" },
+        { origin: "Lagos", destination: "Benin", transitTime: "0.32HRS", distance: "0.32HRS", rate: 7, currency: "USD", type: "regional", modes: ["Air"], frequency: "Daily", status: "active" },
+        { origin: "Lagos", destination: "Togo", transitTime: "0.59HRS", distance: "0.59HRS", rate: 7, currency: "USD", type: "regional", modes: ["Air"], frequency: "Daily", status: "active" },
+        { origin: "Lagos", destination: "Abidjan", transitTime: "1.76HRS", distance: "1.76HRS", rate: 8.5, currency: "USD", type: "regional", modes: ["Air"], frequency: "Daily", status: "active" },
+    ];
 
-        for (const route of routes) {
+    for (const route of routes) {
+        if (!existingRouteDestinations.has(route.destination)) {
             await addDoc(routesRef, { ...route, createdAt: serverTimestamp() });
         }
     }
+}
+
+export async function updateRoute(routeId: string, data: Partial<Omit<Route, "id">>): Promise<void> {
+    const routeRef = doc(db, "routes", routeId);
+    await updateDoc(routeRef, {
+        ...data,
+        updatedAt: serverTimestamp(),
+    });
+}
+
+export async function addRoute(data: Omit<Route, "id">): Promise<string> {
+    const routesRef = collection(db, "routes");
+    const docRef = await addDoc(routesRef, {
+        ...data,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+    });
+    return docRef.id;
+}
+
+export async function deleteRoute(routeId: string): Promise<void> {
+    const routeRef = doc(db, "routes", routeId);
+    await updateDoc(routeRef, {
+        status: "inactive",
+        updatedAt: serverTimestamp(),
+    });
 }

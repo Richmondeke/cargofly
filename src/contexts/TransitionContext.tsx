@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 
 interface TransitionContextType {
     isExiting: boolean;
+    isLoading: boolean;
     startExitAnimation: (href: string) => void;
 }
 
@@ -12,6 +13,7 @@ const TransitionContext = createContext<TransitionContextType | undefined>(undef
 
 export function TransitionProvider({ children }: { children: ReactNode }) {
     const [isExiting, setIsExiting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -19,6 +21,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         if (pathname === href) return;
 
         setIsExiting(true);
+        setIsLoading(true);
 
         // Animate out duration: Match this with your Framer Motion exit duration
         setTimeout(() => {
@@ -26,12 +29,13 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
             // Wait a slight tick for router to catch up before resetting
             setTimeout(() => {
                 setIsExiting(false);
-            }, 100);
+                setIsLoading(false);
+            }, 500); // Increased delay to ensure visibility of the Lottie animation
         }, 500); // 500ms duration for the exit animation
     };
 
     return (
-        <TransitionContext.Provider value={{ isExiting, startExitAnimation }}>
+        <TransitionContext.Provider value={{ isExiting, isLoading, startExitAnimation }}>
             {children}
         </TransitionContext.Provider>
     );

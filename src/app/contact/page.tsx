@@ -47,23 +47,29 @@ const locations = [
 
 const faqs = [
     {
-        element: "faq-1",
-        question: "How do I track my shipment?",
-        answer:
-            "You can track your shipment using the 12-digit tracking number provided in your booking confirmation. Enter it on our homepage or tracking page for real-time updates.",
+        question: "What types of shipping services does Cargofly offer?",
+        answer: "We offer per-pound cargo, Express for dedicated aircraft and flexible scheduling, and courier services for urgent documents and small packages. We also handle special cargo such as live animals, healthcare products, and fresh goods."
     },
     {
-        element: "faq-2",
-        question: "What are your prohibited items?",
-        answer:
-            "We adhere to IATA Dangerous Goods Regulations. Prohibited items include explosives, radioactive materials, and certain flammable substances. Please contact us for a detailed list.",
+        question: "How are freight charges determined?",
+        answer: "Pricing is based on a combination of weight and dimensions. Exact charges are determined when the shipment is tendered. Minimum fees and dimensional weight rules apply."
     },
     {
-        element: "faq-3",
-        question: "Do you offer insurance?",
-        answer:
-            "Yes, all shipments are automatically insured up to $100. Additional comprehensive insurance coverage is available for high-value items at competitive rates.",
+        question: "When do I need to pay for my shipment?",
+        answer: "All shipments must be paid in full before departing from the origin facility. Please note that a 3% processing fee applies to credit card payments, while debit cards are exempt."
     },
+    {
+        question: "What are the requirements for picking up shipments?",
+        answer: "Major shipments must be picked up within 48 hours of arrival at our neighbor island facilities to avoid storage fees."
+    },
+    {
+        question: "Do you partner with major retailers?",
+        answer: "Yes, we partner with major retailers like Home Depot and Lowe's for inter-island shipping. Through our retail partnerships, we also facilitate shopping from Oʻahu retailers like Costco, Sam's Club, Target, and Walmart."
+    },
+    {
+        question: "Can you handle perishable or special items?",
+        answer: "Yes, we handle fresh, refrigerated, and frozen items with temperature-controlled handling. We also offer expert transportation for live animals, ensuring their safety and well-being."
+    }
 ];
 
 export default function ContactPage() {
@@ -343,7 +349,7 @@ export default function ContactPage() {
                             >
                                 <button
                                     onClick={() =>
-                                        setActiveFaq(activeFaq === faq.element ? null : faq.element)
+                                        setActiveFaq(activeFaq === faq.question ? null : faq.question)
                                     }
                                     className="w-full flex items-center justify-between p-6 text-left"
                                 >
@@ -358,14 +364,14 @@ export default function ContactPage() {
                                     <ChevronDown
                                         className={cn(
                                             "w-5 h-5 text-white/40 transition-transform duration-300",
-                                            activeFaq === faq.element ? "rotate-180" : ""
+                                            activeFaq === faq.question ? "rotate-180" : ""
                                         )}
                                     />
                                 </button>
                                 <div
                                     className={cn(
                                         "px-6 transition-all duration-300 overflow-hidden font-body text-white/60 leading-relaxed",
-                                        activeFaq === faq.element
+                                        activeFaq === faq.question
                                             ? "max-h-40 pb-6 opacity-100"
                                             : "max-h-0 opacity-0"
                                     )}
