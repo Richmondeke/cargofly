@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,7 +20,14 @@ import dynamicImport from "next/dynamic";
 const PricingCalculator = dynamicImport(() => import("@/components/PricingCalculator"), { ssr: false });
 import { cn } from "@/lib/utils";
 import { createShipment, ShipmentAddress, ShipmentPackage } from "@/lib/firestore";
-import { getRoutes, Route } from "@/lib/dashboard-service";
+// Removed server-only import. Route type defined locally.
+
+type Route = {
+    origin: string;
+    destination: string;
+    rate: number;
+    currency: string;
+};
 import { useAuth } from "@/contexts/AuthContext";
 import { Timestamp } from "firebase/firestore";
 import { Input } from "@/components/ui/Input";
@@ -59,32 +65,6 @@ export default function ShipPage() {
     const [availableRoutes, setAvailableRoutes] = useState<Route[]>([]);
     const [currentRoute, setCurrentRoute] = useState<Route | undefined>(undefined);
 
-    useEffect(() => {
-        const fetchRoutes = async () => {
-            const routes = await getRoutes();
-            setAvailableRoutes(routes);
-        };
-        fetchRoutes();
-    }, []);
-
-
-
-
-    const calculatePrices = () => {
-        if (!currentRoute) {
-            const base = 40 * (parseFloat(packageDetails.weight) || 1);
-            const insuranceP = packageDetails.insurance ? 20 : 0;
-            return { base, total: base + insuranceP + 25, currency: 'USD' };
-        }
-
-        const multiplier = 1.0; // Express by default in this flow or based on some other field
-        const base = currentRoute.rate * (parseFloat(packageDetails.weight) || 1) * multiplier;
-        const insuranceP = packageDetails.insurance ? 20 : 0;
-        return { base, total: base + insuranceP + 25, currency: currentRoute.currency };
-    };
-
-    const { base: basePrice, total: totalPrice, currency } = calculatePrices();
-
     // Form State
     const [packageDetails, setPackageDetails] = useState({
         weight: "",
@@ -115,6 +95,47 @@ export default function ShipPage() {
         city: "",
         country: "",
     });
+
+    useEffect(() => {
+        const fetchRoutes = async () => {
+            try {
+                const { getRoutes } = await import("@/lib/dashboard-service");
+                const routes = await getRoutes();
+                setAvailableRoutes(routes);
+            } catch (err) {
+                console.error("Failed to load routes:", err);
+            }
+        };
+        fetchRoutes();
+    }, []);
+
+    // Compute current route whenever sender or recipient city changes and routes are loaded
+    useEffect(() => {
+        if (sender.city && recipient.city && availableRoutes.length) {
+            const route = availableRoutes.find(
+                r => r.origin.toLowerCase().includes(sender.city.toLowerCase().trim()) &&
+                    r.destination.toLowerCase().includes(recipient.city.toLowerCase().trim())
+            );
+            setCurrentRoute(route);
+        } else {
+            setCurrentRoute(undefined);
+        }
+    }, [sender.city, recipient.city, availableRoutes]);
+
+    const calculatePrices = () => {
+        if (!currentRoute) {
+            const base = 40 * (parseFloat(packageDetails.weight) || 1);
+            const insuranceP = packageDetails.insurance ? 20 : 0;
+            return { base, total: base + insuranceP + 25, currency: 'USD' };
+        }
+
+        const multiplier = 1.0; // Express by default in this flow or based on some other field
+        const base = currentRoute.rate * (parseFloat(packageDetails.weight) || 1) * multiplier;
+        const insuranceP = packageDetails.insurance ? 20 : 0;
+        return { base, total: base + insuranceP + 25, currency: currentRoute.currency };
+    };
+
+    const { base: basePrice, total: totalPrice, currency } = calculatePrices();
 
     const handleBookShipment = async () => {
         if (!user) {
