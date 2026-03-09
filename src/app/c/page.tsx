@@ -268,7 +268,7 @@ export default function LandingPageVariantC() {
             </div>
             <motion.a
               whileHover={{ x: 10 }}
-              className="text-gold-500 font-semibold flex items-center gap-2 hover:underline" href="#"
+              className="text-gold-500 font-semibold flex items-center gap-2 hover:underline" href="/dashboard/new-booking"
             >
               Explore All Aviation Services <span className="material-symbols-outlined">arrow_right_alt</span>
             </motion.a>
@@ -301,6 +301,7 @@ export default function LandingPageVariantC() {
                 </li>
               </ul>
               <motion.button
+                onClick={() => router.push('/dashboard/new-booking')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full py-4 rounded-xl border-2 border-white/20 text-white font-bold hover:bg-gold-500 hover:border-gold-500 hover:text-black transition-all duration-300"

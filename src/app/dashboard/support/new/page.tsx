@@ -4,7 +4,13 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { createTicket } from '@/lib/ticket-service';
+import { createTicket, Ticket } from '@/lib/ticket-service';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
+import { Textarea } from '@/components/ui/Textarea';
+import { ArrowLeft, Send } from 'lucide-react';
 
 export default function NewTicketPage() {
     const { user, userProfile } = useAuth();
@@ -12,8 +18,8 @@ export default function NewTicketPage() {
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         subject: '',
-        category: 'general' as 'shipping' | 'billing' | 'technical' | 'general',
-        priority: 'medium' as 'low' | 'medium' | 'high',
+        category: 'general' as Ticket['category'],
+        priority: 'medium' as Ticket['priority'],
         description: '',
         shipmentId: '',
     });
@@ -44,127 +50,141 @@ export default function NewTicketPage() {
     };
 
     return (
-        <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 h-full bg-slate-50 dark:bg-background-dark">
             {/* Header */}
             <div className="mb-8">
-                <Link
-                    href="/dashboard/support"
-                    className="inline-flex items-center gap-1 text-slate-500 hover:text-primary mb-4 transition-colors"
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    asChild
+                    className="mb-4 -ml-2"
                 >
-                    <span className="material-symbols-outlined text-sm">arrow_back</span>
-                    Back to Support
-                </Link>
-                <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">New Ticket</h2>
-                <p className="text-slate-500 dark:text-slate-400 mt-1">Describe your issue and we&apos;ll help you out</p>
+                    <Link href="/dashboard/support" className="flex items-center gap-2">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Support
+                    </Link>
+                </Button>
+                <div className="mt-2">
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">New Ticket</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">Describe your issue and we&apos;ll help you out</p>
+                </div>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="max-w-2xl">
-                <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-8 space-y-6">
-                    {/* Subject */}
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Subject *
-                        </label>
-                        <input
-                            type="text"
-                            required
-                            value={form.subject}
-                            onChange={(e) => setForm(prev => ({ ...prev, subject: e.target.value }))}
-                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="Brief description of your issue"
-                        />
-                    </div>
-
-                    {/* Category & Priority */}
-                    <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="max-w-3xl">
+                <Card className="border-none shadow-2xl shadow-slate-200/50 dark:shadow-none">
+                    <CardHeader className="pb-2">
+                        <CardTitle>Ticket Details</CardTitle>
+                        <CardDescription>Fill in the details below to open a new support request.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6 pt-6-pt-4">
+                        {/* Subject */}
                         <div>
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                Category
+                                Subject *
                             </label>
-                            <select
-                                value={form.category}
-                                onChange={(e) => setForm(prev => ({ ...prev, category: e.target.value as typeof form.category }))}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white"
-                            >
-                                <option value="general">General Inquiry</option>
-                                <option value="shipping">Shipping Issue</option>
-                                <option value="billing">Billing Question</option>
-                                <option value="technical">Technical Problem</option>
-                            </select>
+                            <Input
+                                type="text"
+                                required
+                                value={form.subject}
+                                onChange={(e) => setForm(prev => ({ ...prev, subject: e.target.value }))}
+                                placeholder="Brief description of your issue"
+                            />
                         </div>
+
+                        {/* Category & Priority */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                    Category
+                                </label>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                        Category
+                                    </label>
+                                    <Select
+                                        value={form.category}
+                                        onChange={(e) => setForm(prev => ({ ...prev, category: e.target.value as any }))}
+                                    >
+                                        <option value="general">General Inquiry</option>
+                                        <option value="shipment">Shipment Issue</option>
+                                        <option value="payment">Payment/Billing</option>
+                                        <option value="duties">Customs & Duties</option>
+                                        <option value="tracking">Tracking Help</option>
+                                        <option value="claims">Shipping Claims</option>
+                                        <option value="technical">Technical Problem</option>
+                                    </Select>
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                    Priority
+                                </label>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                        Priority
+                                    </label>
+                                    <Select
+                                        value={form.priority}
+                                        onChange={(e) => setForm(prev => ({ ...prev, priority: e.target.value as typeof form.priority }))}
+                                    >
+                                        <option value="low">🟢 Low</option>
+                                        <option value="medium">🟡 Medium</option>
+                                        <option value="high">🔴 High</option>
+                                    </Select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Shipment ID (optional) */}
                         <div>
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                                Priority
+                                Related Shipment ID (optional)
                             </label>
-                            <select
-                                value={form.priority}
-                                onChange={(e) => setForm(prev => ({ ...prev, priority: e.target.value as typeof form.priority }))}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white"
-                            >
-                                <option value="low">🟢 Low</option>
-                                <option value="medium">🟡 Medium</option>
-                                <option value="high">🔴 High</option>
-                            </select>
+                            <Input
+                                type="text"
+                                value={form.shipmentId}
+                                onChange={(e) => setForm(prev => ({ ...prev, shipmentId: e.target.value }))}
+                                placeholder="e.g. SHP-1234"
+                            />
                         </div>
-                    </div>
 
-                    {/* Shipment ID (optional) */}
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Related Shipment ID (optional)
-                        </label>
-                        <input
-                            type="text"
-                            value={form.shipmentId}
-                            onChange={(e) => setForm(prev => ({ ...prev, shipmentId: e.target.value }))}
-                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white"
-                            placeholder="e.g. SHP-1234"
-                        />
-                    </div>
+                        {/* Description */}
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                Description *
+                            </label>
+                            <Textarea
+                                required
+                                rows={6}
+                                value={form.description}
+                                onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
+                                placeholder="Please describe your issue in detail..."
+                                className="resize-none"
+                            />
+                        </div>
 
-                    {/* Description */}
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Description *
-                        </label>
-                        <textarea
-                            required
-                            rows={6}
-                            value={form.description}
-                            onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
-                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white resize-none"
-                            placeholder="Please describe your issue in detail..."
-                        />
-                    </div>
-
-                    {/* Submit */}
-                    <div className="flex gap-4 pt-4">
-                        <Link
-                            href="/dashboard/support"
-                            className="flex-1 px-6 py-3 text-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors"
-                        >
-                            Cancel
-                        </Link>
-                        <button
-                            type="submit"
-                            disabled={loading || !form.subject || !form.description}
-                            className="flex-1 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                            {loading ? (
-                                <>
-                                    <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
-                                    Creating...
-                                </>
-                            ) : (
-                                <>
-                                    <span className="material-symbols-outlined text-sm">send</span>
-                                    Submit Ticket
-                                </>
-                            )}
-                        </button>
-                    </div>
-                </div>
+                        {/* Submit */}
+                        <div className="flex gap-4 pt-4">
+                            <Button
+                                variant="ghost"
+                                className="flex-1"
+                                onClick={() => router.push('/dashboard/support')}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={loading || !form.subject || !form.description}
+                                loading={loading}
+                                leftIcon={<Send className="w-4 h-4" />}
+                                className="flex-1"
+                            >
+                                Submit Ticket
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
             </form>
         </div>
     );

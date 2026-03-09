@@ -44,16 +44,16 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className={cn("relative border-t border-white/5 py-40", isLanding ? "bg-transparent" : "bg-navy-900")}
+            className={cn("relative border-t border-white/5 py-16 md:py-40", isLanding ? "bg-transparent" : "bg-navy-900")}
         >
             {/* Background Effects */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-navy-800/50 via-transparent to-transparent pointer-events-none opacity-0 dark:opacity-100 transition-opacity duration-300" />
 
-            <div className="container mx-auto px-spacing-06 relative z-10">
-                <div className="py-spacing-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-spacing-09 border-b border-navy-800/50">
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 border-b border-navy-800/50">
                     {/* Brand Column */}
                     <div className="lg:col-span-4">
-                        <div className="mb-6">
+                        <TransitionLink href="/" className="mb-6 block">
                             <Image
                                 src={theme === 'dark' ? '/logo-dark.png' : '/logo-light.png'}
                                 alt="Cargofly"
@@ -61,16 +61,24 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
                                 height={40}
                                 className="object-contain"
                             />
-                        </div>
+                        </TransitionLink>
                         <p className="text-[#003399]/70 dark:text-white/60 text-sm font-body mb-8 max-w-sm">
                             The pinnacle of West African aviation logistics. Premium cargo services, real-time tracking, and white-glove delivery.
                         </p>
                         <div className="flex gap-4">
-                            {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
-                                <TransitionLink key={i} href="#" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all">
-                                    <Icon className="w-4 h-4" />
-                                </TransitionLink>
-                            ))}
+                            {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => {
+                                const urls = [
+                                    "https://facebook.com/cargofly",
+                                    "https://twitter.com/cargofly",
+                                    "https://instagram.com/cargofly",
+                                    "https://linkedin.com/company/cargofly"
+                                ];
+                                return (
+                                    <TransitionLink key={i} href={urls[i]} className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-gold-500 hover:text-navy-900 transition-all">
+                                        <Icon className="w-4 h-4" />
+                                    </TransitionLink>
+                                );
+                            })}
                         </div>
                     </div>
 

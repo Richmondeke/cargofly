@@ -30,11 +30,19 @@ export interface DashboardShipment {
     progress: number;
     eta: string;
     price?: { total: number; currency: string };
-    package?: { description: string; weight: number; dimensions?: { length: number; width: number; height: number } };
+    paymentStatus?: string;
+    totalPrice?: string;
+    packages?: { description: string; weight: number; dimensions?: { length: number; width: number; height: number } }[];
     category: string;
     weight: string;
     createdAt?: Timestamp;
     estimatedDelivery?: Timestamp;
+    consignmentMedia?: {
+        url: string;
+        type: 'image' | 'video';
+        name: string;
+        createdAt: Timestamp;
+    }[];
 }
 
 export interface MonthlyVolume {
@@ -176,17 +184,19 @@ export async function getDashboardStats(userId?: string, role?: string) {
             // Normalize status to lowercase for comparison
             const status = (data.status || '').toLowerCase();
 
-            if (status === "in_transit" || status === "in transit" || status === "at_hub" || status === "at hub" || status === "out_for_delivery" || status === "out for delivery") {
+            // Mapping logic for in_transit
+            const inTransitStatuses = ["in_transit", "in transit", "at_hub", "at hub", "out_for_delivery", "out for delivery", "on_way", "at_destination_hub"];
+            if (inTransitStatuses.includes(status)) {
                 inTransit++;
             }
-            if (status === "delivered") {
+            if (status === "delivered" || status === "completed") {
                 delivered++;
             }
-            if (status === "pending" || status === "confirmed") {
+            if (status === "pending" || status === "confirmed" || status === "awaiting_pickup") {
                 pending++;
             }
             if (data.price?.total) {
-                totalRevenue += data.price.total;
+                totalRevenue += (data.price.total || 0);
             }
         });
 
@@ -236,29 +246,35 @@ export async function getActiveShipments(userId?: string, role?: string, statusF
     const shipmentsRef = collection(db, "shipments");
     const constraints: QueryConstraint[] = [];
 
-    // If filtering by userId, we can't combine with orderBy without a composite index
-    // So we fetch without orderBy and sort in memory
-    if (userId) {
+    // To avoid composite index requirements for every filter combination,
+    // we only use orderBy when NO filters are applied. Otherwise we sort in memory.
+    const hasUserId = !!userId;
+    const hasStatusFilter = !!(statusFilter && statusFilter.toLowerCase() !== "all");
+    const hasAnyFilter = hasUserId || hasStatusFilter;
+
+    if (hasUserId) {
         constraints.push(where("userId", "==", userId));
-    } else {
-        // Only use orderBy when NOT filtering by userId to avoid composite index requirement
+    }
+
+    if (hasStatusFilter) {
+        const _filter = statusFilter!.toLowerCase();
+        const statusMap: Record<string, ShipmentStatus[]> = {
+            "in transit": ["in_transit", "at_hub", "out_for_delivery", "picked_up"],
+            "customs hold": ["customs_hold"],
+            "delivered": ["delivered"],
+            "pending": ["pending", "confirmed"],
+        };
+        const statuses = statusMap[_filter];
+        if (statuses && statuses.length > 0) {
+            constraints.push(where("status", "in", statuses));
+        }
+    }
+
+    if (!hasAnyFilter) {
         constraints.push(orderBy("createdAt", "desc"));
     }
 
     constraints.push(limit(50));
-
-    if (statusFilter && statusFilter !== "all") {
-        const statusMap: Record<string, ShipmentStatus[]> = {
-            "In Transit": ["in_transit", "at_hub", "out_for_delivery"],
-            "Customs Hold": ["at_hub"],
-            "Delivered": ["delivered"],
-            "Pending": ["pending", "confirmed"],
-        };
-        const statuses = statusMap[statusFilter];
-        if (statuses && statuses.length === 1) {
-            constraints.push(where("status", "==", statuses[0]));
-        }
-    }
 
     const q = query(shipmentsRef, ...constraints);
     const snapshot = await getDocs(q);
@@ -286,16 +302,21 @@ export async function getActiveShipments(userId?: string, role?: string, statusF
             progress: data.progress || 0,
             eta,
             price: data.price,
-            package: data.package,
+            paymentStatus: data.paymentStatus || 'pending',
+            totalPrice: data.price ? `${data.price.currency === 'NGN' ? '₦' : '$'}${data.price.total.toLocaleString()}` : 'N/A',
+            packages: data.packages,
             category: data.service || "General",
-            weight: data.package?.weight ? `${data.package.weight}kg` : "N/A",
+            weight: data.packages?.length > 0
+                ? `${data.packages.reduce((sum, p) => sum + p.weight, 0).toFixed(1)}kg`
+                : ((data as any).package?.weight ? `${(data as any).package.weight}kg` : "N/A"),
             createdAt: data.createdAt,
-            estimatedDelivery: data.estimatedDelivery
+            estimatedDelivery: data.estimatedDelivery,
+            consignmentMedia: data.consignmentMedia
         };
     });
 
-    // Sort in memory when filtering by userId (since we couldn't use orderBy)
-    if (userId) {
+    // Sort in memory when filtering (since we couldn't use orderBy)
+    if (hasAnyFilter) {
         results.sort((a, b) => {
             const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
             const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
@@ -319,13 +340,14 @@ function formatStatus(status: ShipmentStatus): string {
     const map: Record<ShipmentStatus, string> = {
         pending: "Pending",
         confirmed: "Pending",
-        picked_up: "In Transit",
+        picked_up: "Picked Up",
+        at_hub: "At Hub",
         in_transit: "In Transit",
-        at_hub: "Customs",
-        out_for_delivery: "In Transit",
+        out_for_delivery: "Out for Delivery",
         delivered: "Delivered",
         cancelled: "Cancelled",
         returned: "Returned",
+        customs_hold: "Customs Hold"
     };
     return map[status] || status;
 }
@@ -783,7 +805,7 @@ export async function createBooking(
             height: number;
             description: string;
             isFragile: boolean;
-        };
+        }[];
         sender: {
             name: string;
             phone: string;
@@ -838,17 +860,18 @@ export async function createBooking(
             phone: bookingData.recipient.phone,
             email: bookingData.recipient.email,
         },
-        package: {
-            weight: bookingData.packageDetails.weight,
+        packages: bookingData.packageDetails.map(p => ({
+            weight: p.weight,
             dimensions: {
-                length: bookingData.packageDetails.length,
-                width: bookingData.packageDetails.width,
-                height: bookingData.packageDetails.height,
+                length: p.length,
+                width: p.width,
+                height: p.height,
             },
-            description: bookingData.packageDetails.description,
-            isFragile: bookingData.packageDetails.isFragile,
+            description: p.description,
+            pieces: 1,
+            isFragile: p.isFragile,
             requiresSignature: true,
-        },
+        })),
         service: bookingData.serviceType as "express" | "standard" | "economy",
         estimatedDelivery: Timestamp.fromDate(
             new Date(Date.now() + (bookingData.serviceType === "express" ? 3 : 7) * 24 * 60 * 60 * 1000)

@@ -20,6 +20,7 @@ const statusOptions = [
     { value: 'delivered', label: 'Delivered', color: 'text-emerald-600 bg-emerald-50 hover:bg-emerald-100' },
     { value: 'cancelled', label: 'Cancelled', color: 'text-red-600 bg-red-50 hover:bg-red-100' },
     { value: 'returned', label: 'Returned', color: 'text-slate-600 bg-slate-50 hover:bg-slate-100' },
+    { value: 'customs_hold', label: 'Customs Hold', color: 'text-amber-600 bg-amber-50 hover:bg-amber-100' },
 ];
 
 export default function StatusDropdown({ currentStatus, onStatusChange, loading = false }: StatusDropdownProps) {

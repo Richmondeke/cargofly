@@ -4,7 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCustomers, TeamMember } from '@/lib/dashboard-service';
 import { useAuth } from '@/contexts/AuthContext';
+import { StatusPill } from '@/components/dashboard/StatusPill';
 import RiveAnimation from '@/components/ui/RiveAnimation';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { User, Eye, Lock, Mail, Calendar } from 'lucide-react';
 
 export default function AdminUsersPage() {
     const { userProfile } = useAuth();
@@ -55,10 +59,10 @@ export default function AdminUsersPage() {
 
     return (
         <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
-            <div className="flex justify-between items-center mb-8">
-                <div>
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Registered Users</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Manage and view customer activities</p>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div className="text-left">
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Registered Users</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">Manage and view customer activities</p>
                 </div>
             </div>
 
@@ -100,22 +104,21 @@ export default function AdminUsersPage() {
                                         </td>
                                         <td className="hidden md:table-cell px-6 py-4 text-slate-600 dark:text-slate-300">{user.email}</td>
                                         <td className="px-4 md:px-6 py-4">
-                                            <span className="inline-flex items-center gap-1.5 px-2 md:px-2.5 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
-                                                Active
-                                            </span>
+                                            <StatusPill status="success" />
                                         </td>
                                         <td className="hidden lg:table-cell px-6 py-4 text-slate-500">
                                             {user.joinedAt?.toDate ? user.joinedAt.toDate().toLocaleDateString() : 'N/A'}
                                         </td>
                                         <td className="px-4 md:px-6 py-4 text-right">
-                                            <button
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
                                                 onClick={() => handleViewShipments(user.uid)}
-                                                className="px-2 md:px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg text-xs font-bold transition-all whitespace-nowrap"
+                                                className="rounded-xl shadow-sm hover:bg-primary hover:text-white transition-all whitespace-nowrap"
+                                                leftIcon={<Eye className="w-3.5 h-3.5" />}
                                             >
-                                                View
-                                                <span className="hidden md:inline ml-1">Shipments</span>
-                                            </button>
+                                                View <span className="hidden md:inline">Shipments</span>
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))

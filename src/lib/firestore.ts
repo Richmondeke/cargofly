@@ -9,10 +9,17 @@ import {
     query,
     where,
     orderBy,
+    limit,
     Timestamp,
     serverTimestamp,
+    arrayUnion,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "firebase/storage";
+import { db, storage } from "./firebase";
 
 // Types
 export interface ShipmentAddress {
@@ -28,6 +35,8 @@ export interface ShipmentAddress {
 }
 
 export interface ShipmentPackage {
+    id?: string; // Internal parcel ID
+    parcelId?: string; // User-facing tracking ID for Agent sub-users
     weight: number;
     dimensions: {
         length: number;
@@ -35,6 +44,8 @@ export interface ShipmentPackage {
         height: number;
     };
     description: string;
+    pieces: number;
+    ticketNumber?: string;
     declaredValue?: number;
     isFragile: boolean;
     requiresSignature: boolean;
@@ -57,7 +68,8 @@ export type ShipmentStatus =
     | "out_for_delivery"
     | "delivered"
     | "cancelled"
-    | "returned";
+    | "returned"
+    | "customs_hold";
 
 export interface Shipment {
     id?: string;
@@ -67,11 +79,23 @@ export interface Shipment {
     status: ShipmentStatus;
     currentLocation: string;
     progress: number;
-    package: ShipmentPackage;
+    packages: ShipmentPackage[];
     sender: ShipmentAddress;
     recipient: ShipmentAddress;
     service: "express" | "standard" | "economy";
     estimatedDelivery: Timestamp;
+    departureDate?: Timestamp;
+    poNumber?: string;
+    bookingComments?: string;
+    isDangerousGoods?: boolean;
+    customsDuty?: number;
+    customsDutyStatus?: "none" | "pending" | "paid";
+    consignmentMedia?: {
+        url: string;
+        type: 'image' | 'video';
+        name: string;
+        createdAt: Timestamp;
+    }[];
     price: ShipmentPrice;
     paymentStatus: "pending" | "paid" | "failed" | "refunded";
     paymentMethod?: string;
@@ -105,6 +129,14 @@ export interface BlogPost {
     isPublished: boolean;
 }
 
+// Upload a blog cover image
+export async function uploadBlogImage(file: File): Promise<string> {
+    const filename = `blog_covers/${Date.now()}_${file.name}`;
+    const storageRef = ref(storage, filename);
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef);
+}
+
 // Generate tracking number
 export function generateTrackingNumber(): string {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -124,6 +156,11 @@ export async function createShipment(
     const shipment: Omit<Shipment, "id"> = {
         ...shipmentData,
         trackingNumber,
+        packages: shipmentData.packages.map((pkg, index) => ({
+            ...pkg,
+            id: pkg.id || `pkg-${Date.now()}-${index}`,
+            parcelId: pkg.parcelId || `${trackingNumber}-${(index + 1).toString().padStart(2, '0')}`
+        })),
         status: "pending",
         currentLocation: shipmentData.sender.city + ", " + shipmentData.sender.country,
         progress: 0,
@@ -171,13 +208,14 @@ function generateMockShipment(trackingNumber: string): Shipment {
         status: "in_transit",
         currentLocation: "Frankfurt, Germany", // Transit hub
         progress: 50,
-        package: {
+        packages: [{
             weight: 5.5,
             dimensions: { length: 30, width: 20, height: 15 },
             description: "General Cargo",
+            pieces: 1,
             isFragile: false,
             requiresSignature: true
-        },
+        }],
         sender: {
             name: "Sender Name",
             street: "123 Origin St",
@@ -231,6 +269,73 @@ export async function getShipmentByTracking(trackingNumber: string): Promise<Shi
     // Fallback: Mock Data for specific formats or ALWAYS for demo if requested
     console.log("Generating mock data for:", trackingNumber);
     return generateMockShipment(trackingNumber);
+}
+
+// Get shipment by ID
+export async function getShipmentById(shipmentId: string): Promise<Shipment | null> {
+    if (shipmentId.startsWith("mock_")) {
+        const trackingNumber = shipmentId.replace("mock_", "");
+        return generateMockShipment(trackingNumber);
+    }
+
+    try {
+        const docRef = doc(db, "shipments", shipmentId);
+        const snapshot = await getDoc(docRef);
+
+        if (snapshot.exists()) {
+            return { id: snapshot.id, ...snapshot.data() } as Shipment;
+        }
+    } catch (e) {
+        console.warn("Firestore fetch by ID failed:", e);
+    }
+    return null;
+}
+
+// Get all shipments (Admin)
+export async function getAllShipments(): Promise<Shipment[]> {
+    try {
+        const q = query(
+            collection(db, "shipments"),
+            orderBy("createdAt", "desc"),
+            limit(100)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Shipment);
+    } catch (error) {
+        console.error("Error fetching all shipments:", error);
+        return [];
+    }
+}
+
+// Update customs duty (Admin)
+export async function updateShipmentCustomsDuty(
+    shipmentId: string,
+    amount: number,
+    status: "pending" | "paid" = "pending"
+): Promise<void> {
+    const shipmentRef = doc(db, "shipments", shipmentId);
+    await updateDoc(shipmentRef, {
+        customsDuty: amount,
+        customsDutyStatus: status,
+        updatedAt: serverTimestamp()
+    });
+}
+
+// Get shipments with pending customs duties for a user
+export async function getPendingCustomsDuties(userId: string): Promise<Shipment[]> {
+    try {
+        const q = query(
+            collection(db, "shipments"),
+            where("userId", "==", userId)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }) as Shipment)
+            .filter(shipment => shipment.customsDutyStatus === "pending" && (shipment.customsDuty || 0) > 0);
+    } catch (error) {
+        console.error("Error fetching pending duties:", error);
+        return [];
+    }
 }
 
 // Get user's shipments
@@ -330,6 +435,7 @@ export async function updateShipmentStatus(
         delivered: 100,
         cancelled: 0,
         returned: 0,
+        customs_hold: 50,
     };
 
     await updateDoc(shipmentRef, {
@@ -352,6 +458,36 @@ export async function updateShipmentStatus(
     });
 }
 
+
+// Upload consignment media
+export async function uploadConsignmentMedia(
+    shipmentId: string,
+    file: File
+): Promise<void> {
+    if (shipmentId.startsWith("mock_")) {
+        throw new Error("Cannot upload media to mock shipments");
+    }
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+    const storageRef = ref(storage, `shipments/${shipmentId}/${fileName}`);
+
+    // 1. Upload to Storage
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    // 2. Update Firestore
+    const shipmentRef = doc(db, "shipments", shipmentId);
+    await updateDoc(shipmentRef, {
+        consignmentMedia: arrayUnion({
+            url: downloadURL,
+            type: file.type.startsWith('video') ? 'video' : 'image',
+            name: file.name,
+            createdAt: Timestamp.now()
+        }),
+        updatedAt: serverTimestamp()
+    });
+}
 
 // Format timestamp for display
 export function formatTimestamp(timestamp: Timestamp): string {
@@ -377,6 +513,7 @@ export function getStatusDisplay(status: ShipmentStatus): string {
         delivered: "Delivered",
         cancelled: "Cancelled",
         returned: "Returned",
+        customs_hold: "Customs Hold",
     };
     return displayMap[status];
 }

@@ -12,7 +12,9 @@ import {
     Check,
     Plane,
     Info,
-    ArrowLeft
+    ArrowLeft,
+    AlertCircle,
+    DollarSign
 } from "lucide-react";
 import TrackingTimeline, { TrackingEvent as UITrackingEvent } from "@/components/TrackingTimeline";
 import { cn } from "@/lib/utils";
@@ -140,8 +142,8 @@ function TrackingContent({ id }: { id: string }) {
                     <ArrowLeft className="w-6 h-6 text-slate-600 dark:text-slate-400" />
                 </Link>
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Shipment Details</h1>
-                    <p className="text-slate-500 dark:text-slate-400">Tracking ID: {id}</p>
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Shipment Details</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">Tracking ID: {id}</p>
                 </div>
             </div>
 
@@ -215,6 +217,28 @@ function TrackingContent({ id }: { id: string }) {
                                 <p className="text-sm text-slate-500 dark:text-slate-400">{formatDate(shipment.estimatedDelivery)}</p>
                             </div>
                         </div>
+
+                        {/* Customs Duty Alert */}
+                        {shipment.customsDutyStatus === "pending" && shipment.status === "customs_hold" && (
+                            <div className="mt-8 p-6 bg-amber-50 dark:bg-amber-900/20 rounded-2xl border border-amber-200 dark:border-amber-800 flex items-start gap-4 animate-pulse">
+                                <div className="p-3 bg-amber-100 dark:bg-amber-800 rounded-full text-amber-600 dark:text-amber-400">
+                                    <AlertCircle className="w-6 h-6" />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Customs Duty Required</h3>
+                                    <p className="text-slate-600 dark:text-slate-400 mt-1">
+                                        This shipment is currently on hold by customs. A duty payment of <span className="font-bold text-slate-900 dark:text-white">${shipment.customsDuty?.toFixed(2)}</span> is required to proceed.
+                                    </p>
+                                    <Link
+                                        href="/dashboard/wallet"
+                                        className="mt-4 inline-flex items-center gap-2 px-6 py-2 bg-amber-600 text-white font-bold rounded-lg hover:bg-amber-700 transition-colors shadow-lg"
+                                    >
+                                        <DollarSign className="w-4 h-4" />
+                                        Pay Duty Now
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Timeline */}
@@ -237,18 +261,45 @@ function TrackingContent({ id }: { id: string }) {
                             </div>
                             <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700">
                                 <span className="text-slate-500 dark:text-slate-400 text-sm">Weight</span>
-                                <span className="text-slate-900 dark:text-white">{shipment.package.weight} kg</span>
+                                <span className="text-slate-900 dark:text-white">{shipment.packages.reduce((sum, p) => sum + p.weight, 0).toFixed(2)} kg</span>
                             </div>
                             <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700">
                                 <span className="text-slate-500 dark:text-slate-400 text-sm">Dimensions</span>
                                 <span className="text-slate-900 dark:text-white">
-                                    {shipment.package.dimensions.length}x{shipment.package.dimensions.width}x{shipment.package.dimensions.height} cm
+                                    {shipment.packages[0].dimensions.length}x{shipment.packages[0].dimensions.width}x{shipment.packages[0].dimensions.height} cm
+                                    {shipment.packages.length > 1 && ` (+${shipment.packages.length - 1} more)`}
                                 </span>
                             </div>
                             <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700">
                                 <span className="text-slate-500 dark:text-slate-400 text-sm">Contents</span>
-                                <span className="text-slate-900 dark:text-white">{shipment.package.description}</span>
+                                <span className="text-slate-900 dark:text-white">
+                                    {shipment.packages[0].description}
+                                    {shipment.packages.length > 1 && ` (+${shipment.packages.length - 1} more)`}
+                                </span>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Individual Parcel Tracking */}
+                    <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                            <Package className="w-5 h-5 text-primary" /> Parcel List
+                        </h3>
+                        <div className="space-y-4">
+                            {shipment.packages.map((pkg, idx) => (
+                                <div key={pkg.id || idx} className="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Parcel {idx + 1}</span>
+                                        <span className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full font-bold">Active</span>
+                                    </div>
+                                    <p className="font-mono text-sm text-slate-900 dark:text-white mb-1">{pkg.parcelId || 'N/A'}</p>
+                                    <p className="text-xs text-slate-500 line-clamp-1">{pkg.description}</p>
+                                    <div className="mt-3 flex items-center gap-3 text-[10px] font-bold text-slate-400">
+                                        <span className="flex items-center gap-1"><Package className="w-3 h-3" /> {pkg.weight}kg</span>
+                                        <span className="flex items-center gap-1"><Info className="w-3 h-3" /> {pkg.dimensions.length}x{pkg.dimensions.width}x{pkg.dimensions.height}cm</span>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

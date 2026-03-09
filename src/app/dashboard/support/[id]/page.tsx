@@ -10,8 +10,13 @@ import {
     addMessage,
     markTicketAsRead,
     Ticket,
-    Message
+    Message,
+    updateTicketStatus
 } from '@/lib/ticket-service';
+import { StatusPill } from '@/components/dashboard/StatusPill';
+import { Button } from '@/components/ui/Button';
+import { ArrowLeft, Send, Truck, ShieldAlert, CheckCircle2, Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function TicketDetailPage() {
     const { id } = useParams();
@@ -77,19 +82,20 @@ export default function TicketDetailPage() {
         }
     };
 
-    const getStatusColor = (status: Ticket['status']) => {
-        switch (status) {
-            case 'open': return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
-            case 'in-progress': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
-            case 'resolved': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
-            case 'closed': return 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-400';
+    const handleStatusChange = async (newStatus: string) => {
+        if (!ticket) return;
+        try {
+            await updateTicketStatus(ticket.id, newStatus as any);
+            setTicket({ ...ticket, status: newStatus as any });
+        } catch (error) {
+            console.error('Error updating status:', error);
         }
     };
 
     if (loading) {
         return (
             <div className="flex-1 flex items-center justify-center bg-slate-50 dark:bg-background-dark">
-                <span className="material-symbols-outlined animate-spin text-4xl text-primary">progress_activity</span>
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
         );
     }
@@ -97,7 +103,7 @@ export default function TicketDetailPage() {
     if (!ticket) {
         return (
             <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 dark:bg-background-dark">
-                <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600 mb-4">error</span>
+                <ShieldAlert className="w-16 h-16 text-slate-300 dark:text-slate-600 mb-4" />
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Ticket not found</h3>
                 <Link href="/dashboard/support" className="text-primary hover:underline">
                     Back to Support
@@ -110,63 +116,98 @@ export default function TicketDetailPage() {
         <div className="flex-1 flex flex-col h-full bg-slate-50 dark:bg-background-dark">
             {/* Header */}
             <div className="flex-shrink-0 p-6 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark">
-                <Link
-                    href="/dashboard/support"
-                    className="inline-flex items-center gap-1 text-slate-500 hover:text-primary mb-3 transition-colors text-sm"
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    asChild
+                    className="mb-3 -ml-2 text-slate-500 hover:text-primary"
                 >
-                    <span className="material-symbols-outlined text-sm">arrow_back</span>
-                    Back to Tickets
-                </Link>
+                    <Link href="/dashboard/support" className="flex items-center gap-1">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Tickets
+                    </Link>
+                </Button>
                 <div className="flex items-start justify-between">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <span className="text-xs font-mono text-slate-400">#{ticket.id}</span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(ticket.status)}`}>
-                                {ticket.status.replace('-', ' ')}
-                            </span>
+                            <span className="text-xs font-mono font-bold text-slate-400">#{ticket.id}</span>
+                            <StatusPill
+                                status={ticket.status}
+                                interactive={userProfile?.role === 'admin'}
+                                onStatusChange={handleStatusChange}
+                            />
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{ticket.subject}</h2>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                            {ticket.category} • Created {ticket.createdAt?.toLocaleDateString()}
+                        <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">{ticket.subject}</h1>
+                        <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">
+                            <span className="capitalize">{ticket.category}</span> • Created {ticket.createdAt?.toLocaleDateString()}
                         </p>
                     </div>
                     {ticket.shipmentId && (
-                        <Link
-                            href={`/dashboard/shipments/${ticket.shipmentId}`}
-                            className="text-sm text-primary hover:underline flex items-center gap-1"
+                        <Button
+                            variant="link"
+                            size="sm"
+                            asChild
+                            className="text-primary font-bold"
                         >
-                            <span className="material-symbols-outlined text-sm">local_shipping</span>
-                            {ticket.shipmentId}
-                        </Link>
+                            <Link href={`/dashboard/shipments/${ticket.shipmentId}`} className="flex items-center gap-2">
+                                <Truck className="w-4 h-4" />
+                                {ticket.shipmentId}
+                            </Link>
+                        </Button>
                     )}
                 </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 {messages.map((msg) => (
                     <div
                         key={msg.id}
-                        className={`flex ${msg.senderRole === 'customer' ? 'justify-end' : 'justify-start'}`}
+                        className={`flex flex-col ${msg.senderRole === 'customer' ? 'items-end' : 'items-start'}`}
                     >
                         <div
-                            className={`max-w-[70%] rounded-2xl px-4 py-3 ${msg.senderRole === 'customer'
-                                    ? 'bg-primary text-white rounded-br-md'
-                                    : 'bg-white dark:bg-surface-dark text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-bl-md'
-                                }`}
+                            className={cn(
+                                "max-w-[80%] rounded-2xl px-5 py-3 shadow-sm",
+                                msg.senderRole === 'customer'
+                                    ? "bg-primary text-white shadow-lg shadow-primary/20 rounded-tr-none"
+                                    : "bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-tl-none"
+                            )}
                         >
-                            <div className={`text-xs mb-1 ${msg.senderRole === 'customer' ? 'text-white/70' : 'text-slate-500'}`}>
-                                {msg.senderRole === 'admin' && (
-                                    <span className="inline-flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-xs">support_agent</span>
-                                        Support Team
-                                    </span>
-                                )}
-                                {msg.senderRole === 'customer' && 'You'}
-                                {' • '}
-                                {msg.createdAt?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </div>
-                            <p className="whitespace-pre-wrap">{msg.content}</p>
+                            {msg.senderRole === 'admin' && (
+                                <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-primary mb-2">
+                                    <CheckCircle2 className="w-3 h-3" />
+                                    Support Agent
+                                </div>
+                            )}
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+
+                            {msg.attachments && msg.attachments.length > 0 && (
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                    {msg.attachments.map((url, i) => (
+                                        <a
+                                            key={url}
+                                            href={url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="block h-20 w-20 rounded-lg overflow-hidden border border-white/20 hover:scale-105 transition-transform"
+                                        >
+                                            <img src={url} alt="attachment" className="h-full w-full object-cover" />
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={cn(
+                            "flex items-center gap-2 mt-1 px-1 text-[10px] text-slate-400 font-bold tracking-tight uppercase",
+                            msg.senderRole === 'customer' ? "flex-row-reverse" : "flex-row"
+                        )}>
+                            <span>{msg.createdAt?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                            {msg.senderRole === 'customer' && (
+                                <span className={cn("flex items-center gap-0.5", msg.seen ? "text-primary font-black" : "text-slate-300 font-medium")}>
+                                    {msg.seen ? "Seen" : "Sent"}
+                                </span>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -175,27 +216,25 @@ export default function TicketDetailPage() {
 
             {/* Input */}
             {ticket.status !== 'closed' && (
-                <div className="flex-shrink-0 p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark">
-                    <div className="flex gap-3">
+                <div className="flex-shrink-0 p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-background-dark">
+                    <div className="flex gap-3 max-w-5xl mx-auto">
                         <input
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
                             placeholder="Type your message..."
-                            className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white"
+                            className="flex-1 px-5 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                         />
-                        <button
+                        <Button
                             onClick={handleSend}
                             disabled={sending || !newMessage.trim()}
-                            className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all disabled:opacity-50 flex items-center gap-2"
+                            loading={sending}
+                            className="px-8 rounded-2xl"
+                            rightIcon={<Send className="w-4 h-4" />}
                         >
-                            {sending ? (
-                                <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
-                            ) : (
-                                <span className="material-symbols-outlined text-sm">send</span>
-                            )}
-                        </button>
+                            Send
+                        </Button>
                     </div>
                 </div>
             )}

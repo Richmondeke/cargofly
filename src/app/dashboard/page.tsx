@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { StatusBadge } from '@/components/dashboard/StatusBadge';
 import EmptyState from '@/components/common/EmptyState';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -10,9 +11,13 @@ import {
     getActiveShipments,
     seedInitialData,
     DashboardShipment,
+    formatTimestamp,
 } from '@/lib/dashboard-service';
 import RiveAnimation from '@/components/ui/RiveAnimation';
 import { useNotifications } from '@/contexts/NotificationContext';
+import { ShipmentDetailsDrawer } from '@/components/dashboard/ShipmentDetailsDrawer';
+import { Eye } from 'lucide-react';
+
 
 // --- Components ---
 
@@ -84,6 +89,10 @@ export default function DashboardPage() {
     const [showTrackModal, setShowTrackModal] = useState(false);
     const { toggleSidebar, unreadCount } = useNotifications();
 
+    // Drawer State
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [selectedShipment, setSelectedShipment] = useState<DashboardShipment | null>(null);
+
     useEffect(() => {
         if (authLoading || !user) return;
 
@@ -109,11 +118,11 @@ export default function DashboardPage() {
         <div className="flex-1 overflow-y-auto bg-[#F8FAFC] dark:bg-background-dark min-h-full">
             {showTrackModal && <TrackOrderModal onClose={() => setShowTrackModal(false)} />}
 
-            <div className="p-8">
+            <div className="p-4 sm:p-8">
                 {/* Header - Spacing: 32px bottom */}
                 <div className="flex justify-between items-center mb-8">
                     <div>
-                        <h1 className="text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Dashboard</h1>
+                        <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Dashboard</h1>
                         <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">
                             Welcome back {userProfile?.displayName ? userProfile.displayName.split(' ')[0] : 'Richmond'}
                         </p>
@@ -138,8 +147,8 @@ export default function DashboardPage() {
                 {/* Banner - Height 220px */}
                 <div className="flex flex-col lg:flex-row h-auto lg:h-[220px] rounded-[24px] overflow-hidden shadow-lg mb-8">
                     {/* Left Side - Dark Blue */}
-                    <div className="flex-1 bg-[#003399] p-8 lg:p-10 flex flex-col justify-center relative">
-                        <h2 className="text-[32px] font-bold text-white mb-2">In-Transit</h2>
+                    <div className="flex-1 bg-[#003399] p-6 sm:p-10 flex flex-col justify-center relative">
+                        <h2 className="text-2xl sm:text-[32px] font-bold text-white mb-2">In-Transit</h2>
                         <p className="text-[14px] text-blue-100 mb-6 max-w-sm">
                             Active shipments currently moving across our network.
                         </p>
@@ -160,8 +169,8 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                {/* Stats Cards - Height 118px, Radius 16px, Padding 24px */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* Stats Cards - Height 118px auto on mobile, Radius 16px, Padding 24px */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
                     {/* Total Shipments - Blue */}
                     <div className="bg-[#003399] p-[24px] rounded-[16px] shadow-sm flex flex-col justify-between h-[118px]">
                         <div className="flex justify-between items-start">
@@ -200,7 +209,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Shipping History Table */}
-                <div className="bg-white dark:bg-surface-dark rounded-[24px] p-8 shadow-sm">
+                <div className="bg-white dark:bg-surface-dark rounded-[24px] p-4 sm:p-8 shadow-sm">
                     <h3 className="text-[18px] font-bold text-slate-900 dark:text-white mb-6">Shipping History</h3>
 
                     <div className="overflow-x-auto">
@@ -208,10 +217,10 @@ export default function DashboardPage() {
                             <thead className="text-[12px] text-slate-500 font-medium border-b border-slate-100 dark:border-slate-700">
                                 <tr>
                                     <th className="pb-4 pl-2 font-normal">Shipping ID</th>
-                                    <th className="pb-4 font-normal">Category</th>
+                                    <th className="pb-4 font-normal">Date</th>
                                     <th className="pb-4 font-normal">Origin</th>
                                     <th className="pb-4 font-normal">Destination</th>
-                                    <th className="pb-4 font-normal">Weight</th>
+                                    <th className="pb-4 font-normal">ETA</th>
                                     <th className="pb-4 font-normal">Status</th>
                                     <th className="pb-4 font-normal">Action</th>
                                 </tr>
@@ -229,25 +238,32 @@ export default function DashboardPage() {
                                     shipments.slice(0, 5).map((s) => (
                                         <tr key={s.id} className="border-b border-slate-50 dark:border-slate-800 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                             <td className="py-5 pl-2 font-medium text-slate-900 dark:text-white">{s.trackingNumber || s.id}</td>
-                                            <td className="py-5 text-slate-600 dark:text-slate-300">{s.category}</td>
+                                            <td className="py-5 text-slate-600 dark:text-slate-300">{s.createdAt ? formatTimestamp(s.createdAt) : 'N/A'}</td>
                                             <td className="py-5 text-slate-600 dark:text-slate-300">{s.origin}</td>
                                             <td className="py-5 text-slate-600 dark:text-slate-300">{s.destination}</td>
-                                            <td className="py-5 text-slate-600 dark:text-slate-300">{s.weight}</td>
+                                            <td className="py-5 text-slate-600 dark:text-slate-300">{s.eta}</td>
                                             <td className="py-5">
-                                                <span className={`px-3 py-1 rounded-full text-[12px] font-medium ${s.status.toLowerCase().includes('delivered') ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                                    s.status.toLowerCase().includes('transit') || s.status.toLowerCase().includes('progress') ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
-                                                        s.status.toLowerCase().includes('verified') ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                                            'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
-                                                    }`}>
-                                                    {s.status === 'in_transit' ? 'Verified' : s.status}  {/* Mocking 'Verified' style if needed, or keeping status */}
-                                                </span>
+                                                <StatusBadge status={s.status} />
                                             </td>
-                                            <td className="py-5">
+                                            <td className="py-5 flex items-center gap-2">
                                                 <Link href={`/dashboard/track/${s.id}`}>
-                                                    <button className="px-4 py-1.5 border border-slate-200 dark:border-slate-700 rounded-full text-[12px] font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                                                        Process
+                                                    <button
+                                                        className="p-2 rounded-xl text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                                        title="Track Shipment"
+                                                    >
+                                                        <span className="material-symbols-outlined text-[18px]">map</span>
                                                     </button>
                                                 </Link>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedShipment(s);
+                                                        setIsDrawerOpen(true);
+                                                    }}
+                                                    className="p-2 rounded-xl text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                                    title="View Details"
+                                                >
+                                                    <Eye className="w-4 h-4" />
+                                                </button>
                                             </td>
                                         </tr>
                                     ))
@@ -266,6 +282,12 @@ export default function DashboardPage() {
                     </div>
                 </div >
             </div >
+
+            <ShipmentDetailsDrawer
+                isOpen={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
+                shipment={selectedShipment}
+            />
         </div >
     );
 }

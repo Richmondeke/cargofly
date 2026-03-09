@@ -4,6 +4,11 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { getUserTickets, Ticket } from '@/lib/ticket-service';
+import { StatusPill } from '@/components/dashboard/StatusPill';
+import { Card, CardContent } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { LifeBuoy, Plus, MessageSquare, Clock, CheckCircle2, ChevronRight, MessageCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import EmptyState from '@/components/common/EmptyState';
 
 export default function SupportPage() {
@@ -54,18 +59,20 @@ export default function SupportPage() {
     return (
         <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
             {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-                <div>
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Support</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Manage your support tickets</p>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <div className="text-left">
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Support</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1 font-medium italic">We&apos;re here to help you with your logistics</p>
                 </div>
-                <Link
-                    href="/dashboard/support/new"
-                    className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all flex items-center gap-2 shadow-lg"
+                <Button
+                    asChild
+                    className="w-full sm:w-auto"
                 >
-                    <span className="material-symbols-outlined">add</span>
-                    New Ticket
-                </Link>
+                    <Link href="/dashboard/support/new" className="flex items-center gap-2">
+                        <Plus className="w-4 h-4" />
+                        New Ticket
+                    </Link>
+                </Button>
             </div>
 
             {/* Filters */}
@@ -110,41 +117,46 @@ export default function SupportPage() {
                         />
                     </div>
                 ) : (
-                    <div className="divide-y divide-slate-100 dark:divide-slate-700">
+                    <div className="grid grid-cols-1 gap-6">
                         {filteredTickets.map((ticket) => (
-                            <Link
-                                key={ticket.id}
-                                href={`/dashboard/support/${ticket.id}`}
-                                className="flex items-center gap-4 p-5 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-                            >
-                                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-primary">
-                                        {ticket.category === 'shipping' ? 'local_shipping' :
-                                            ticket.category === 'billing' ? 'receipt' :
-                                                ticket.category === 'technical' ? 'build' : 'help'}
-                                    </span>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-xs font-mono text-slate-400">#{ticket.id}</span>
-                                        {ticket.unreadByUser && (
-                                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                                        )}
+                            <Link key={ticket.id} href={`/dashboard/support/${ticket.id}`} className="group block">
+                                <Card variant="default" className="p-6 group-hover:border-primary/50 group-hover:shadow-xl transition-all border-none shadow-md shadow-slate-200/40 dark:shadow-none">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                        <div className="flex gap-4 items-start text-left">
+                                            <div className="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl group-hover:bg-primary/5 transition-colors">
+                                                <MessageCircle className="w-6 h-6 text-slate-400 group-hover:text-primary transition-colors" />
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">#{ticket.id}</span>
+                                                    <span className="w-1 h-1 rounded-full bg-slate-300" />
+                                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{ticket.category}</span>
+                                                </div>
+                                                <h4 className="text-lg font-black text-slate-900 dark:text-white group-hover:text-primary transition-colors tracking-tight">
+                                                    {ticket.subject}
+                                                </h4>
+                                                <div className="flex items-center gap-4 mt-2">
+                                                    <div className="flex items-center gap-1 text-xs text-slate-500 font-medium italic">
+                                                        <Clock className="w-3 h-3" />
+                                                        Updated {ticket.updatedAt?.toLocaleDateString()}
+                                                    </div>
+                                                    <div className="flex items-center gap-1 text-xs text-slate-500 font-medium">
+                                                        <span className={cn(
+                                                            "w-2 h-2 rounded-full",
+                                                            ticket.priority === 'high' ? "bg-red-500" :
+                                                                ticket.priority === 'medium' ? "bg-amber-500" : "bg-green-500"
+                                                        )} />
+                                                        <span className="capitalize">{ticket.priority}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-4 self-stretch sm:self-auto justify-between sm:justify-end">
+                                            <StatusPill status={ticket.status} />
+                                            <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-primary transition-all group-hover:translate-x-1" />
+                                        </div>
                                     </div>
-                                    <h4 className="font-semibold text-slate-900 dark:text-white truncate">
-                                        {ticket.subject}
-                                    </h4>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                                        Updated {ticket.updatedAt?.toLocaleDateString()}
-                                    </p>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <span title={ticket.priority}>{getPriorityIcon(ticket.priority)}</span>
-                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(ticket.status)}`}>
-                                        {ticket.status.replace('-', ' ')}
-                                    </span>
-                                    <span className="material-symbols-outlined text-slate-400">chevron_right</span>
-                                </div>
+                                </Card>
                             </Link>
                         ))}
                     </div>

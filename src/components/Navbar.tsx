@@ -127,21 +127,23 @@ export default function Navbar() {
 
                 {/* Mobile Menu Button - Moved right */}
                 <div className="flex items-center gap-4 md:hidden">
-                    <button
-                        className="z-50 text-navy-900 dark:text-white p-2"
-                        onClick={() => setIsOpen(!isOpen)}
-                        aria-label={isOpen ? "Close menu" : "Open menu"}
-                    >
-                        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                    </button>
+                    {/* Mobile Menu Button - Moved right */}
+                    <div className="flex items-center gap-4 md:hidden">
+                        <button
+                            className="z-[70] text-navy-900 dark:text-white p-2 relative"
+                            onClick={() => setIsOpen(!isOpen)}
+                            aria-label={isOpen ? "Close menu" : "Open menu"}
+                        >
+                            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                        </button>
+                    </div>
                 </div>
 
-                {/* Mobile Nav Overlay */}
                 <motion.div
                     initial={false}
                     animate={isOpen ? { opacity: 1, visibility: "visible" } : { opacity: 0, visibility: "hidden" }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 bg-white dark:bg-navy-900 z-50 flex flex-col items-center justify-center gap-8 md:hidden"
+                    className="fixed inset-0 bg-white dark:bg-navy-900 z-[60] flex flex-col items-center justify-center gap-8 md:hidden shadow-2xl"
                 >
                     {navLinks.map((link, i) => (
                         <motion.div

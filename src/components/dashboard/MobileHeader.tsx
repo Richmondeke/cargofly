@@ -11,7 +11,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ onOpenConfig }) => {
     const { userProfile } = useAuth();
 
     return (
-        <div className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-navy-900 border-b border-slate-200 dark:border-navy-700 sticky top-0 z-30">
+        <div className="md:hidden flex items-center justify-between px-6 py-4 bg-white dark:bg-navy-900 border-b border-slate-200 dark:border-navy-700 sticky top-0 z-30">
             <div className="flex items-center gap-3">
                 <button
                     onClick={onOpenConfig}

@@ -48,8 +48,8 @@ export default function NetworkPage() {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Global Network</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">View hubs, warehouses, and shipping routes</p>
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Global Network</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">View hubs, warehouses, and shipping routes</p>
                 </div>
             </div>
 

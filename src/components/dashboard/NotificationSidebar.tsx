@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNotifications, Notification } from '@/contexts/NotificationContext';
+import Link from 'next/link';
 
 // Simple formatter if date-fns is not available
 const formatTime = (date: Date) => {
@@ -149,9 +150,14 @@ export default function NotificationSidebar() {
 
                         {/* Footer */}
                         <div className="p-6 border-t border-white/10 bg-navy-950/50">
-                            <button className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl text-sm transition-all border border-white/5">
+                            <Link
+                                href="/dashboard/notifications"
+                                onClick={closeSidebar}
+                                className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl text-sm transition-all border border-white/5 flex items-center justify-center gap-2"
+                            >
+                                <span className="material-symbols-outlined text-[18px]">history</span>
                                 View Notification History
-                            </button>
+                            </Link>
                         </div>
                     </motion.div>
                 </>

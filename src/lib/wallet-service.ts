@@ -170,3 +170,51 @@ export async function mockDeposit(userId: string, amount: number, currency: 'USD
         });
     });
 }
+
+/**
+ * Withdraws funds from the wallet and records the transaction
+ */
+export async function withdrawFunds(
+    userId: string,
+    amount: number,
+    currency: 'USD' | 'GBP',
+    description: string = 'Withdrawal'
+) {
+    const walletRef = doc(db, "wallets", userId);
+    const txnRef = collection(db, "wallets", userId, "transactions");
+
+    return await runTransaction(db, async (transaction) => {
+        const walletDoc = await transaction.get(walletRef);
+        if (!walletDoc.exists()) {
+            throw new Error("Wallet not found");
+        }
+
+        const data = walletDoc.data() as Wallet;
+        const balanceField = currency === 'USD' ? 'balanceUSD' : 'balanceGBP';
+        const currentBalance = data[balanceField] || 0;
+
+        if (currentBalance < amount) {
+            throw new Error(`Insufficient ${currency} balance for withdrawal`);
+        }
+
+        // Update Balance
+        transaction.update(walletRef, {
+            [balanceField]: currentBalance - amount,
+            updatedAt: serverTimestamp()
+        });
+
+        // Add Transaction Record
+        const newTxnDoc = doc(txnRef);
+        transaction.set(newTxnDoc, {
+            type: 'withdrawal',
+            amount: -amount,
+            currency,
+            description,
+            status: 'success',
+            method: 'bank',
+            createdAt: serverTimestamp()
+        });
+
+        return newTxnDoc.id;
+    });
+}

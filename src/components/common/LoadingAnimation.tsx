@@ -13,7 +13,7 @@ const LoadingAnimation = ({ isSplash = false }: LoadingAnimationProps) => {
     return (
         <div className={cn(
             "fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-500",
-            isSplash ? "bg-white" : "bg-white/80 backdrop-blur-sm"
+            "bg-white"
         )}>
             <div className="w-64 h-64">
                 <Lottie

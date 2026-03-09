@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { serverDb as db } from "@/lib/firebase-server";
-import { collection, addDoc, doc, runTransaction, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, doc, runTransaction, updateDoc, serverTimestamp } from "firebase/firestore";
 
 const GRAPH_API_URL = process.env.GRAPH_API_URL || 'https://api.usegraph.io/v1';
 const GRAPH_API_KEY = process.env.GRAPH_API_KEY || '';
@@ -71,6 +71,16 @@ export async function POST(req: NextRequest) {
                     createdAt: serverTimestamp()
                 });
 
+                // Update shipment if this was a duty payment
+                if (shipmentId) {
+                    const shipmentRef = doc(db, "shipments", shipmentId);
+                    transaction.update(shipmentRef, {
+                        customsDutyStatus: 'paid',
+                        status: 'confirmed', // Release hold
+                        updatedAt: serverTimestamp()
+                    });
+                }
+
                 return newTxnDoc.id;
             });
 
@@ -113,6 +123,16 @@ export async function POST(req: NextRequest) {
                 externalId: externalTxnId,
                 createdAt: serverTimestamp()
             });
+
+            // Update shipment if this was a duty payment
+            if (shipmentId) {
+                const shipmentRef = doc(db, "shipments", shipmentId);
+                await updateDoc(shipmentRef, {
+                    customsDutyStatus: 'paid',
+                    status: 'confirmed', // Release hold
+                    updatedAt: serverTimestamp()
+                });
+            }
 
             return NextResponse.json({
                 success: true,

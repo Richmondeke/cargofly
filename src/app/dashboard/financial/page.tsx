@@ -76,8 +76,8 @@ export default function FinancialPage() {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Financial Hub</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">Track revenue, expenses, and invoices</p>
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Financial Hub</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">Track revenue, expenses, and invoices</p>
                 </div>
                 <button
                     onClick={handleExport}

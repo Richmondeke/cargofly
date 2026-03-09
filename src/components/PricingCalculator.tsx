@@ -192,21 +192,21 @@ export default function PricingCalculator() {
                             <label className="block text-sm text-white/40 mb-3 font-body uppercase tracking-wider">
                                 Cargo Type
                             </label>
-                            <div className="grid grid-cols-2 lg:grid-cols-5 gap-2">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                                 {cargoTypes.map((type) => (
                                     <button
                                         key={type.id}
                                         type="button"
                                         onClick={() => setCargoType(type.id)}
                                         className={cn(
-                                            "p-3 rounded-xl border transition-all text-center group",
+                                            "p-2 md:p-3 rounded-xl border transition-all text-center group",
                                             cargoType === type.id
                                                 ? "bg-gold-500/20 border-gold-500/50 text-white shadow-[0_0_15px_rgba(202,138,4,0.15)]"
                                                 : "bg-white/5 border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
                                         )}
                                     >
-                                        <span className="text-xs font-bold uppercase tracking-wide font-body truncate block">
-                                            {type.name === "Live Animals" ? "Live Animals" : type.name}
+                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-wide font-body truncate block">
+                                            {type.name}
                                         </span>
                                     </button>
                                 ))}
@@ -246,7 +246,7 @@ export default function PricingCalculator() {
                                         setDimensions({ ...dimensions, length: e.target.value })
                                     }
                                     placeholder="L (cm)"
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-sm"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 md:py-4 px-2 md:px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-[10px] md:text-sm"
                                 />
                             </div>
                             <div className="relative">
@@ -257,7 +257,7 @@ export default function PricingCalculator() {
                                         setDimensions({ ...dimensions, width: e.target.value })
                                     }
                                     placeholder="W (cm)"
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-sm"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 md:py-4 px-2 md:px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-[10px] md:text-sm"
                                 />
                             </div>
                             <div className="relative">
@@ -268,7 +268,7 @@ export default function PricingCalculator() {
                                         setDimensions({ ...dimensions, height: e.target.value })
                                     }
                                     placeholder="H (cm)"
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-sm"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 md:py-4 px-2 md:px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-[10px] md:text-sm"
                                 />
                             </div>
                         </div>

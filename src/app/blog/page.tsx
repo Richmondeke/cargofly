@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +8,48 @@ import { getBlogPosts, BlogPost } from "@/lib/firestore";
 import { Calendar, User, ArrowRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+
+const DUMMY_POSTS: BlogPost[] = [
+    {
+        id: "dummy-1",
+        title: "The Future of Sustainable Aviation Logistics",
+        slug: "future-sustainable-aviation-logistics",
+        excerpt: "Exploring how biofuel and electric cargo planes are reshaping the environmental impact of global shipping in 2026.",
+        content: "",
+        category: "Industry",
+        author: "Capt. Sarah Jenkins",
+        image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800",
+        publishedAt: { toDate: () => new Date() } as any,
+        updatedAt: { toDate: () => new Date() } as any,
+        isPublished: true
+    },
+    {
+        id: "dummy-2",
+        title: "Optimizing Last-Mile Delivery in Emerging Markets",
+        slug: "optimizing-last-mile-delivery",
+        excerpt: "A deep dive into the challenges and solutions for efficient cargo distribution in rapidly growing technological hubs.",
+        content: "",
+        category: "Logistics",
+        author: "Marcus Chen",
+        image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
+        publishedAt: { toDate: () => new Date(Date.now() - 86400000) } as any,
+        updatedAt: { toDate: () => new Date(Date.now() - 86400000) } as any,
+        isPublished: true
+    },
+    {
+        id: "dummy-3",
+        title: "Direct Hub-to-Hub: Minimizing Transit Times",
+        slug: "minimizing-transit-times",
+        excerpt: "How our new direct routes between major African and European hubs are cutting delivery times by up to 40%.",
+        content: "",
+        category: "Company",
+        author: "David Olumide",
+        image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800",
+        publishedAt: { toDate: () => new Date(Date.now() - 172800000) } as any,
+        updatedAt: { toDate: () => new Date(Date.now() - 172800000) } as any,
+        isPublished: true
+    }
+];
 
 export default function BlogIndex() {
     const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -28,9 +70,13 @@ export default function BlogIndex() {
         fetchPosts();
     }, []);
 
+    const displayedPosts = useMemo(() => {
+        return posts.length > 0 ? posts : DUMMY_POSTS;
+    }, [posts]);
+
     const formatDate = (timestamp: any) => {
         if (!timestamp) return "";
-        const date = timestamp.toDate();
+        const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
         return new Intl.DateTimeFormat('en-US', {
             month: 'long',
             day: 'numeric',
@@ -78,14 +124,9 @@ export default function BlogIndex() {
                                 </div>
                             ))}
                         </div>
-                    ) : posts.length === 0 ? (
-                        <div className="text-center py-20 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10">
-                            <h3 className="text-2xl font-bold text-navy-900 dark:text-white mb-2">No articles yet</h3>
-                            <p className="text-navy-900/60 dark:text-white/60">Check back later for industry insights and updates.</p>
-                        </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {posts.map((post, index) => (
+                            {displayedPosts.map((post, index) => (
                                 <motion.article
                                     key={post.id}
                                     initial={{ opacity: 0, y: 20 }}

@@ -57,8 +57,8 @@ export default function AnalyticsPage() {
     return (
         <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
             <div className="mb-8">
-                <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Analytics Dashboard</h2>
-                <p className="text-slate-500 dark:text-slate-400 mt-1">Insights into your shipping performance and spend</p>
+                <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Analytics Dashboard</h1>
+                <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">Insights into your shipping performance and spend</p>
             </div>
 
             {loading ? (

@@ -75,13 +75,14 @@ export default function DemoPage() {
                         country: dest.country,
                         phone: "+0987654321"
                     },
-                    package: {
+                    packages: [{
                         weight: 5.5,
                         dimensions: { length: 30, width: 20, height: 15 },
                         description: "Demo Package Content",
+                        pieces: 1,
                         isFragile: false,
                         requiresSignature: true
-                    },
+                    } as any],
                     price: {
                         base: 100,
                         fuel: 20,

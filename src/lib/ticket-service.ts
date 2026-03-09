@@ -26,8 +26,8 @@ export interface Ticket {
     userEmail: string;
     userName: string;
     subject: string;
-    category: 'shipping' | 'billing' | 'technical' | 'general';
-    status: 'open' | 'in-progress' | 'resolved' | 'closed';
+    category: 'shipment' | 'payment' | 'duties' | 'tracking' | 'claims' | 'technical' | 'general';
+    status: 'open' | 'in-progress' | 'pending-customer' | 'resolved' | 'closed';
     priority: 'low' | 'medium' | 'high';
     shipmentId?: string;
     createdAt: Date;
@@ -46,6 +46,7 @@ export interface Message {
     content: string;
     createdAt: Date;
     attachments?: string[];
+    seen?: boolean;
 }
 
 export interface CreateTicketData {
@@ -215,6 +216,7 @@ export async function addMessage(
     const messageDoc = await addDoc(messagesRef, {
         ...data,
         createdAt: now,
+        seen: false,
     });
 
     // Update ticket timestamps and unread status

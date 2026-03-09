@@ -4,7 +4,12 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { getAllTickets, updateTicketStatus, Ticket } from '@/lib/ticket-service';
-import StatusDropdown from '@/components/dashboard/StatusDropdown';
+import { StatusPill } from '@/components/dashboard/StatusPill';
+import { DashboardTabs } from '@/components/dashboard/DashboardTabs';
+import { Card, CardContent } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Inbox, Clock, CheckCircle2, List, Shield, Zap, Info, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function AdminSupportPage() {
     const { userProfile } = useAuth();
@@ -56,6 +61,18 @@ export default function AdminSupportPage() {
     const inProgressCount = tickets.filter(t => t.status === 'in-progress').length;
     const unreadCount = tickets.filter(t => t.unreadByAdmin).length;
 
+    const getCategoryIcon = (category: Ticket['category']) => {
+        switch (category) {
+            case 'shipment': return 'local_shipping';
+            case 'payment': return 'payments';
+            case 'duties': return 'gavel';
+            case 'tracking': return 'location_on';
+            case 'claims': return 'fact_check';
+            case 'technical': return 'build';
+            default: return 'help';
+        }
+    };
+
     if (userProfile?.role !== 'admin') {
         return (
             <div className="flex-1 flex items-center justify-center bg-slate-50 dark:bg-background-dark">
@@ -65,48 +82,74 @@ export default function AdminSupportPage() {
     }
 
     return (
-        <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 h-full bg-slate-50 dark:bg-background-dark">
             {/* Header */}
             <div className="mb-8">
-                <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Support Tickets</h2>
-                <p className="text-slate-500 dark:text-slate-400 mt-1">Manage customer support requests</p>
+                <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Support Tickets</h1>
+                <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">Manage customer support requests</p>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-white dark:bg-surface-dark rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-                    <div className="text-3xl font-bold text-slate-900 dark:text-white">{tickets.length}</div>
-                    <div className="text-sm text-slate-500">Total Tickets</div>
-                </div>
-                <div className="bg-white dark:bg-surface-dark rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-                    <div className="text-3xl font-bold text-red-500">{openCount}</div>
-                    <div className="text-sm text-slate-500">Open</div>
-                </div>
-                <div className="bg-white dark:bg-surface-dark rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-                    <div className="text-3xl font-bold text-yellow-500">{inProgressCount}</div>
-                    <div className="text-sm text-slate-500">In Progress</div>
-                </div>
-                <div className="bg-white dark:bg-surface-dark rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-                    <div className="text-3xl font-bold text-primary">{unreadCount}</div>
-                    <div className="text-sm text-slate-500">Unread</div>
-                </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+                <Card variant="flat" className="p-6 border-none">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{tickets.length}</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Total Tickets</div>
+                        </div>
+                        <div className="p-2 bg-slate-200/50 dark:bg-white/5 rounded-lg">
+                            <List className="w-4 h-4 text-slate-500" />
+                        </div>
+                    </div>
+                </Card>
+                <Card variant="flat" className="p-6 border-none group hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <div className="text-3xl font-black text-red-500 tracking-tighter">{openCount}</div>
+                            <div className="text-[10px] font-black text-red-400/80 uppercase tracking-widest mt-1">Open Priority</div>
+                        </div>
+                        <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
+                            <Inbox className="w-4 h-4 text-red-500" />
+                        </div>
+                    </div>
+                </Card>
+                <Card variant="flat" className="p-6 border-none group hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-colors">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <div className="text-3xl font-black text-amber-500 tracking-tighter">{inProgressCount}</div>
+                            <div className="text-[10px] font-black text-amber-400/80 uppercase tracking-widest mt-1">Processing</div>
+                        </div>
+                        <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
+                            <Clock className="w-4 h-4 text-amber-500" />
+                        </div>
+                    </div>
+                </Card>
+                <Card variant="flat" className="p-6 border-none group hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <div className="text-3xl font-black text-primary tracking-tighter">{unreadCount}</div>
+                            <div className="text-[10px] font-black text-primary/80 uppercase tracking-widest mt-1">New Messages</div>
+                        </div>
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                            <Zap className="w-4 h-4 text-primary" />
+                        </div>
+                    </div>
+                </Card>
             </div>
 
             {/* Filters */}
-            <div className="flex gap-2 mb-6">
-                {(['all', 'open', 'in-progress', 'resolved'] as const).map((f) => (
-                    <button
-                        key={f}
-                        onClick={() => setFilter(f)}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all ${filter === f
-                            ? 'bg-primary text-white'
-                            : 'bg-white dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
-                            }`}
-                    >
-                        {f.charAt(0).toUpperCase() + f.slice(1).replace('-', ' ')}
-                    </button>
-                ))}
-            </div>
+            <DashboardTabs
+                tabs={[
+                    { id: 'all', label: 'All Tickets', icon: List },
+                    { id: 'open', label: 'Open', icon: Inbox },
+                    { id: 'in-progress', label: 'In Progress', icon: Clock },
+                    { id: 'pending-customer', label: 'Pending Info', icon: Clock },
+                    { id: 'resolved', label: 'Resolved', icon: CheckCircle2 },
+                ]}
+                activeTab={filter}
+                onTabChange={(id) => setFilter(id as any)}
+                className="mb-8"
+            />
 
             {/* Ticket Table */}
             <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
@@ -142,46 +185,56 @@ export default function AdminSupportPage() {
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                             {filteredTickets.map((ticket) => (
                                 <tr key={ticket.id} className="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2">
+                                    <td className="px-6 py-5">
+                                        <div className="flex items-center gap-3">
                                             {ticket.unreadByAdmin && (
                                                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0" />
                                             )}
                                             <div>
-                                                <span className="text-xs font-mono text-slate-400">#{ticket.id}</span>
-                                                <p className="font-medium text-slate-900 dark:text-white truncate max-w-[200px]">
+                                                <span className="text-[10px] font-black text-slate-400 tracking-tighter uppercase">#{ticket.id}</span>
+                                                <p className="font-bold text-slate-900 dark:text-white truncate max-w-[220px]">
                                                     {ticket.subject}
                                                 </p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-6 py-5">
                                         <div>
-                                            <p className="text-sm font-medium text-slate-900 dark:text-white">{ticket.userName}</p>
-                                            <p className="text-xs text-slate-500">{ticket.userEmail}</p>
+                                            <p className="text-sm font-bold text-slate-900 dark:text-white">{ticket.userName}</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 italic">{ticket.userEmail}</p>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">{ticket.category}</span>
+                                    <td className="px-6 py-5">
+                                        <div className="flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm text-slate-400">
+                                                {getCategoryIcon(ticket.category)}
+                                            </span>
+                                            <span className="text-[11px] font-black text-slate-600 dark:text-white/70 uppercase tracking-widest">{ticket.category}</span>
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4">{getPriorityBadge(ticket.priority)}</td>
                                     <td className="px-6 py-4">
-                                        <StatusDropdown
+                                        <StatusPill
                                             status={ticket.status}
-                                            onChange={(s) => handleStatusChange(ticket.id, s)}
+                                            interactive={true}
+                                            onStatusChange={(s) => handleStatusChange(ticket.id, s as any)}
                                         />
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className="text-sm text-slate-500">{ticket.updatedAt?.toLocaleDateString()}</span>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <Link
-                                            href={`/dashboard/admin/support/${ticket.id}`}
-                                            className="text-primary hover:underline flex items-center gap-1 text-sm font-medium"
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            asChild
+                                            className="font-bold text-primary hover:text-primary hover:bg-primary/5"
                                         >
-                                            View
-                                            <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                                        </Link>
+                                            <Link href={`/dashboard/admin/support/${ticket.id}`} className="flex items-center gap-2">
+                                                View Details
+                                                <ChevronRight className="w-4 h-4" />
+                                            </Link>
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}

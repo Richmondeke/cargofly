@@ -25,10 +25,17 @@ import {
     RotateCcw,
     ChevronUp,
     ChevronDown,
-    ChevronsUpDown
+    ChevronsUpDown,
+    Clock,
+    Ship
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { StatusPill } from "@/components/dashboard/StatusPill";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 
 export default function AdminRatesPage() {
     const [routes, setRoutes] = useState<Route[]>([]);
@@ -153,86 +160,100 @@ export default function AdminRatesPage() {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                    <div>
-                        <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2">
-                            Shipping Rates Management
+                    <div className="text-left">
+                        <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">
+                            Shipping Rates
                         </h1>
-                        <p className="text-slate-500 dark:text-slate-400">
+                        <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">
                             Manage global shipping routes, base rates, and currency configurations.
                         </p>
                     </div>
-                    <button
+                    <Button
                         onClick={() => setShowAddModal(true)}
-                        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gold-500 hover:bg-gold-600 text-navy-900 font-bold transition-all shadow-lg shadow-gold-500/20"
+                        leftIcon={<Plus className="w-5 h-5" />}
+                        className="shadow-xl shadow-primary/20"
                     >
-                        <Plus className="w-5 h-5" />
                         Add New Route
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-white dark:bg-navy-900/60 shadow-sm border border-slate-200 dark:border-white/5 rounded-2xl">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                                <Globe className="w-6 h-6 text-blue-500" />
+                    <Card variant="default">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+                                    <Globe className="w-6 h-6 text-blue-500" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Total Routes</p>
+                                    <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{routes.length}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">Total Routes</p>
-                                <p className="text-2xl font-bold text-slate-900 dark:text-white">{routes.length}</p>
+                        </CardContent>
+                    </Card>
+                    <Card variant="default">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
+                                    <TrendingUp className="w-6 h-6 text-emerald-500" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Active Destinations</p>
+                                    <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                        {routes.filter(r => r.status === 'active').length}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="bg-white dark:bg-navy-900/60 shadow-sm border border-slate-200 dark:border-white/5 rounded-2xl">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center">
-                                <TrendingUp className="w-6 h-6 text-green-500" />
+                        </CardContent>
+                    </Card>
+                    <Card variant="premium">
+                        <CardContent className="p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
+                                    <DollarSign className="w-6 h-6 text-white" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest">Currencies</p>
+                                    <p className="text-2xl font-black text-white tracking-tighter">
+                                        {[...new Set(routes.map(r => r.currency))].length}
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">Active Destinations</p>
-                                <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                                    {routes.filter(r => r.status === 'active').length}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="bg-white dark:bg-navy-900/60 shadow-sm border border-slate-200 dark:border-white/5 rounded-2xl">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 rounded-xl bg-gold-500/10 flex items-center justify-center">
-                                <DollarSign className="w-6 h-6 text-gold-500" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">Currencies</p>
-                                <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                                    {[...new Set(routes.map(r => r.currency))].length}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 {/* Filters & Search */}
-                <div className="bg-white dark:bg-navy-900/60 shadow-sm border border-slate-200 dark:border-white/5 rounded-2xl p-4 mb-6 flex flex-col md:flex-row gap-4">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                        <input
+                <Card variant="flat" className="p-4 mb-8 flex flex-col md:flex-row gap-4 border-none items-center">
+                    <div className="relative flex-1 w-full">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+                        <Input
                             type="text"
                             placeholder="Search by origin or destination..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500/50"
+                            className="pl-12 bg-white dark:bg-slate-900 border-none shadow-none"
                         />
                     </div>
-                    <div className="flex gap-2">
-                        <button className="flex items-center gap-2 px-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 transition-all text-slate-600 dark:text-slate-300">
-                            <Filter className="w-5 h-5" />
+                    <div className="flex gap-2 w-full md:w-auto">
+                        <Button
+                            variant="outline"
+                            leftIcon={<Filter className="w-4 h-4" />}
+                            className="flex-1 md:flex-none"
+                        >
                             Filters
-                        </button>
-                        <button onClick={fetchRoutes} className="p-3 rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 transition-all text-slate-600 dark:text-slate-300">
-                            <RotateCcw className="w-5 h-5" />
-                        </button>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={fetchRoutes}
+                            className="flex-shrink-0"
+                        >
+                            <RotateCcw className={cn("w-4 h-4 text-slate-500", loading && "animate-spin")} />
+                        </Button>
                     </div>
-                </div>
+                </Card>
 
                 {/* Routes Table */}
                 <div className="bg-white dark:bg-navy-900/60 rounded-2xl border border-slate-200 dark:border-white/5 shadow-sm overflow-hidden">
@@ -348,13 +369,7 @@ export default function AdminRatesPage() {
                                             {route.transitTime || "N/A"}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className={cn(
-                                                "flex items-center gap-1.5 text-xs font-semibold",
-                                                route.status === 'active' ? "text-green-500" : "text-slate-400"
-                                            )}>
-                                                <div className={cn("w-1.5 h-1.5 rounded-full", route.status === 'active' ? "bg-green-500" : "bg-slate-400")} />
-                                                {route.status}
-                                            </span>
+                                            <StatusPill status={route.status === 'active' ? 'success' : 'failed'} />
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -478,18 +493,19 @@ export default function AdminRatesPage() {
                             </div>
 
                             <div className="flex gap-4 mt-8">
-                                <button
+                                <Button
+                                    variant="ghost"
                                     onClick={() => setShowAddModal(false)}
-                                    className="flex-1 px-6 py-4 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 font-bold"
+                                    className="flex-1"
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                     onClick={handleAddRoute}
-                                    className="flex-1 px-6 py-4 rounded-xl bg-gold-500 text-navy-900 font-bold shadow-lg shadow-gold-500/20"
+                                    className="flex-1 shadow-lg shadow-primary/20"
                                 >
                                     Create Route
-                                </button>
+                                </Button>
                             </div>
                         </motion.div>
                     </div>

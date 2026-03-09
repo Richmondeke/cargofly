@@ -7,21 +7,21 @@ import L from 'leaflet';
 import { Location, Route } from '@/lib/dashboard-service';
 
 // Fix for default Leaflet icon issues in Next.js
-const iconUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png';
-const iconRetinaUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png';
-const shadowUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png';
+const getIcon = () => {
+    const iconUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png';
+    const iconRetinaUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png';
+    const shadowUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png';
 
-const DefaultIcon = L.icon({
-    iconUrl,
-    iconRetinaUrl,
-    shadowUrl,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
+    return L.icon({
+        iconUrl,
+        iconRetinaUrl,
+        shadowUrl,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+    });
+};
 
 // Helper to get coordinates for a location (mocking if missing)
 const getCoordinates = (loc: Location): [number, number] => {
@@ -46,6 +46,10 @@ const MapBounds = ({ locations }: { locations: Location[] }) => {
     const map = useMap();
 
     useEffect(() => {
+        if (typeof window !== 'undefined' && L.Marker.prototype.options.icon !== getIcon()) {
+            L.Marker.prototype.options.icon = getIcon();
+        }
+
         if (locations.length > 0) {
             const bounds = L.latLngBounds(locations.map(l => getCoordinates(l)));
             map.fitBounds(bounds, { padding: [50, 50] });

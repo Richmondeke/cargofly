@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getClaims, createClaim, Claim, getActiveShipments, DashboardShipment } from '@/lib/dashboard-service';
 import EmptyState from '@/components/common/EmptyState';
+import { StatusPill } from '@/components/dashboard/StatusPill';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ClaimsPage() {
@@ -82,8 +83,8 @@ export default function ClaimsPage() {
         <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Claims Center</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">File and track insurance claims for your shipments</p>
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Claims Center</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">File and track insurance claims for your shipments</p>
                 </div>
                 <button
                     onClick={() => setShowFileForm(!showFileForm)}
@@ -167,12 +168,7 @@ export default function ClaimsPage() {
                         <div key={claim.id} className="bg-white dark:bg-surface-dark rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between gap-4">
                             <div>
                                 <div className="flex items-center gap-3 mb-2">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${claim.status === 'approved' ? 'bg-green-100 text-green-700' :
-                                        claim.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                                            'bg-yellow-100 text-yellow-700'
-                                        }`}>
-                                        {claim.status === 'under_review' ? 'Under Review' : claim.status}
-                                    </span>
+                                    <StatusPill status={claim.status === 'under_review' ? 'under_review' : claim.status} />
                                     <span className="text-sm text-slate-400">ID: {claim.id}</span>
                                     <span className="text-sm text-slate-400">•</span>
                                     <span className="text-sm text-slate-400">{claim.createdAt?.toDate ? claim.createdAt.toDate().toLocaleDateString() : 'Date Unknown'}</span>

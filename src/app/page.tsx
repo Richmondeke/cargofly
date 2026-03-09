@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Globe, Headset, Users, CheckCircle, Search, ArrowRight, Plane, Clock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Select } from '@/components/ui/Select';
 import ExitIntentModal from '@/components/common/ExitIntentModal';
 
 const fadeUp: Variants = {
@@ -88,18 +89,18 @@ export default function Home() {
         .dark .map-bg { opacity: 0.15; display: block; }
       `}} />
 
-        <header className="relative pt-32 pb-20 md:pt-48 md:pb-40 overflow-hidden bg-transparent">
+        <header className="relative pt-24 pb-12 md:pt-48 md:pb-40 overflow-hidden bg-transparent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-center mb-12"
+              className="text-center mb-8 md:mb-12"
             >
-              <h1 className="text-5xl md:text-7xl font-bold text-navy-900 dark:text-white mb-6 tracking-tight">
+              <h1 className="text-4xl md:text-7xl font-bold text-navy-900 dark:text-white mb-4 md:mb-6 tracking-tight leading-[1.1]">
                 Global Logistics, <span className="text-gold-500">Simplified.</span>
               </h1>
-              <p className="text-lg md:text-xl text-navy-900/70 dark:text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed font-body">
+              <p className="text-base md:text-xl text-navy-900/70 dark:text-white/70 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed font-body px-4">
                 Track your shipments in real-time or book freight across oceans, skies, and roads with a single click.
               </p>
             </motion.div>
@@ -109,20 +110,20 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="max-w-4xl mx-auto bg-slate-50/80 dark:bg-navy-900/40 backdrop-blur-3xl rounded-[32px] shadow-2xl p-4 md:p-6 border border-slate-200 dark:border-white/10" id="action-tabs"
             >
-              <div className="flex bg-slate-200/50 dark:bg-navy-900/30 backdrop-blur-md rounded-2xl p-1 relative overflow-hidden w-fit mx-auto shadow-sm border border-slate-200 dark:border-white/10 mb-6">
+              <div className="flex bg-slate-200/50 dark:bg-navy-900/30 backdrop-blur-md rounded-2xl p-1 relative overflow-hidden w-full md:w-fit mx-auto shadow-sm border border-slate-200 dark:border-white/10 mb-6">
                 <button
-                  className={"px-8 py-3 text-sm font-bold tracking-wide uppercase transition-all duration-300 min-w-[180px] rounded-xl flex items-center justify-center gap-2 " + (activeTab === 'track' ? 'bg-white text-navy-900 shadow-md' : 'text-navy-900/70 dark:text-white/80 hover:text-navy-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5')}
+                  className={"flex-1 md:px-8 py-3 text-sm font-bold tracking-wide uppercase transition-all duration-300 rounded-xl flex items-center justify-center gap-2 " + (activeTab === 'track' ? 'bg-white text-navy-900 shadow-md' : 'text-navy-900/70 dark:text-white/80 hover:text-navy-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5')}
                   onClick={() => setActiveTab('track')}
                 >
                   <span className="material-symbols-outlined text-lg">location_on</span>
-                  Track Shipment
+                  <span className="truncate">Track</span>
                 </button>
                 <button
-                  className={"px-8 py-3 text-sm font-bold tracking-wide uppercase transition-all duration-300 min-w-[180px] rounded-xl flex items-center justify-center gap-2 " + (activeTab === 'book' ? 'bg-white text-navy-900 shadow-md' : 'text-navy-900/70 dark:text-white/80 hover:text-navy-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5')}
+                  className={"flex-1 md:px-8 py-3 text-sm font-bold tracking-wide uppercase transition-all duration-300 rounded-xl flex items-center justify-center gap-2 " + (activeTab === 'book' ? 'bg-white text-navy-900 shadow-md' : 'text-navy-900/70 dark:text-white/80 hover:text-navy-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5')}
                   onClick={() => setActiveTab('book')}
                 >
                   <span className="material-symbols-outlined text-lg">local_shipping</span>
-                  Book Freight
+                  <span className="truncate">Book</span>
                 </button>
               </div>
 
@@ -191,7 +192,7 @@ export default function Home() {
                       </div>
                       <div className="relative">
                         <label className="block text-xs font-bold text-navy-900/60 dark:text-white/80 uppercase mb-2 ml-1">Cargo Type</label>
-                        <select
+                        <Select
                           className="w-full p-4 rounded-xl bg-white text-slate-800 border-0 focus:ring-2 focus:ring-gold-500 outline-none"
                           value={bookingData.cargoType}
                           onChange={(e) => setBookingData(prev => ({ ...prev, cargoType: e.target.value }))}
@@ -200,7 +201,7 @@ export default function Home() {
                           <option>Fragile</option>
                           <option>Hazardous</option>
                           <option>Temperature Controlled</option>
-                        </select>
+                        </Select>
                       </div>
                       <div className="flex items-end">
                         <motion.button
@@ -330,7 +331,7 @@ export default function Home() {
               </div>
               <motion.a
                 whileHover={{ x: 10 }}
-                className="text-gold-500 font-semibold flex items-center gap-2 hover:underline" href="#"
+                className="text-gold-500 font-semibold flex items-center gap-2 hover:underline" href="/dashboard/new-booking"
               >
                 Explore All Aviation Services <span className="material-symbols-outlined">arrow_right_alt</span>
               </motion.a>
@@ -367,6 +368,7 @@ export default function Home() {
                   ))}
                 </ul>
                 <motion.button
+                  onClick={() => router.push('/dashboard/new-booking')}
                   whileHover={{ scale: 1.02, backgroundColor: "#EAB308", color: "#000" }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-5 rounded-2xl border-2 border-gold-500/50 dark:border-gold-500/30 text-gold-500 font-bold transition-all duration-300 shadow-md flex items-center justify-center gap-2"
@@ -498,23 +500,24 @@ export default function Home() {
                     { dest: "South - East", time: "1.2HRS", rate: "2,500", flag: "ng" },
                     { dest: "South - South", time: "0.9HRS", rate: "2,500", flag: "ng" },
                   ].map((route, i) => (
-                    <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group">
-                      <div className="flex items-center gap-4">
-                        <div className="text-navy-900 dark:text-white font-bold flex items-center gap-3">
-                          <img
-                            src={`https://flagcdn.com/w40/${route.flag}.png`}
-                            alt=""
-                            className="w-6 h-6 rounded-full object-cover border border-white/10 shadow-sm"
-                          />
-                          Lagos <span className="text-gold-500 mx-1">↔</span> {route.dest}
+                    <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group gap-2 sm:gap-4">
+                      {/* Local Routes items - optimized for mobile */}
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={`https://flagcdn.com/w40/${route.flag}.png`}
+                          alt=""
+                          className="w-5 h-5 rounded-full object-cover border border-white/10 shadow-sm"
+                        />
+                        <div className="text-navy-900 dark:text-white font-bold text-sm sm:text-base flex items-center gap-2">
+                          Lagos <span className="text-gold-500">↔</span> {route.dest}
                         </div>
                       </div>
-                      <div className="flex items-center gap-6">
-                        <div className="text-navy-900/40 dark:text-white/40 text-sm flex items-center gap-1.5 font-medium">
-                          <Clock className="w-4 h-4" />
+                      <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 mt-1 sm:mt-0">
+                        <div className="text-navy-900/40 dark:text-white/40 text-[10px] sm:text-xs flex items-center gap-1.5 font-medium uppercase tracking-wider">
+                          <Clock className="w-3.5 h-3.5" />
                           {route.time}
                         </div>
-                        <div className="text-gold-500 font-bold">₦{route.rate}</div>
+                        <div className="text-gold-500 font-bold text-sm sm:text-base">₦{route.rate}</div>
                       </div>
                     </div>
                   ))}
@@ -545,23 +548,24 @@ export default function Home() {
                     { dest: "Togo", time: "0.59HRS", rate: "9,500", flag: "tg" },
                     { dest: "Abidjan", time: "1.76HRS", rate: "15,000", flag: "ci" }
                   ].map((route, i) => (
-                    <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group">
-                      <div className="flex items-center gap-4">
-                        <div className="text-navy-900 dark:text-white font-bold flex items-center gap-3">
-                          <img
-                            src={`https://flagcdn.com/w40/${route.flag}.png`}
-                            alt=""
-                            className="w-6 h-6 rounded-full object-cover border border-white/10 shadow-sm"
-                          />
-                          Lagos <span className="text-gold-500 mx-1">↔</span> {route.dest}
+                    <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group gap-2 sm:gap-4">
+                      {/* Regional Routes items - optimized for mobile */}
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={`https://flagcdn.com/w40/${route.flag}.png`}
+                          alt=""
+                          className="w-5 h-5 rounded-full object-cover border border-white/10 shadow-sm"
+                        />
+                        <div className="text-navy-900 dark:text-white font-bold text-sm sm:text-base flex items-center gap-2">
+                          Lagos <span className="text-gold-500">↔</span> {route.dest}
                         </div>
                       </div>
-                      <div className="flex items-center gap-6">
-                        <div className="text-navy-900/40 dark:text-white/40 text-sm flex items-center gap-1.5 font-medium">
-                          <Clock className="w-4 h-4" />
+                      <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 mt-1 sm:mt-0">
+                        <div className="text-navy-900/40 dark:text-white/40 text-[10px] sm:text-xs flex items-center gap-1.5 font-medium uppercase tracking-wider">
+                          <Clock className="w-3.5 h-3.5" />
                           {route.time}
                         </div>
-                        <div className="text-gold-500 font-bold">₦{route.rate}</div>
+                        <div className="text-gold-500 font-bold text-sm sm:text-base">₦{route.rate}</div>
                       </div>
                     </div>
                   ))}
@@ -569,7 +573,7 @@ export default function Home() {
               </motion.div>
             </div>
           </div>
-        </section>
+        </section >
 
         <section className="py-24 bg-white dark:bg-transparent border-t border-slate-200 dark:border-white/10 relative z-10 overflow-hidden">
           {/* Decorative background circle */}
@@ -608,7 +612,7 @@ export default function Home() {
                 <p className="text-navy-900/80 dark:text-white/80 leading-relaxed mb-6">
                   Our modern fleet of specialized cargo aircraft, operated by skilled professionals, ensures your cargo reaches its destination safely and on time.
                 </p>
-                <button className="text-gold-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 group/btn">
+                <button onClick={() => router.push('/about')} className="text-gold-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 group/btn">
                   LEARN MORE
                   <span className="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
                 </button>
@@ -634,7 +638,7 @@ export default function Home() {
                 <p className="text-navy-900/80 dark:text-white/80 leading-relaxed mb-6">
                   Our friendly and knowledgeable team is dedicated to providing every customer a seamless and personalized shipping experience.
                 </p>
-                <button className="text-gold-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 group/btn">
+                <button onClick={() => router.push('/about')} className="text-gold-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 group/btn">
                   LEARN MORE
                   <span className="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
                 </button>
@@ -660,7 +664,7 @@ export default function Home() {
                 <p className="text-navy-900/80 dark:text-white/80 leading-relaxed mb-6">
                   We provide vital connections across Nigeria and West Africa, supporting individuals, businesses, and communities with reliable air transit.
                 </p>
-                <button className="text-gold-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 group/btn">
+                <button onClick={() => router.push('/about')} className="text-gold-500 font-bold uppercase tracking-widest text-xs flex items-center gap-2 group/btn">
                   LEARN MORE
                   <span className="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
                 </button>
@@ -718,8 +722,8 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
-      </div>
+      </div >
       <ExitIntentModal />
-    </div>
+    </div >
   );
 }

@@ -132,20 +132,25 @@ export default function AdminTicketDetailPage() {
                 </Link>
                 <div className="flex items-start justify-between gap-6">
                     <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
+                        <div className="flex items-center gap-3 mb-2 relative z-[60]">
                             <span className="text-xs font-mono text-slate-400">#{ticket.id}</span>
-                            <select
-                                value={ticket.status}
-                                onChange={(e) => handleStatusChange(e.target.value as Ticket['status'])}
-                                className={`px-3 py-1 rounded-lg text-xs font-medium border-0 cursor-pointer ${getStatusColor(ticket.status)}`}
-                            >
-                                <option value="open">Open</option>
-                                <option value="in-progress">In Progress</option>
-                                <option value="resolved">Resolved</option>
-                                <option value="closed">Closed</option>
-                            </select>
+                            <div className="relative">
+                                <select
+                                    value={ticket.status}
+                                    onChange={(e) => handleStatusChange(e.target.value as Ticket['status'])}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200/50 appearance-none pr-8 cursor-pointer shadow-sm transition-all focus:ring-2 focus:ring-primary/20 ${getStatusColor(ticket.status)}`}
+                                >
+                                    <option value="open">Open</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="resolved">Resolved</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                                <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-sm pointer-events-none opacity-50">
+                                    expand_more
+                                </span>
+                            </div>
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{ticket.subject}</h2>
+                        <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">{ticket.subject}</h1>
                     </div>
                     <div className="text-right text-sm">
                         <p className="font-medium text-slate-900 dark:text-white">{ticket.userName}</p>
@@ -166,24 +171,40 @@ export default function AdminTicketDetailPage() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 {messages.map((msg) => (
                     <div
                         key={msg.id}
-                        className={`flex ${msg.senderRole === 'admin' ? 'justify-end' : 'justify-start'}`}
+                        className={`flex flex-col ${msg.senderRole === 'admin' ? 'items-end' : 'items-start'}`}
                     >
                         <div
-                            className={`max-w-[70%] rounded-2xl px-4 py-3 ${msg.senderRole === 'admin'
-                                    ? 'bg-primary text-white rounded-br-md'
-                                    : 'bg-white dark:bg-surface-dark text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-bl-md'
+                            className={`max-w-[80%] rounded-2xl px-5 py-3 transition-all ${msg.senderRole === 'admin'
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20 rounded-tr-none'
+                                : 'bg-white/80 dark:bg-white/5 backdrop-blur-md text-slate-900 dark:text-white border border-slate-200/50 dark:border-white/10 shadow-sm rounded-tl-none'
                                 }`}
                         >
-                            <div className={`text-xs mb-1 ${msg.senderRole === 'admin' ? 'text-white/70' : 'text-slate-500'}`}>
-                                {msg.senderName}
-                                {' • '}
-                                {msg.createdAt?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </div>
-                            <p className="whitespace-pre-wrap">{msg.content}</p>
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+
+                            {msg.attachments && msg.attachments.length > 0 && (
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                    {msg.attachments.map((url, i) => (
+                                        <a
+                                            key={url}
+                                            href={url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="block h-20 w-20 rounded-lg overflow-hidden border border-white/20 hover:scale-105 transition-transform"
+                                        >
+                                            <img src={url} alt="attachment" className="h-full w-full object-cover" />
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={`flex items-center gap-2 mt-1 px-1 text-[10px] text-slate-400 font-medium ${msg.senderRole === 'admin' ? 'flex-row-reverse' : 'flex-row'}`}>
+                            <span>{msg.createdAt?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                            {msg.senderName && <span className="opacity-60">• {msg.senderName}</span>}
                         </div>
                     </div>
                 ))}

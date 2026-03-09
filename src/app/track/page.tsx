@@ -125,7 +125,9 @@ function TrackPageContent() {
     };
 
     const handleViewInvoice = () => {
-        alert("Invoice viewing functionality is coming soon! For now, please check your email for the official receipt.");
+        if (shipment?.id) {
+            window.open(`/invoice/${shipment.id}`, '_blank');
+        }
     };
 
     const getProgress = (status: string) => {
@@ -313,11 +315,14 @@ function TrackPageContent() {
                                         </div>
                                         <div className="space-y-1 md:text-right">
                                             <p className="text-[10px] text-slate-400 dark:text-gray-400 font-bold tracking-widest uppercase">Weight</p>
-                                            <p className="text-lg font-display text-navy-900 dark:text-white">{shipment.package.weight} kg</p>
+                                            <p className="text-lg font-display text-navy-900 dark:text-white">{shipment.packages.reduce((sum, p) => sum + p.weight, 0).toFixed(2)} kg</p>
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-[10px] text-slate-400 dark:text-gray-400 font-bold tracking-widest uppercase">Cargo Type</p>
-                                            <p className="text-lg font-display text-navy-900 dark:text-white">{shipment.package.description}</p>
+                                            <p className="text-lg font-display text-navy-900 dark:text-white">
+                                                {shipment.packages[0].description}
+                                                {shipment.packages.length > 1 && ` (+${shipment.packages.length - 1} more)`}
+                                            </p>
                                         </div>
                                         <div className="space-y-1 md:text-right">
                                             <p className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Service Level</p>
@@ -329,7 +334,7 @@ function TrackPageContent() {
 
                                     <div className="pt-8 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6">
                                         <p className="text-slate-400 dark:text-gray-400 font-mono text-sm tracking-wider">
-                                            Invoice #INV-2023-8829
+                                            Invoice #{shipment.id ? shipment.id.substring(0, 8).toUpperCase() : 'INV'}
                                         </p>
                                         <button
                                             onClick={handleViewInvoice}

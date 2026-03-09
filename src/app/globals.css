@@ -132,9 +132,15 @@
 */
 
 @layer base {
+  html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+  }
+
   body {
-    /* Background and color are now handled by classes on the body/main elements or defaults */
+    overflow-x: hidden;
     font-family: var(--font-body);
+    position: relative;
   }
 
   h1,
@@ -160,8 +166,8 @@
   .dark input:-webkit-autofill:hover,
   .dark input:-webkit-autofill:focus,
   .dark input:-webkit-autofill:active {
-      -webkit-text-fill-color: white !important;
-      box-shadow: 0 0 0 30px #001A4D inset !important;
+    -webkit-text-fill-color: white !important;
+    box-shadow: 0 0 0 30px #001A4D inset !important;
   }
 }
 
@@ -174,6 +180,7 @@
     @apply bg-gold-500 text-navy-900 font-bold uppercase tracking-wider hover:shadow-lg transition-all;
   }
 }
+
 .bg-motif {
   background-image: url('/Cargofly motif_transparent.png');
   background-repeat: repeat;

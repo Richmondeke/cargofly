@@ -1,14 +1,18 @@
-"use strict";
+'use client';
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 const ExitIntentModal = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [isDismissed, setIsDismissed] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
         // Check if user has already seen/dismissed it in this session
         const hasSeen = sessionStorage.getItem("hasSeenExitModal");
         if (hasSeen) {
@@ -36,34 +40,34 @@ const ExitIntentModal = () => {
         setIsDismissed(true);
     };
 
-    if (isDismissed && !isVisible) return null;
+    if (!mounted || (isDismissed && !isVisible)) return null;
 
-    return (
+    return createPortal(
         <AnimatePresence>
             {isVisible && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={handleClose}
-                        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"
+                        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[9998]"
                     />
 
-                    {/* Modal Content */}
+                    {/* Modal Content Wrapper */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-4xl bg-slate-900 rounded-[32px] overflow-hidden shadow-2xl border border-white/10 flex flex-col md:flex-row min-h-[500px]"
+                        className="relative z-[9999] w-full max-w-4xl bg-slate-900 rounded-[32px] overflow-hidden shadow-2xl border border-white/10 flex flex-col md:flex-row min-h-[500px]"
                     >
                         {/* Close Button */}
                         <button
                             onClick={handleClose}
-                            className="absolute top-6 right-6 z-20 w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+                            className="absolute top-6 right-6 z-20 w-10 h-10 bg-white/10 text-white flex items-center justify-center rounded-lg hover:bg-white/20 transition-all border border-white/20 shadow-lg backdrop-blur-md"
                         >
-                            <span className="material-symbols-outlined font-bold">close</span>
+                            <X className="w-6 h-6" />
                         </button>
 
                         {/* Image Side (Left) */}
@@ -133,7 +137,8 @@ const ExitIntentModal = () => {
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };
 

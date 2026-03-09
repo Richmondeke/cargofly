@@ -381,6 +381,19 @@ export default function ContactPage() {
                             </div>
                         ))}
                     </div>
+
+                    <div className="mt-12 text-center">
+                        <p className="text-white/40 font-body mb-6">
+                            Didn't find what you were looking for?
+                        </p>
+                        <a
+                            href="/faqs"
+                            className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-display hover:bg-white/10 transition-all group"
+                        >
+                            View All FAQs
+                            <ChevronDown className="w-4 h-4 -rotate-90 group-hover:translate-x-1 transition-transform" />
+                        </a>
+                    </div>
                 </motion.div>
             </div>
         </div>

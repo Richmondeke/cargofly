@@ -4,6 +4,27 @@ import React, { useEffect, useState } from 'react';
 import { getTeamMembers, getRecentActivities, formatActivityTime, TeamMember, Activity, getDashboardStats, inviteTeamMember } from '@/lib/dashboard-service';
 import { useAuth } from '@/contexts/AuthContext';
 import RiveAnimation from '@/components/ui/RiveAnimation';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
+import {
+    UserPlus,
+    MoreVertical,
+    Edit,
+    UserMinus,
+    Trash2,
+    Truck,
+    Activity as ActivityIcon,
+    CheckCircle,
+    CreditCard,
+    ShieldOff,
+    UserCheck,
+    Box,
+    Clock,
+    RefreshCcw
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
     const [email, setEmail] = useState('');
@@ -34,74 +55,76 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div className="bg-white dark:bg-navy-900 rounded-2xl w-full max-w-md p-6 shadow-xl border border-slate-200 dark:border-navy-700 animate-in fade-in zoom-in duration-200">
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Invite Team Member</h3>
+            <Card className="w-full max-w-md shadow-2xl border-none">
+                <CardHeader>
+                    <CardTitle>Invite Team Member</CardTitle>
+                    <CardDescription>Send an invitation to join your team.</CardDescription>
+                </CardHeader>
 
-                {error && (
-                    <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-lg">
-                        {error}
-                    </div>
-                )}
+                <CardContent>
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-lg">
+                            {error}
+                        </div>
+                    )}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
-                        <input
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-navy-600 bg-white dark:bg-navy-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:outline-none"
-                            placeholder="colleague@example.com"
-                        />
-                    </div>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Email Address</label>
+                            <Input
+                                type="email"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="colleague@example.com"
+                            />
+                        </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Role</label>
-                        <select
-                            value={role}
-                            onChange={(e) => setRole(e.target.value as any)}
-                            className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-navy-600 bg-white dark:bg-navy-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:outline-none"
-                        >
-                            <option value="staff">Staff</option>
-                            <option value="manager">Manager</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
+                        <div>
+                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Role</label>
+                            <Select
+                                value={role}
+                                onChange={(e) => setRole(e.target.value as any)}
+                            >
+                                <option value="staff">Staff</option>
+                                <option value="manager">Manager</option>
+                                <option value="admin">Admin</option>
+                            </Select>
+                        </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Department</label>
-                        <select
-                            value={department}
-                            onChange={(e) => setDepartment(e.target.value)}
-                            className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-navy-600 bg-white dark:bg-navy-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:outline-none"
-                        >
-                            <option value="Operations">Operations</option>
-                            <option value="Finance">Finance</option>
-                            <option value="Logistics">Logistics</option>
-                            <option value="IT">IT</option>
-                            <option value="Customer Support">Customer Support</option>
-                        </select>
-                    </div>
+                        <div>
+                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Department</label>
+                            <Select
+                                value={department}
+                                onChange={(e) => setDepartment(e.target.value)}
+                            >
+                                <option value="Operations">Operations</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Logistics">Logistics</option>
+                                <option value="IT">IT</option>
+                                <option value="Customer Support">Customer Support</option>
+                            </Select>
+                        </div>
 
-                    <div className="flex gap-3 mt-6">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="flex-1 py-2 rounded-lg border border-slate-300 dark:border-navy-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-navy-800 font-medium transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="flex-1 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-                        >
-                            {loading ? <span className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" /> : 'Send Invite'}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                        <div className="flex gap-3 mt-6">
+                            <Button
+                                variant="ghost"
+                                className="flex-1"
+                                onClick={onClose}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                loading={loading}
+                                className="flex-1"
+                            >
+                                Send Invite
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     );
 }
@@ -164,74 +187,89 @@ export default function AdminPage() {
 
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Operations</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">System administration and team management</p>
+                <div className="text-left">
+                    <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">Operations</h1>
+                    <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">System administration and team management</p>
                 </div>
-                <button
+                <Button
                     onClick={() => setShowInviteModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-all shadow-md"
+                    leftIcon={<UserPlus className="w-4 h-4" />}
                 >
-                    <span className="material-symbols-outlined text-lg">person_add</span>
                     Add Team Member
-                </button>
+                </Button>
             </div>
 
             {/* System Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {/* Total Shipments */}
-                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="material-symbols-outlined text-gold-500">local_shipping</span>
-                        <span className="text-sm font-medium text-slate-500">Total Shipments</span>
-                    </div>
-                    {loading ? (
-                        <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
-                    ) : (
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.totalShipments.toLocaleString()}</p>
-                    )}
-                </div>
+                <Card variant="default">
+                    <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                                <Truck className="w-4 h-4 text-amber-500" />
+                            </div>
+                            <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Shipments</span>
+                        </div>
+                        {loading ? (
+                            <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+                        ) : (
+                            <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{stats.totalShipments.toLocaleString()}</p>
+                        )}
+                    </CardContent>
+                </Card>
 
                 {/* In Transit */}
-                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="material-symbols-outlined text-sky-500">moving</span>
-                        <span className="text-sm font-medium text-slate-500">In Transit</span>
-                    </div>
-                    {loading ? (
-                        <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
-                    ) : (
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.inTransit.toLocaleString()}</p>
-                    )}
-                </div>
+                <Card variant="default">
+                    <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-sky-50 dark:bg-sky-900/20 rounded-lg">
+                                <ActivityIcon className="w-4 h-4 text-sky-500" />
+                            </div>
+                            <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">In Transit</span>
+                        </div>
+                        {loading ? (
+                            <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+                        ) : (
+                            <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{stats.inTransit.toLocaleString()}</p>
+                        )}
+                    </CardContent>
+                </Card>
 
                 {/* Delivered */}
-                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="material-symbols-outlined text-green-500">check_circle</span>
-                        <span className="text-sm font-medium text-slate-500">Delivered</span>
-                    </div>
-                    {loading ? (
-                        <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
-                    ) : (
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.delivered.toLocaleString()}</p>
-                    )}
-                </div>
+                <Card variant="default">
+                    <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                                <CheckCircle className="w-4 h-4 text-emerald-500" />
+                            </div>
+                            <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Delivered</span>
+                        </div>
+                        {loading ? (
+                            <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+                        ) : (
+                            <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{stats.delivered.toLocaleString()}</p>
+                        )}
+                    </CardContent>
+                </Card>
 
                 {/* Total Revenue */}
-                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="material-symbols-outlined text-primary">payments</span>
-                        <span className="text-sm font-medium text-slate-500">Total Revenue</span>
-                    </div>
-                    {loading ? (
-                        <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
-                    ) : (
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                            ${(stats.totalRevenue / 1000).toFixed(1)}k
-                        </p>
-                    )}
-                </div>
+                <Card variant="premium">
+                    <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-white/10 rounded-lg">
+                                <CreditCard className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="text-sm font-bold text-white/70 uppercase tracking-wider">Total Revenue</span>
+                        </div>
+                        {loading ? (
+                            <div className="h-8 w-16 bg-white/10 rounded animate-pulse"></div>
+                        ) : (
+                            <p className="text-3xl font-black text-white tracking-tighter">
+                                ${(stats.totalRevenue / 1000).toFixed(1)}k
+                            </p>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

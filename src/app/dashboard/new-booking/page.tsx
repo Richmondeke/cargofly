@@ -21,17 +21,19 @@ export default function NewBookingPage() {
     const [loading, setLoading] = useState(false);
     const [trackingNumber, setTrackingNumber] = useState<string | null>(null);
 
-    const [formData, setFormData] = useState({
-        origin: searchParams.get('origin') || '',
-        destination: searchParams.get('destination') || '',
-        serviceType: searchParams.get('cargoType')?.toLowerCase() || 'express',
-        // Package details
+    const [packages, setPackages] = useState([{
         weight: '',
         length: '',
         width: '',
         height: '',
         description: '',
         isFragile: searchParams.get('cargoType')?.toLowerCase() === 'fragile',
+    }]);
+
+    const [formData, setFormData] = useState({
+        origin: searchParams.get('origin') || '',
+        destination: searchParams.get('destination') || '',
+        serviceType: searchParams.get('cargoType')?.toLowerCase() || 'express',
         // Sender
         senderName: '',
         senderPhone: '',
@@ -59,10 +61,43 @@ export default function NewBookingPage() {
                 origin: origin || prev.origin,
                 destination: destination || prev.destination,
                 serviceType: cargoType || prev.serviceType,
-                isFragile: cargoType === 'fragile' || prev.isFragile
             }));
+            if (cargoType === 'fragile') {
+                setPackages(prev => {
+                    const newPackages = [...prev];
+                    newPackages[0].isFragile = true;
+                    return newPackages;
+                });
+            }
         }
     }, [searchParams]);
+
+    const handlePackageChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        setPackages(prev => {
+            const newPackages = [...prev];
+            newPackages[index] = {
+                ...newPackages[index],
+                [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+            };
+            return newPackages;
+        });
+    };
+
+    const addPackage = () => {
+        setPackages(prev => [...prev, {
+            weight: '',
+            length: '',
+            width: '',
+            height: '',
+            description: '',
+            isFragile: false,
+        }]);
+    };
+
+    const removePackage = (index: number) => {
+        setPackages(prev => prev.filter((_, i) => i !== index));
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -90,14 +125,14 @@ export default function NewBookingPage() {
                 origin: formData.origin,
                 destination: formData.destination,
                 serviceType: formData.serviceType,
-                packageDetails: {
-                    weight: parseFloat(formData.weight) || 0,
-                    length: parseFloat(formData.length) || 0,
-                    width: parseFloat(formData.width) || 0,
-                    height: parseFloat(formData.height) || 0,
-                    description: formData.description,
-                    isFragile: formData.isFragile,
-                },
+                packageDetails: packages.map(p => ({
+                    weight: parseFloat(p.weight) || 0,
+                    length: parseFloat(p.length) || 0,
+                    width: parseFloat(p.width) || 0,
+                    height: parseFloat(p.height) || 0,
+                    description: p.description,
+                    isFragile: p.isFragile,
+                })),
                 sender: {
                     name: formData.senderName,
                     phone: formData.senderPhone,
@@ -151,61 +186,63 @@ export default function NewBookingPage() {
 
     // Calculate estimated price
     const calculatePrices = () => {
+        const totalWeight = packages.reduce((sum, p) => sum + (parseFloat(p.weight) || 0), 0) || 1;
+
         if (!currentRoute) {
             const base = formData.serviceType === 'express' ? 250 : (formData.serviceType === 'standard' ? 150 : 100);
-            const weightP = (parseFloat(formData.weight) || 0) * 10;
+            const weightP = totalWeight * 10;
             return { base, total: base + weightP + 25, currency: 'USD' };
         }
 
         const multiplier = formData.serviceType === 'express' ? 1.5 : (formData.serviceType === 'standard' ? 1 : 0.8);
-        const base = currentRoute.rate * (parseFloat(formData.weight) || 1) * multiplier;
+        const base = currentRoute.rate * totalWeight * multiplier;
         return { base, total: base + 25, currency: currentRoute.currency };
     };
 
     const { base: basePrice, total: totalPrice, currency } = calculatePrices();
 
     return (
-        <div className="flex-1 overflow-y-auto p-8 h-full bg-slate-50 dark:bg-background-dark">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 h-full bg-slate-50 dark:bg-background-dark">
             {/* Header */}
             <div className="mb-8">
-                <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">New Booking</h2>
-                <p className="text-slate-500 dark:text-slate-400 mt-1">Create a new shipment request</p>
+                <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight">New Booking</h1>
+                <p className="text-[14px] text-[#64748b] dark:text-slate-400 mt-1">Create a new shipment request</p>
             </div>
 
-            {/* Progress Steps */}
-            <div className="flex items-center justify-center gap-4 mb-10">
+            {/* Progress Steps - Responsive */}
+            <div className="flex items-center justify-center gap-2 sm:gap-4 mb-10 overflow-x-auto py-2 no-scrollbar">
                 {steps.map((step, index) => (
                     <React.Fragment key={step.number}>
-                        <div className="flex items-center gap-2">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${currentStep >= step.number
-                                ? 'bg-primary text-white'
+                        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all ${currentStep >= step.number
+                                ? 'bg-primary text-white shadow-lg'
                                 : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
                                 }`}>
                                 {currentStep > step.number ? (
-                                    <span className="material-symbols-outlined text-base">check</span>
+                                    <span className="material-symbols-outlined text-sm sm:text-base">check</span>
                                 ) : (
                                     step.number
                                 )}
                             </div>
-                            <span className={`text-sm font-medium ${currentStep >= step.number ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                            <span className={`text-[10px] sm:text-sm font-semibold whitespace-nowrap ${currentStep >= step.number ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                                 {step.label}
                             </span>
                         </div>
                         {index < steps.length - 1 && (
-                            <div className={`w-16 h-0.5 ${currentStep > step.number ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'}`}></div>
+                            <div className={`w-8 sm:w-16 h-0.5 shrink-0 ${currentStep > step.number ? 'bg-primary shadow-sm' : 'bg-slate-200 dark:bg-slate-700'}`}></div>
                         )}
                     </React.Fragment>
                 ))}
             </div>
 
             {/* Form Content */}
-            <div className="max-w-2xl mx-auto">
-                <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-8">
+            <div className="max-w-2xl mx-auto w-full">
+                <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 sm:p-8">
                     {currentStep === 1 && (
                         <>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Shipment Details</h3>
                             <div className="space-y-5">
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <Label htmlFor="origin">Origin</Label>
                                         <Input
@@ -249,77 +286,107 @@ export default function NewBookingPage() {
                     {currentStep === 2 && (
                         <>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Package & Contact Details</h3>
-                            <div className="space-y-5">
-                                <div className="grid grid-cols-4 gap-4">
-                                    <div>
-                                        <Label htmlFor="weight">Weight (kg)</Label>
-                                        <Input
-                                            id="weight"
-                                            type="number"
-                                            name="weight"
-                                            value={formData.weight}
-                                            onChange={handleChange}
-                                            placeholder="0"
-                                        />
+                            <div className="space-y-8">
+                                {packages.map((pkg, index) => (
+                                    <div key={index} className="space-y-5 relative">
+                                        <div className="flex items-center justify-between">
+                                            <h4 className="font-semibold text-slate-900 dark:text-white">
+                                                Package {index + 1}
+                                            </h4>
+                                            {packages.length > 1 && (
+                                                <button
+                                                    onClick={() => removePackage(index)}
+                                                    className="text-sm text-red-500 hover:text-red-600 flex items-center gap-1 font-medium"
+                                                >
+                                                    <span className="material-symbols-outlined text-base">delete</span>
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </div>
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                            <div>
+                                                <Label htmlFor={`weight-${index}`}>Weight (kg)</Label>
+                                                <Input
+                                                    id={`weight-${index}`}
+                                                    type="number"
+                                                    name="weight"
+                                                    value={pkg.weight}
+                                                    onChange={(e) => handlePackageChange(index, e as any)}
+                                                    placeholder="0"
+                                                />
+                                            </div>
+                                            <div>
+                                                <Label htmlFor={`length-${index}`}>L (cm)</Label>
+                                                <Input
+                                                    id={`length-${index}`}
+                                                    type="number"
+                                                    name="length"
+                                                    value={pkg.length}
+                                                    onChange={(e) => handlePackageChange(index, e as any)}
+                                                    placeholder="0"
+                                                />
+                                            </div>
+                                            <div>
+                                                <Label htmlFor={`width-${index}`}>W (cm)</Label>
+                                                <Input
+                                                    id={`width-${index}`}
+                                                    type="number"
+                                                    name="width"
+                                                    value={pkg.width}
+                                                    onChange={(e) => handlePackageChange(index, e as any)}
+                                                    placeholder="0"
+                                                />
+                                            </div>
+                                            <div>
+                                                <Label htmlFor={`height-${index}`}>H (cm)</Label>
+                                                <Input
+                                                    id={`height-${index}`}
+                                                    type="number"
+                                                    name="height"
+                                                    value={pkg.height}
+                                                    onChange={(e) => handlePackageChange(index, e as any)}
+                                                    placeholder="0"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <Label htmlFor={`description-${index}`}>Description</Label>
+                                            <Textarea
+                                                id={`description-${index}`}
+                                                name="description"
+                                                value={pkg.description}
+                                                onChange={(e) => handlePackageChange(index, e as any)}
+                                                rows={2}
+                                                placeholder="Describe the package contents"
+                                                className="resize-none"
+                                            />
+                                        </div>
+                                        <label className="flex items-center gap-3 cursor-pointer">
+                                            <Checkbox
+                                                name="isFragile"
+                                                checked={pkg.isFragile}
+                                                onChange={(e) => handlePackageChange(index, { target: { name: 'isFragile', type: 'checkbox', checked: e.target.checked } } as any)}
+                                            />
+                                            <span className="text-sm text-slate-600 dark:text-slate-400">This package is fragile</span>
+                                        </label>
+
+                                        {index < packages.length - 1 && (
+                                            <hr className="border-slate-100 dark:border-slate-800 my-6" />
+                                        )}
                                     </div>
-                                    <div>
-                                        <Label htmlFor="length">L (cm)</Label>
-                                        <Input
-                                            id="length"
-                                            type="number"
-                                            name="length"
-                                            value={formData.length}
-                                            onChange={handleChange}
-                                            placeholder="0"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="width">W (cm)</Label>
-                                        <Input
-                                            id="width"
-                                            type="number"
-                                            name="width"
-                                            value={formData.width}
-                                            onChange={handleChange}
-                                            placeholder="0"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="height">H (cm)</Label>
-                                        <Input
-                                            id="height"
-                                            type="number"
-                                            name="height"
-                                            value={formData.height}
-                                            onChange={handleChange}
-                                            placeholder="0"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <Label htmlFor="description">Description</Label>
-                                    <Textarea
-                                        id="description"
-                                        name="description"
-                                        value={formData.description}
-                                        onChange={handleChange}
-                                        rows={2}
-                                        placeholder="Describe the package contents"
-                                        className="resize-none"
-                                    />
-                                </div>
-                                <label className="flex items-center gap-3 cursor-pointer">
-                                    <Checkbox
-                                        name="isFragile"
-                                        checked={formData.isFragile}
-                                        onChange={(e) => handleChange({ target: { name: 'isFragile', type: 'checkbox', checked: e.target.checked } } as any)}
-                                    />
-                                    <span className="text-sm text-slate-600 dark:text-slate-400">This package is fragile</span>
-                                </label>
+                                ))}
+
+                                <button
+                                    onClick={addPackage}
+                                    className="w-full py-3 border-2 border-dashed border-primary/30 text-primary font-semibold rounded-xl hover:bg-primary/5 transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <span className="material-symbols-outlined pb-0.5 text-lg">add_circle</span>
+                                    Add Another Package
+                                </button>
 
                                 <hr className="border-slate-200 dark:border-slate-700" />
 
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div className="space-y-4">
                                         <h4 className="font-semibold text-slate-900 dark:text-white">Sender</h4>
                                         <Input
