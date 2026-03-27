@@ -108,12 +108,12 @@ export default function TicketsPage() {
                 {/* Header */}
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="font-['Work_Sans'] font-bold text-3xl tracking-tighter text-[#1b1c1c] uppercase">Support Tickets</h2>
-                        <p className="font-['Work_Sans'] font-semibold tracking-tight text-slate-500 text-sm mt-1">Manage and track your support inquiries</p>
+                        <h2 className="font-display font-medium text-3xl tracking-tighter text-[#1b1c1c] uppercase">Support Tickets</h2>
+                        <p className="font-display font-medium tracking-tight text-slate-500 text-sm mt-1">Manage and track your support inquiries</p>
                     </div>
                     <Link
                         href="/dashboard/support/new"
-                        className="bg-primary text-white py-3 px-6 rounded-xl font-bold text-sm flex items-center gap-2 shadow-lg hover:bg-navy-800 transition-all active:scale-95"
+                        className="bg-primary text-white py-3 px-6 rounded-xl font-medium text-sm flex items-center gap-2 shadow-lg hover:bg-navy-800 transition-all active:scale-95"
                     >
                         <span className="material-symbols-outlined">add</span>
                         Create New Ticket
@@ -128,10 +128,10 @@ export default function TicketsPage() {
                                 <div className={`p-2 rounded-xl ${stat.bg} ${stat.color}`}>
                                     <span className="material-symbols-outlined">{stat.icon}</span>
                                 </div>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Last 30 Days</span>
+                                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Last 30 Days</span>
                             </div>
                             <div className="flex items-baseline gap-2">
-                                <span className={`text-4xl font-['Work_Sans'] font-bold tracking-tighter ${stat.color}`}>
+                                <span className={`text-4xl font-display font-medium tracking-tighter ${stat.color}`}>
                                     {stat.value.toString().padStart(2, '0')}
                                 </span>
                                 <span className="text-slate-500 font-medium">{stat.label}</span>
@@ -149,7 +149,7 @@ export default function TicketsPage() {
                                 <button
                                     key={tab}
                                     onClick={() => { setActiveTab(tab); setPage(1); }}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === tab ? 'bg-white text-[#003399] shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === tab ? 'bg-white text-[#003399] shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
                                 >
                                     {tab}
                                 </button>
@@ -175,12 +175,12 @@ export default function TicketsPage() {
                         <table className="w-full text-left">
                             <thead className="bg-slate-50/50">
                                 <tr>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Ticket ID</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Subject</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Priority</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Last Activity</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Ticket ID</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Subject</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Category</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Priority</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Status</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 uppercase tracking-widest">Last Activity</th>
                                     <th className="px-6 py-4" />
                                 </tr>
                             </thead>
@@ -198,13 +198,13 @@ export default function TicketsPage() {
                                         <td colSpan={7} className="px-6 py-16 text-center">
                                             <div className="flex flex-col items-center gap-3">
                                                 <span className="material-symbols-outlined text-4xl text-slate-300">confirmation_number</span>
-                                                <p className="text-sm font-semibold text-slate-500">
+                                                <p className="text-sm font-medium text-slate-500">
                                                     {searchQuery ? 'No tickets match your search.' : 'No tickets yet.'}
                                                 </p>
                                                 {!searchQuery && (
                                                     <Link
                                                         href="/dashboard/support/new"
-                                                        className="mt-2 inline-flex items-center gap-2 bg-[#003399] text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-[#003399]/90 transition-all"
+                                                        className="mt-2 inline-flex items-center gap-2 bg-[#003399] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#003399]/90 transition-all"
                                                     >
                                                         <span className="material-symbols-outlined text-sm">add</span>
                                                         Create your first ticket
@@ -221,7 +221,7 @@ export default function TicketsPage() {
                                             className="hover:bg-slate-50/70 transition-colors group cursor-pointer"
                                         >
                                             <td className="px-6 py-4">
-                                                <span className="font-['Work_Sans'] font-bold text-[#003399] text-sm">{ticket.id}</span>
+                                                <span className="font-display font-medium text-[#003399] text-sm">{ticket.id}</span>
                                                 {ticket.unreadByUser && (
                                                     <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-[#003399] align-middle" />
                                                 )}
@@ -230,21 +230,21 @@ export default function TicketsPage() {
                                                 <span className="font-medium text-slate-900 text-sm line-clamp-1">{ticket.subject}</span>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest capitalize">{ticket.category}</span>
+                                                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest capitalize">{ticket.category}</span>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${priorityStyle(ticket.priority)}`}>
+                                                <span className={`px-2 py-1 rounded text-[10px] font-medium uppercase tracking-wider ${priorityStyle(ticket.priority)}`}>
                                                     {ticket.priority}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-1.5">
                                                     <div className={`size-1.5 rounded-full ${statusDot(ticket.status)}`} />
-                                                    <span className="text-xs font-semibold text-slate-600">{statusLabel(ticket.status)}</span>
+                                                    <span className="text-xs font-medium text-slate-600">{statusLabel(ticket.status)}</span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">
                                                     {timeAgo(ticket.updatedAt)}
                                                 </span>
                                             </td>
@@ -262,7 +262,7 @@ export default function TicketsPage() {
 
                     {/* Pagination */}
                     <div className="p-6 border-t border-slate-100 bg-slate-50/30 flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">
                             Showing {paged.length} of {filtered.length} ticket{filtered.length !== 1 ? 's' : ''}
                         </span>
                         <div className="flex items-center gap-2">
@@ -277,7 +277,7 @@ export default function TicketsPage() {
                                 <button
                                     key={p}
                                     onClick={() => setPage(p)}
-                                    className={`w-8 h-8 rounded-lg text-sm font-semibold transition-colors ${p === page ? 'bg-[#003399] text-white' : 'text-slate-500 hover:bg-slate-50'}`}
+                                    className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${p === page ? 'bg-[#003399] text-white' : 'text-slate-500 hover:bg-slate-50'}`}
                                 >
                                     {p}
                                 </button>

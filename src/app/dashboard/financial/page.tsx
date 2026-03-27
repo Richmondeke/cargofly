@@ -81,7 +81,7 @@ export default function FinancialPage() {
             >
                 <button
                     onClick={handleExport}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-all shadow-md active:scale-95"
+                    className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-all shadow-md active:scale-95"
                 >
                     <span className="material-symbols-outlined text-lg">download</span>
                     Export Report
@@ -100,7 +100,7 @@ export default function FinancialPage() {
                     {loading ? (
                         <div className="h-8 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
                     ) : (
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(stats.totalRevenue)}</p>
+                        <p className="text-2xl font-medium text-slate-900 dark:text-white">{formatCurrency(stats.totalRevenue)}</p>
                     )}
                 </div>
                 <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
@@ -113,7 +113,7 @@ export default function FinancialPage() {
                     {loading ? (
                         <div className="h-8 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
                     ) : (
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(stats.pendingPayments)}</p>
+                        <p className="text-2xl font-medium text-slate-900 dark:text-white">{formatCurrency(stats.pendingPayments)}</p>
                     )}
                 </div>
                 <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
@@ -126,7 +126,7 @@ export default function FinancialPage() {
                     {loading ? (
                         <div className="h-8 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
                     ) : (
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.paidInvoices}</p>
+                        <p className="text-2xl font-medium text-slate-900 dark:text-white">{stats.paidInvoices}</p>
                     )}
                 </div>
             </div>
@@ -135,7 +135,7 @@ export default function FinancialPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
                 {/* Revenue Chart */}
                 <div className="lg:col-span-2 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Monthly Revenue</h3>
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6">Monthly Revenue</h3>
                     <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={[
@@ -158,7 +158,7 @@ export default function FinancialPage() {
 
                 {/* Expense Breakdown */}
                 <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Expense Breakdown</h3>
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6">Expense Breakdown</h3>
                     <div className="h-48">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
@@ -185,12 +185,12 @@ export default function FinancialPage() {
             {/* Recent Invoices */}
             <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
                 <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Recent Invoices</h3>
-                    <button className="text-sm font-semibold text-primary hover:underline">View All</button>
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-white">Recent Invoices</h3>
+                    <button className="text-sm font-medium text-primary hover:underline">View All</button>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 uppercase tracking-wider font-semibold text-xs">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 uppercase tracking-wider font-medium text-xs">
                             <tr>
                                 <th className="px-6 py-4">Invoice</th>
                                 <th className="px-6 py-4">Customer</th>
@@ -211,11 +211,11 @@ export default function FinancialPage() {
                             ) : invoices.length > 0 ? (
                                 invoices.slice(0, 5).map((inv) => (
                                     <tr key={inv.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                        <td className="px-6 py-5 font-bold text-primary">{inv.invoiceNumber}</td>
+                                        <td className="px-6 py-5 font-medium text-primary">{inv.invoiceNumber}</td>
                                         <td className="px-6 py-5 text-slate-900 dark:text-white">{inv.customerName}</td>
-                                        <td className="px-6 py-5 font-semibold">{formatCurrency(inv.amount)}</td>
+                                        <td className="px-6 py-5 font-medium">{formatCurrency(inv.amount)}</td>
                                         <td className="px-6 py-5">
-                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${inv.status === 'paid'
+                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${inv.status === 'paid'
                                                 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                                                 : inv.status === 'overdue'
                                                     ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'

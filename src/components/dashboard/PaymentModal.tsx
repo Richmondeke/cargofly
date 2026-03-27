@@ -113,7 +113,7 @@ export default function PaymentModal({ isOpen, onClose, amount, userId, shipment
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
                     <div>
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Complete Payment</h2>
+                        <h2 className="text-xl font-medium text-slate-900 dark:text-white">Complete Payment</h2>
                         <p className="text-sm text-slate-500 mt-1">{description}</p>
                     </div>
                     <button
@@ -127,14 +127,14 @@ export default function PaymentModal({ isOpen, onClose, amount, userId, shipment
                 {/* Amount Display */}
                 <div className="p-6 bg-slate-50 dark:bg-slate-800/50 flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-700">
                     <p className="text-sm font-medium text-slate-500 mb-1">Total to Pay</p>
-                    <p className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
+                    <p className="text-4xl font-medium text-slate-900 dark:text-white tracking-tight">
                         {currency === 'USD' ? '$' : '£'}{amount.toFixed(2)}
                     </p>
                 </div>
 
                 {/* Content */}
                 <div className="p-6 overflow-y-auto flex-1">
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 uppercase tracking-wider">Select Payment Method</h3>
+                    <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-4 uppercase tracking-wider">Select Payment Method</h3>
 
                     <div className="space-y-3">
                         {/* Wallet USD */}
@@ -154,7 +154,7 @@ export default function PaymentModal({ isOpen, onClose, amount, userId, shipment
                             </div>
                             <div className="flex-1">
                                 <div className="flex justify-between items-center mb-1">
-                                    <span className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span className="font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-green-600 text-sm">payments</span>
                                         USD Wallet
                                     </span>
@@ -181,7 +181,7 @@ export default function PaymentModal({ isOpen, onClose, amount, userId, shipment
                             </div>
                             <div className="flex-1">
                                 <div className="flex justify-between items-center mb-1">
-                                    <span className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span className="font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-indigo-600 text-sm">euro</span>
                                         GBP Wallet
                                     </span>
@@ -208,7 +208,7 @@ export default function PaymentModal({ isOpen, onClose, amount, userId, shipment
                             </div>
                             <div className="flex-1">
                                 <div className="flex items-center mb-1">
-                                    <span className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span className="font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-slate-600 text-sm">credit_card</span>
                                         Credit / Debit Card
                                     </span>
@@ -234,7 +234,7 @@ export default function PaymentModal({ isOpen, onClose, amount, userId, shipment
                             </div>
                             <div className="flex-1">
                                 <div className="flex items-center mb-1">
-                                    <span className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span className="font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-slate-600 text-sm">account_balance</span>
                                         Bank Transfer
                                     </span>
@@ -263,7 +263,7 @@ export default function PaymentModal({ isOpen, onClose, amount, userId, shipment
                     <button
                         onClick={handlePayment}
                         disabled={loading || redirecting || !selectedMethod}
-                        className="flex-1 px-4 py-3 font-bold text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="flex-1 px-4 py-3 font-medium text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {redirecting ? (
                             <>

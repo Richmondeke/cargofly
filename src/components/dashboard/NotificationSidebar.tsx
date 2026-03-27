@@ -51,7 +51,7 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                        <h4 className={`text-sm font-bold truncate ${notification.isRead ? 'text-white/70' : 'text-white'}`}>
+                        <h4 className={`text-sm font-medium truncate ${notification.isRead ? 'text-white/70' : 'text-white'}`}>
                             {notification.title}
                         </h4>
                         {!notification.isRead && (
@@ -97,7 +97,7 @@ export default function NotificationSidebar() {
                         {/* Header */}
                         <div className="p-6 border-b border-white/10 flex items-center justify-between">
                             <div>
-                                <h2 className="text-xl font-display font-bold text-white mb-1">Notifications</h2>
+                                <h2 className="text-xl font-display font-medium text-white mb-1">Notifications</h2>
                                 <p className="text-xs text-white/50">
                                     You have {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}
                                 </p>
@@ -114,14 +114,14 @@ export default function NotificationSidebar() {
                         <div className="px-6 py-4 flex items-center justify-between bg-navy-950/20 border-b border-white/5">
                             <button
                                 onClick={markAllAsRead}
-                                className="text-xs font-bold text-gold-500 hover:text-gold-400 transition-colors uppercase tracking-wider"
+                                className="text-xs font-medium text-gold-500 hover:text-gold-400 transition-colors uppercase tracking-wider"
                                 disabled={unreadCount === 0}
                             >
                                 Mark all as read
                             </button>
                             <button
                                 onClick={clearAll}
-                                className="text-xs font-bold text-white/40 hover:text-white/60 transition-colors uppercase tracking-wider"
+                                className="text-xs font-medium text-white/40 hover:text-white/60 transition-colors uppercase tracking-wider"
                                 disabled={notifications.length === 0}
                             >
                                 Clear all
@@ -153,7 +153,7 @@ export default function NotificationSidebar() {
                             <Link
                                 href="/dashboard/notifications"
                                 onClick={closeSidebar}
-                                className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl text-sm transition-all border border-white/5 flex items-center justify-center gap-2"
+                                className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-xl text-sm transition-all border border-white/5 flex items-center justify-center gap-2"
                             >
                                 <span className="material-symbols-outlined text-[18px]">history</span>
                                 View Notification History

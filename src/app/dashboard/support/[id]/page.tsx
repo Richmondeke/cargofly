@@ -29,7 +29,7 @@ function StatusBadge({ status }: { status: Ticket['status'] }) {
     };
     const { label, cls, icon } = map[status] ?? map['open'];
     return (
-        <span className={cn('inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest', cls)}>
+        <span className={cn('inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-medium uppercase tracking-widest', cls)}>
             <span className="material-symbols-outlined text-sm">{icon}</span>
             {label}
         </span>
@@ -44,7 +44,7 @@ function PriorityBadge({ priority }: { priority: Ticket['priority'] }) {
     };
     const { label, cls } = map[priority] ?? map['medium'];
     return (
-        <span className={cn('inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest', cls)}>
+        <span className={cn('inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-medium uppercase tracking-widest', cls)}>
             <span className="material-symbols-outlined text-sm">priority_high</span>
             {label}
         </span>
@@ -60,7 +60,7 @@ function Avatar({ name, role }: { name: string; role: 'customer' | 'admin' | 'su
 
     return (
         <div className={cn(
-            "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-xs shadow-sm",
+            "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white font-medium text-xs shadow-sm",
             isAgent ? "bg-navy-900 dark:bg-indigo-600" : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
         )}>
             {isAgent ? (
@@ -97,16 +97,16 @@ function MessageBubble({ msg }: { msg: Message }) {
                 )}>
                     <div className="flex justify-between items-center mb-3">
                         <div className="flex items-center gap-2">
-                            <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                            <span className="text-xs font-medium text-slate-900 dark:text-white uppercase tracking-tight">
                                 {msg.senderName}
                             </span>
                             {isAgent && (
-                                <span className="text-[9px] bg-navy-900 dark:bg-indigo-600 text-white px-1.5 py-0.5 rounded-md uppercase font-black tracking-widest leading-none">
+                                <span className="text-[9px] bg-navy-900 dark:bg-indigo-600 text-white px-1.5 py-0.5 rounded-md uppercase font-medium tracking-widest leading-none">
                                     Support
                                 </span>
                             )}
                         </div>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{time}</span>
+                        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">{time}</span>
                     </div>
                     <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap font-medium">
                         {msg.content}
@@ -124,7 +124,7 @@ function MessageBubble({ msg }: { msg: Message }) {
                                     className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-primary hover:shadow-md transition-all group/file"
                                 >
                                     <span className="material-symbols-outlined text-primary text-lg group-hover/file:scale-110 transition-transform">description</span>
-                                    <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">attachment_{i + 1}</span>
+                                    <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 uppercase tracking-widest">attachment_{i + 1}</span>
                                 </a>
                             ))}
                         </div>
@@ -245,8 +245,8 @@ export default function TicketDetailPage() {
         return (
             <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 dark:bg-[#0f172a] gap-4">
                 <ShieldAlert className="w-16 h-16 text-slate-300 dark:text-slate-600 hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Ticket not found</h3>
-                <Link href="/dashboard/support" className="text-primary hover:underline text-xs font-black uppercase tracking-widest">
+                <h3 className="text-xl font-medium text-slate-900 dark:text-white tracking-tight">Ticket not found</h3>
+                <Link href="/dashboard/support" className="text-primary hover:underline text-xs font-medium uppercase tracking-widest">
                     ← Back to Support
                 </Link>
             </div>
@@ -262,7 +262,7 @@ export default function TicketDetailPage() {
             <div className="max-w-7xl mx-auto px-6 py-10">
 
                 {/* Breadcrumbs */}
-                <nav className="flex items-center mb-8 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                <nav className="flex items-center mb-8 text-[10px] font-medium uppercase tracking-widest text-slate-400">
                     <Link href="/dashboard" className="hover:text-primary transition-colors">Support</Link>
                     <span className="mx-3 opacity-30">/</span>
                     <Link href="/dashboard/tickets" className="hover:text-primary transition-colors">Tickets</Link>
@@ -279,10 +279,10 @@ export default function TicketDetailPage() {
                         <div className="bg-white dark:bg-[#1e293b] p-8 rounded-3xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-white/5 group">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                                 <div>
-                                    <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
+                                    <h2 className="text-2xl font-medium text-slate-900 dark:text-white tracking-tight mb-2">
                                         {ticket.subject}
                                     </h2>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                    <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">
                                         Reported by{' '}
                                         <span className="text-slate-600 dark:text-slate-300">
                                             {ticket.userName || 'Customer'}
@@ -293,7 +293,7 @@ export default function TicketDetailPage() {
                                 {ticket.status !== 'closed' && (
                                     <button
                                         onClick={handleCloseTicket}
-                                        className="bg-navy-900 dark:bg-indigo-600 text-white hover:opacity-90 px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-navy-900/10"
+                                        className="bg-navy-900 dark:bg-indigo-600 text-white hover:opacity-90 px-6 py-2.5 rounded-xl font-medium text-xs uppercase tracking-widest transition-all shadow-lg shadow-navy-900/10"
                                     >
                                         Close Ticket
                                     </button>
@@ -302,7 +302,7 @@ export default function TicketDetailPage() {
                             <div className="flex flex-wrap gap-3">
                                 <StatusBadge status={ticket.status} />
                                 <PriorityBadge priority={ticket.priority} />
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 text-slate-500 dark:bg-slate-500/10 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 text-slate-500 dark:bg-slate-500/10 dark:text-slate-400 text-[10px] font-medium uppercase tracking-widest">
                                     <span className="material-symbols-outlined text-sm">inventory_2</span>
                                     {ticket.category || 'General'}
                                 </span>
@@ -314,7 +314,7 @@ export default function TicketDetailPage() {
                             {messages.length === 0 ? (
                                 <div className="bg-white dark:bg-[#1e293b] p-12 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 text-center text-slate-400">
                                     <span className="material-symbols-outlined text-5xl mb-4 block animate-bounce">chat_bubble</span>
-                                    <p className="text-xs font-black uppercase tracking-widest">Awaiting interaction</p>
+                                    <p className="text-xs font-medium uppercase tracking-widest">Awaiting interaction</p>
                                     <p className="text-[10px] mt-1">Start the conversation below.</p>
                                 </div>
                             ) : (
@@ -375,7 +375,7 @@ export default function TicketDetailPage() {
                                 {attachments.length > 0 && (
                                     <div className="px-6 pb-4 flex flex-wrap gap-2">
                                         {attachments.map((f, i) => (
-                                            <div key={i} className="flex items-center gap-2 px-2 py-1 bg-slate-50 dark:bg-white/5 rounded-md border border-slate-100 dark:border-white/5 text-[9px] font-black uppercase tracking-widest text-slate-500">
+                                            <div key={i} className="flex items-center gap-2 px-2 py-1 bg-slate-50 dark:bg-white/5 rounded-md border border-slate-100 dark:border-white/5 text-[9px] font-medium uppercase tracking-widest text-slate-500">
                                                 <span className="truncate max-w-[100px]">{f.name}</span>
                                                 <button onClick={() => setAttachments(attachments.filter((_, idx) => idx !== i))}>
                                                     <span className="material-symbols-outlined text-[10px] hover:text-rose-500">close</span>
@@ -390,7 +390,7 @@ export default function TicketDetailPage() {
                                     <button
                                         type="button"
                                         onClick={handleSaveDraft}
-                                        className="px-6 py-2.5 bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-white/10 transition-all"
+                                        className="px-6 py-2.5 bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 rounded-xl font-medium text-[10px] uppercase tracking-widest hover:bg-slate-100 dark:hover:bg-white/10 transition-all"
                                     >
                                         Save Draft
                                     </button>
@@ -398,7 +398,7 @@ export default function TicketDetailPage() {
                                         type="button"
                                         onClick={handleSend}
                                         disabled={sending || !newMessage.trim()}
-                                        className="px-8 py-2.5 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                        className="px-8 py-2.5 bg-primary text-white rounded-xl font-medium text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                     >
                                         {sending && <Loader2 className="w-4 h-4 animate-spin text-white" />}
                                         Send Reply
@@ -407,10 +407,10 @@ export default function TicketDetailPage() {
                             </div>
                         ) : (
                             <div className="bg-slate-100 dark:bg-[#1e293b] rounded-3xl border border-slate-200 dark:border-white/5 p-10 text-center">
-                                <p className="text-xs font-black uppercase tracking-widest text-slate-500 mb-4">Conversation Concluded</p>
+                                <p className="text-xs font-medium uppercase tracking-widest text-slate-500 mb-4">Conversation Concluded</p>
                                 <Link
                                     href="/dashboard/support"
-                                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90"
+                                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-xl font-medium text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:opacity-90"
                                 >
                                     <PlusCircle className="w-4 h-4" />
                                     Open New Ticket
@@ -426,28 +426,28 @@ export default function TicketDetailPage() {
                         <div className="bg-white dark:bg-[#1e293b] rounded-3xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-white/5 overflow-hidden">
                             <div className="p-6 border-b border-slate-50 dark:border-white/5 flex items-center gap-3">
                                 <LayoutGrid className="w-4 h-4 text-primary" />
-                                <h3 className="font-black text-slate-900 dark:text-white uppercase text-[10px] tracking-widest">
+                                <h3 className="font-medium text-slate-900 dark:text-white uppercase text-[10px] tracking-widest">
                                     Ticket Intelligence
                                 </h3>
                             </div>
                             <div className="p-6 space-y-6">
                                 <div className="flex flex-col gap-1.5">
-                                    <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest">Ticket ID</span>
-                                    <span className="text-sm font-black text-slate-900 dark:text-blue-300 tracking-tight">
+                                    <span className="text-[9px] text-slate-400 uppercase font-medium tracking-widest">Ticket ID</span>
+                                    <span className="text-sm font-medium text-slate-900 dark:text-blue-300 tracking-tight">
                                         #{ticket.id}
                                     </span>
                                 </div>
 
                                 {ticket.shipmentId && (
                                     <div className="flex flex-col gap-1.5">
-                                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest">Related Entity</span>
+                                        <span className="text-[9px] text-slate-400 uppercase font-medium tracking-widest">Related Entity</span>
                                         <Link
                                             href={`/dashboard/shipments/${ticket.shipmentId}`}
                                             className="group flex items-center justify-between p-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5 hover:border-primary/30 transition-all"
                                         >
                                             <div className="flex flex-col">
-                                                <span className="text-[10px] font-black uppercase text-slate-400">Shipment</span>
-                                                <span className="text-xs font-black text-slate-900 dark:text-white group-hover:text-primary transition-colors">{ticket.shipmentId}</span>
+                                                <span className="text-[10px] font-medium uppercase text-slate-400">Shipment</span>
+                                                <span className="text-xs font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">{ticket.shipmentId}</span>
                                             </div>
                                             <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">open_in_new</span>
                                         </Link>
@@ -456,32 +456,34 @@ export default function TicketDetailPage() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest">Category</span>
-                                        <span className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                                        <span className="text-[9px] text-slate-400 uppercase font-medium tracking-widest">Category</span>
+                                        <span className="text-xs font-medium text-slate-900 dark:text-white capitalize">
                                             {ticket.category || 'General'}
                                         </span>
                                     </div>
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest">Created</span>
-                                        <span className="text-xs font-black text-slate-900 dark:text-white">{createdDate}</span>
+                                        <span className="text-[9px] text-slate-400 uppercase font-medium tracking-widest">Created</span>
+                                        <span className="text-xs font-medium text-slate-900 dark:text-white">{createdDate}</span>
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest">SLA Compliance</span>
-                                        <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Active</span>
+                                {isAdmin && (
+                                    <div className="flex flex-col gap-2 pt-4 border-t border-slate-50 dark:border-white/5">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[9px] text-slate-400 uppercase font-medium tracking-widest">SLA Compliance</span>
+                                            <span className="text-[9px] font-medium text-emerald-500 uppercase tracking-widest">Active</span>
+                                        </div>
+                                        <div className="w-full bg-slate-100 dark:bg-white/5 h-2 rounded-full overflow-hidden">
+                                            <div className="bg-primary h-full w-[85%] rounded-full shadow-[0_0_10px_rgba(37,99,235,0.3)]" />
+                                        </div>
+                                        <span className="text-[8px] font-medium text-slate-400 uppercase tracking-widest text-center">Response due in 2h 15m</span>
                                     </div>
-                                    <div className="w-full bg-slate-100 dark:bg-white/5 h-2 rounded-full overflow-hidden">
-                                        <div className="bg-primary h-full w-[85%] rounded-full shadow-[0_0_10px_rgba(37,99,235,0.3)]" />
-                                    </div>
-                                    <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest text-center">Response due in 2h 15m</span>
-                                </div>
+                                )}
 
                                 {/* Admin: Status Control */}
                                 {isAdmin && ticket.status !== 'closed' && (
                                     <div className="pt-4 border-t border-slate-50 dark:border-white/5">
-                                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-widest mb-3 block text-center">Operator Controls</span>
+                                        <span className="text-[9px] text-slate-400 uppercase font-medium tracking-widest mb-3 block text-center">Operator Controls</span>
                                         <div className="grid grid-cols-2 gap-2">
                                             {(['open', 'in-progress', 'resolved', 'closed'] as const).map((s) => (
                                                 <button
@@ -491,7 +493,7 @@ export default function TicketDetailPage() {
                                                         setTicket({ ...ticket, status: s });
                                                     }}
                                                     className={cn(
-                                                        'px-2 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all',
+                                                        'px-2 py-2 rounded-xl text-[9px] font-medium uppercase tracking-widest transition-all',
                                                         ticket.status === s
                                                             ? 'bg-primary text-white shadow-md shadow-primary/20'
                                                             : 'bg-slate-50 dark:bg-white/5 text-slate-400 hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/20'
@@ -507,40 +509,42 @@ export default function TicketDetailPage() {
                         </div>
 
                         {/* Participants */}
-                        <div className="bg-white dark:bg-[#1e293b] rounded-3xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-white/5 overflow-hidden">
-                            <div className="p-6 border-b border-slate-50 dark:border-white/5 flex justify-between items-center">
-                                <h3 className="font-black text-slate-900 dark:text-white uppercase text-[10px] tracking-widest">
-                                    Network Stakeholders
-                                </h3>
-                                <button className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-primary hover:bg-white transition-all">
-                                    <span className="material-symbols-outlined text-sm">person_add</span>
-                                </button>
-                            </div>
-                            <div className="p-6 space-y-4">
-                                {/* Customer */}
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 font-black text-[10px]">
-                                        {(ticket.userName || 'C').charAt(0).toUpperCase()}
+                        {isAdmin && (
+                            <div className="bg-white dark:bg-[#1e293b] rounded-3xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-white/5 overflow-hidden">
+                                <div className="p-6 border-b border-slate-50 dark:border-white/5 flex justify-between items-center">
+                                    <h3 className="font-medium text-slate-900 dark:text-white uppercase text-[10px] tracking-widest">
+                                        Network Stakeholders
+                                    </h3>
+                                    <button className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-50 dark:bg-white/5 text-slate-400 hover:text-primary hover:bg-white transition-all">
+                                        <span className="material-symbols-outlined text-sm">person_add</span>
+                                    </button>
+                                </div>
+                                <div className="p-6 space-y-4">
+                                    {/* Customer */}
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 font-medium text-[10px]">
+                                            {(ticket.userName || 'C').charAt(0).toUpperCase()}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-xs font-medium text-slate-900 dark:text-white tracking-tight">
+                                                {ticket.userName || 'Customer'}
+                                            </span>
+                                            <span className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Client</span>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-xs font-black text-slate-900 dark:text-white tracking-tight">
-                                            {ticket.userName || 'Customer'}
-                                        </span>
-                                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Client</span>
+                                    {/* Support Agent */}
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-navy-900 dark:bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
+                                            <span className="material-symbols-outlined text-xs">support_agent</span>
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-xs font-medium text-slate-900 dark:text-white tracking-tight">Support Node</span>
+                                            <span className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Operator</span>
+                                        </div>
                                     </div>
                                 </div>
-                                {/* Support Agent */}
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-navy-900 dark:bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
-                                        <span className="material-symbols-outlined text-xs">support_agent</span>
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-xs font-black text-slate-900 dark:text-white tracking-tight">Support Node</span>
-                                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Operator</span>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Quick Actions */}
                         <div className="bg-white dark:bg-[#1e293b] rounded-3xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-white/5 overflow-hidden p-2">
@@ -552,7 +556,7 @@ export default function TicketDetailPage() {
                                     <div className="w-8 h-8 flex items-center justify-center bg-slate-50 dark:bg-white/5 rounded-xl text-slate-400 group-hover:text-primary transition-colors">
                                         <ArrowLeft className="w-4 h-4" />
                                     </div>
-                                    <span className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest group-hover:text-primary transition-colors">
+                                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-widest group-hover:text-primary transition-colors">
                                         Return to Nexus
                                     </span>
                                 </Link>
@@ -563,7 +567,7 @@ export default function TicketDetailPage() {
                                     <div className="w-8 h-8 flex items-center justify-center bg-slate-50 dark:bg-white/5 rounded-xl text-slate-400 group-hover:text-emerald-500 transition-colors">
                                         <PlusCircle className="w-4 h-4" />
                                     </div>
-                                    <span className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest group-hover:text-emerald-500 transition-colors">
+                                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-widest group-hover:text-emerald-500 transition-colors">
                                         Initialize New Ticket
                                     </span>
                                 </Link>

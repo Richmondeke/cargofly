@@ -56,14 +56,14 @@ export default function TrackModal({ isOpen, onClose }: TrackModalProps) {
                         <Package size={20} />
                     </div>
                     <div>
-                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">Real-time GPS Tracking</h4>
+                        <h4 className="font-medium text-slate-900 dark:text-white text-sm">Real-time GPS Tracking</h4>
                         <p className="text-xs text-slate-500 mt-1">Enter your tracking ID to see exactly where your cargo is right now.</p>
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="relative">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5 block">Tracking Number</label>
+                        <label className="text-[10px] font-medium uppercase tracking-widest text-slate-500 mb-1.5 block">Tracking Number</label>
                         <div className="relative">
                             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
                                 track_changes
@@ -78,14 +78,14 @@ export default function TrackModal({ isOpen, onClose }: TrackModalProps) {
                                 placeholder="e.g. CF-2025-8473629"
                                 required
                                 className={cn(
-                                    "w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-primary/50 focus:bg-white dark:focus:bg-slate-900 rounded-2xl outline-none transition-all text-base font-mono font-bold tracking-wider",
+                                    "w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-primary/50 focus:bg-white dark:focus:bg-slate-900 rounded-2xl outline-none transition-all text-base font-mono font-medium tracking-wider",
                                     error && "border-red-500/50 focus:border-red-500"
                                 )}
                                 maxLength={20}
                             />
                         </div>
                         {error && (
-                            <p className="mt-2 text-xs text-red-500 font-bold flex items-center gap-1">
+                            <p className="mt-2 text-xs text-red-500 font-medium flex items-center gap-1">
                                 <span className="material-symbols-outlined text-[14px]">error</span>
                                 {error}
                             </p>
@@ -96,7 +96,7 @@ export default function TrackModal({ isOpen, onClose }: TrackModalProps) {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 bg-primary text-white rounded-2xl font-bold text-sm hover:brightness-110 shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                            className="w-full py-4 bg-primary text-white rounded-2xl font-medium text-sm hover:brightness-110 shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
                         >
                             {isLoading ? (
                                 <>

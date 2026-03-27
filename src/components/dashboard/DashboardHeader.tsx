@@ -60,7 +60,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, subtitle, back
                                 <span className="material-symbols-outlined text-[24px]">arrow_back</span>
                             </button>
                         )}
-                        <h1 className="text-2xl sm:text-[32px] font-bold text-[#1e293b] dark:text-white leading-tight truncate">
+                        <h1 className="text-2xl sm:text-[32px] font-medium text-[#1e293b] dark:text-white leading-tight truncate">
                             {title}
                         </h1>
                     </div>
@@ -94,7 +94,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, subtitle, back
                     <div className="relative" ref={menuRef}>
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm hover:ring-2 hover:ring-primary/20 transition-all shadow-sm"
+                            className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-medium text-sm hover:ring-2 hover:ring-primary/20 transition-all shadow-sm"
                         >
                             {initials}
                         </button>
@@ -109,7 +109,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, subtitle, back
                                     className="absolute right-0 mt-2 w-48 bg-white dark:bg-navy-900 rounded-xl shadow-xl border border-slate-200 dark:border-navy-700 py-2 z-50"
                                 >
                                     <div className="px-4 py-2 border-b border-slate-100 dark:border-navy-800 mb-1">
-                                        <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                                        <p className="text-sm font-medium text-slate-900 dark:text-white truncate">
                                             {userProfile?.displayName || 'User'}
                                         </p>
                                         <p className="text-xs text-slate-500 dark:text-slate-400 truncate capitalize">

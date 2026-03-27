@@ -118,13 +118,13 @@ export default function WalletPage() {
                 {/* ── Page Header ────────────────────────────────────────────────── */}
                 <div className="flex justify-between items-center sm:items-end">
                     <div>
-                        <h2 className="font-['Work_Sans'] font-bold text-3xl tracking-tighter text-[#1b1c1c] dark:text-white uppercase">Financial Wallet</h2>
-                        <p className="font-['Work_Sans'] font-semibold tracking-tight text-slate-500 text-sm mt-1">Manage accounts, payments and withdrawals</p>
+                        <h2 className="font-display font-medium text-3xl tracking-tighter text-[#1b1c1c] dark:text-white uppercase">Financial Wallet</h2>
+                        <p className="font-display font-medium tracking-tight text-slate-500 text-sm mt-1">Manage accounts, payments and withdrawals</p>
                     </div>
                     <button
                         onClick={handleMockDeposit}
                         disabled={actionLoading}
-                        className="bg-white dark:bg-[#1e293b] text-[#1b1c1c] dark:text-white border border-slate-200 dark:border-slate-800 py-3 px-6 rounded-xl font-['Work_Sans'] font-semibold text-sm flex items-center gap-2 shadow-sm hover:bg-slate-50 transition-all active:scale-95 disabled:opacity-50"
+                        className="bg-white dark:bg-[#1e293b] text-[#1b1c1c] dark:text-white border border-slate-200 dark:border-slate-800 py-3 px-6 rounded-xl font-display font-medium text-sm flex items-center gap-2 shadow-sm hover:bg-slate-50 transition-all active:scale-95 disabled:opacity-50"
                     >
                         <span className="material-symbols-outlined">add_card</span>
                         Add Funds
@@ -138,24 +138,24 @@ export default function WalletPage() {
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full transform translate-x-8 -translate-y-8 group-hover:translate-x-4 transition-transform duration-500"></div>
                         <div className="flex justify-between items-start mb-10 relative z-10">
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Main Balance</p>
+                                <p className="text-[10px] font-medium uppercase tracking-widest text-slate-400 mb-2">Main Balance</p>
                                 <div className="flex items-center gap-2">
                                     <span className="text-xl">🇳🇬</span>
-                                    <span className="font-bold text-lg" style={{ fontFamily: 'Work Sans, sans-serif' }}>NGN</span>
+                                    <span className="font-medium text-lg">NGN</span>
                                 </div>
                             </div>
                             <span className="material-symbols-outlined text-slate-500 group-hover:text-white transition-colors">account_balance_wallet</span>
                         </div>
                         <div className="mb-10 relative z-10">
-                            <p className="text-4xl font-bold tracking-tight leading-none" style={{ fontFamily: 'Work Sans, sans-serif' }}>
+                            <p className="text-4xl font-medium tracking-tight leading-none">
                                 ₦{ngnBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
                             <p className="text-xs text-slate-500 mt-2 font-medium">Available for immediate withdrawal</p>
                         </div>
                         <div className="mt-auto pt-6 border-t border-white/10 flex justify-between items-center relative z-10">
                             <div>
-                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Exchange Lock</p>
-                                <p className="text-sm font-bold opacity-80">1,650.00 / USD</p>
+                                <p className="text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-1">Exchange Lock</p>
+                                <p className="text-sm font-medium opacity-80">1,650.00 / USD</p>
                             </div>
                             <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
                                 <span className="material-symbols-outlined text-sm">swap_vert</span>
@@ -167,16 +167,16 @@ export default function WalletPage() {
                     <div className="bg-white dark:bg-[#1e293b] border border-slate-100 dark:border-slate-800 rounded-3xl p-8 flex flex-col shadow-sm hover:shadow-md transition-shadow group">
                         <div className="flex justify-between items-start mb-10">
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Foreign Reserve</p>
+                                <p className="text-[10px] font-medium uppercase tracking-widest text-slate-400 mb-2">Foreign Reserve</p>
                                 <div className="flex items-center gap-2">
                                     <span className="text-xl">🇺🇸</span>
-                                    <span className="font-bold text-lg text-[#1b1c1c] dark:text-white" style={{ fontFamily: 'Work Sans, sans-serif' }}>USD</span>
+                                    <span className="font-medium text-lg text-[#1b1c1c] dark:text-white">USD</span>
                                 </div>
                             </div>
                             <span className="material-symbols-outlined text-slate-300 group-hover:text-[#4397ff] transition-colors">public</span>
                         </div>
                         <div className="mb-10">
-                            <p className="text-4xl font-bold text-[#1b1c1c] dark:text-white tracking-tight leading-none" style={{ fontFamily: 'Work Sans, sans-serif' }}>
+                            <p className="text-4xl font-medium text-[#1b1c1c] dark:text-white tracking-tight leading-none">
                                 ${usdBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
                             <div className="mt-4 flex items-center gap-2">
@@ -187,7 +187,7 @@ export default function WalletPage() {
                         <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
                             <button
                                 onClick={() => setBankModalOpen(true)}
-                                className="flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-[#005eb2] transition-colors"
+                                className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-[#005eb2] transition-colors"
                             >
                                 <span className="material-symbols-outlined text-sm">info</span>
                                 View Bank Details
@@ -201,8 +201,8 @@ export default function WalletPage() {
                 <div className="bg-white dark:bg-[#1e293b] rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
                     <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-2">
-                            <h3 className="font-['Work_Sans'] font-bold text-lg text-[#1b1c1c] dark:text-white uppercase tracking-tight">Activity Log</h3>
-                            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-md text-[10px] font-bold">{transactions.length} Total</span>
+                            <h3 className="font-display font-medium text-lg text-[#1b1c1c] dark:text-white uppercase tracking-tight">Activity Log</h3>
+                            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-md text-[10px] font-medium">{transactions.length} Total</span>
                         </div>
 
                         <div className="flex items-center gap-3">
@@ -219,10 +219,10 @@ export default function WalletPage() {
                         <table className="w-full text-left">
                             <thead className="bg-slate-50/50 dark:bg-[#0f172a]/50">
                                 <tr>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Transaction Details</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Amount</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Date</th>
-                                    <th className="px-6 py-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Status</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">Transaction Details</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Amount</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">Date</th>
+                                    <th className="px-6 py-4 text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">Status</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -234,7 +234,7 @@ export default function WalletPage() {
                                                     <span className="material-symbols-outlined text-4xl">history</span>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <p className="font-bold text-slate-900 dark:text-white">Empty Vault</p>
+                                                    <p className="font-medium text-slate-900 dark:text-white">Empty Vault</p>
                                                     <p className="text-xs text-slate-500">Your financial history will materialize here once you initiate orders or deposits.</p>
                                                 </div>
                                             </div>
@@ -251,25 +251,25 @@ export default function WalletPage() {
                                                             <span className="material-symbols-outlined text-sm">{txnIcon(txn)}</span>
                                                         </div>
                                                         <div>
-                                                            <p className="font-bold text-[#1b1c1c] dark:text-white text-sm" style={{ fontFamily: 'Work Sans, sans-serif' }}>
+                                                            <p className="font-medium text-[#1b1c1c] dark:text-white text-sm">
                                                                 {txn.description}
                                                             </p>
-                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{txn.method} · {txn.shipmentId ? `AWB: ${txn.shipmentId.slice(0, 10)}` : 'WALLET'}</p>
+                                                            <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-0.5">{txn.method} · {txn.shipmentId ? `AWB: ${txn.shipmentId.slice(0, 10)}` : 'WALLET'}</p>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-5 text-right">
-                                                    <p className={`font-['Work_Sans'] font-bold text-sm ${txn.amount < 0 ? 'text-rose-600' : 'text-[#003399]'}`}>
+                                                    <p className={`font-display font-medium text-sm ${txn.amount < 0 ? 'text-rose-600' : 'text-[#003399]'}`}>
                                                         {txn.amount > 0 ? '+' : ''} {txn.currency} {Math.abs(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                                     </p>
                                                 </td>
                                                 <td className="px-6 py-5">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                    <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">
                                                         {txn.createdAt ? (txn.createdAt as any).toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Pending'}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-5">
-                                                    <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${cat.bg} ${cat.color}`}>
+                                                    <span className={`px-2 py-1 rounded text-[10px] font-medium uppercase tracking-wider ${cat.bg} ${cat.color}`}>
                                                         {cat.label}
                                                     </span>
                                                 </td>
@@ -298,7 +298,7 @@ export default function WalletPage() {
                             <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-[#1b1c1c] dark:text-white group-hover:bg-white/10 group-hover:text-white mb-4 transition-colors">
                                 <span className="material-symbols-outlined text-sm">{item.icon}</span>
                             </div>
-                            <h4 className="font-bold text-[#1b1c1c] dark:text-white group-hover:text-white text-sm transition-colors uppercase tracking-tight" style={{ fontFamily: 'Work Sans, sans-serif' }}>
+                            <h4 className="font-medium text-[#1b1c1c] dark:text-white group-hover:text-white text-sm transition-colors uppercase tracking-tight">
                                 {item.label}
                             </h4>
                             <p className="text-xs text-slate-500 group-hover:text-white/60 mt-1 transition-colors">

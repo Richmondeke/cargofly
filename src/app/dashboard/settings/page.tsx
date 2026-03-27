@@ -75,11 +75,11 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                     )}
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Email Address</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Email Address</label>
                             <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="colleague@example.com" />
                         </div>
                         <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Role</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Role</label>
                             <Select value={role} onChange={(e) => setRole(e.target.value as any)}>
                                 <option value="staff">Staff</option>
                                 <option value="manager">Manager</option>
@@ -87,7 +87,7 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
                             </Select>
                         </div>
                         <div>
-                            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Department</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 tracking-tight">Department</label>
                             <Select value={department} onChange={(e) => setDepartment(e.target.value)}>
                                 <option value="Operations">Operations</option>
                                 <option value="Finance">Finance</option>
@@ -382,20 +382,19 @@ export default function SettingsPage() {
                         {/* Profile Card */}
                         <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 mb-4">
                             <div className="flex flex-col items-center text-center">
-                                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center text-primary font-bold text-2xl mb-3">
+                                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center text-primary font-medium text-2xl mb-3">
                                     {userInitials}
                                 </div>
-                                <p className="font-bold text-slate-900 dark:text-white text-sm leading-tight">
+                                <p className="font-medium text-slate-900 dark:text-white text-sm leading-tight">
                                     {formData.displayName || 'Your Name'}
                                 </p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate max-w-full">
                                     {formData.email}
                                 </p>
-                                <span className={`mt-2 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                    userProfile?.role === 'admin'
+                                <span className={`mt-2 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${userProfile?.role === 'admin'
                                         ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
                                         : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
-                                }`}>
+                                    }`}>
                                     <span className="w-1.5 h-1.5 rounded-full bg-current" />
                                     {userProfile?.role || 'User'}
                                 </span>
@@ -408,12 +407,11 @@ export default function SettingsPage() {
                                 <button
                                     key={item.id}
                                     onClick={() => setActiveSection(item.id)}
-                                    className={`w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium transition-colors text-left ${
-                                        idx !== navItems.length - 1 ? 'border-b border-slate-100 dark:border-slate-700' : ''
-                                    } ${activeSection === item.id
-                                        ? 'bg-primary/5 text-primary border-l-4 border-l-primary pl-3'
-                                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-                                    }`}
+                                    className={`w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium transition-colors text-left ${idx !== navItems.length - 1 ? 'border-b border-slate-100 dark:border-slate-700' : ''
+                                        } ${activeSection === item.id
+                                            ? 'bg-primary/5 text-primary border-l-4 border-l-primary pl-3'
+                                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                                        }`}
                                 >
                                     <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
                                     {item.label}
@@ -429,7 +427,7 @@ export default function SettingsPage() {
                         {activeSection === 'profile' && (
                             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                                 <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700">
-                                    <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <h2 className="text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-primary text-xl">person</span>
                                         Personal Information
                                     </h2>
@@ -477,7 +475,7 @@ export default function SettingsPage() {
                                                 <button
                                                     onClick={handleSave}
                                                     disabled={saving || loading}
-                                                    className="px-6 py-2.5 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                                                    className="px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
                                                 >
                                                     {saving ? (
                                                         <><span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>Saving...</>
@@ -496,7 +494,7 @@ export default function SettingsPage() {
                         {activeSection === 'company' && (
                             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                                 <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700">
-                                    <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <h2 className="text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-primary text-xl">business</span>
                                         Company Details
                                     </h2>
@@ -523,7 +521,7 @@ export default function SettingsPage() {
                                             <div className="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-4 flex items-center gap-3">
                                                 <span className="material-symbols-outlined text-primary">info</span>
                                                 <div>
-                                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Account type: <span className="capitalize font-bold">{userProfile?.role || 'User'}</span></p>
+                                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Account type: <span className="capitalize font-medium">{userProfile?.role || 'User'}</span></p>
                                                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Contact your administrator to update your account role.</p>
                                                 </div>
                                             </div>
@@ -531,7 +529,7 @@ export default function SettingsPage() {
                                                 <button
                                                     onClick={handleSave}
                                                     disabled={saving || loading}
-                                                    className="px-6 py-2.5 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                                                    className="px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
                                                 >
                                                     {saving ? (
                                                         <><span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>Saving...</>
@@ -550,7 +548,7 @@ export default function SettingsPage() {
                         {activeSection === 'notifications' && (
                             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                                 <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700">
-                                    <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <h2 className="text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-primary text-xl">notifications</span>
                                         Notification Preferences
                                     </h2>
@@ -564,7 +562,7 @@ export default function SettingsPage() {
                                                 <span className="material-symbols-outlined text-blue-600 dark:text-blue-400 text-xl">mail</span>
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900 dark:text-white text-sm">Email Notifications</p>
+                                                <p className="font-medium text-slate-900 dark:text-white text-sm">Email Notifications</p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">Receive shipment updates via email</p>
                                             </div>
                                         </div>
@@ -587,7 +585,7 @@ export default function SettingsPage() {
                                                 <span className="material-symbols-outlined text-green-600 dark:text-green-400 text-xl">sms</span>
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900 dark:text-white text-sm">SMS Notifications</p>
+                                                <p className="font-medium text-slate-900 dark:text-white text-sm">SMS Notifications</p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">Receive critical alerts via SMS</p>
                                             </div>
                                         </div>
@@ -610,7 +608,7 @@ export default function SettingsPage() {
                                                 <span className="material-symbols-outlined text-primary text-xl">notifications_active</span>
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900 dark:text-white text-sm">Push Notifications</p>
+                                                <p className="font-medium text-slate-900 dark:text-white text-sm">Push Notifications</p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">Receive in-app push notifications</p>
                                                 {pushStatus === 'granted' && (
                                                     <p className="text-xs text-green-600 dark:text-green-400 mt-0.5 flex items-center gap-1">
@@ -634,7 +632,7 @@ export default function SettingsPage() {
                                                 <button
                                                     onClick={handleEnablePush}
                                                     disabled={enablingPush}
-                                                    className="px-4 py-2 bg-primary text-white text-xs font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-1.5"
+                                                    className="px-4 py-2 bg-primary text-white text-xs font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-1.5"
                                                 >
                                                     {enablingPush ? (
                                                         <><span className="material-symbols-outlined animate-spin text-xs">progress_activity</span>Enabling...</>
@@ -656,7 +654,7 @@ export default function SettingsPage() {
                                         <button
                                             onClick={handleSave}
                                             disabled={saving}
-                                            className="px-6 py-2.5 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 flex items-center gap-2 text-sm"
+                                            className="px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 flex items-center gap-2 text-sm"
                                         >
                                             {saving ? (
                                                 <><span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>Saving...</>
@@ -673,7 +671,7 @@ export default function SettingsPage() {
                         {activeSection === 'security' && (
                             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                                 <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700">
-                                    <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <h2 className="text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                         <span className="material-symbols-outlined text-primary text-xl">shield</span>
                                         Security Settings
                                     </h2>
@@ -687,13 +685,13 @@ export default function SettingsPage() {
                                                 <span className="material-symbols-outlined text-slate-600 dark:text-slate-300 text-xl">lock</span>
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900 dark:text-white text-sm">Password</p>
+                                                <p className="font-medium text-slate-900 dark:text-white text-sm">Password</p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">Last changed: unknown</p>
                                             </div>
                                         </div>
                                         <button
                                             onClick={() => setShowPasswordModal(true)}
-                                            className="px-4 py-2 text-sm font-semibold text-primary border border-primary/30 hover:bg-primary/5 rounded-lg transition-colors"
+                                            className="px-4 py-2 text-sm font-medium text-primary border border-primary/30 hover:bg-primary/5 rounded-lg transition-colors"
                                         >
                                             Change Password
                                         </button>
@@ -708,20 +706,20 @@ export default function SettingsPage() {
                                                 </span>
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900 dark:text-white text-sm">Two-Factor Authentication</p>
+                                                <p className="font-medium text-slate-900 dark:text-white text-sm">Two-Factor Authentication</p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">
                                                     {twoFactorEnabled ? '2FA is active – phone verification enabled' : 'Add extra security to your account'}
                                                 </p>
                                             </div>
                                         </div>
                                         {twoFactorEnabled ? (
-                                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-current" /> Active
                                             </span>
                                         ) : (
                                             <button
                                                 onClick={() => setShowTwoFactorModal(true)}
-                                                className="px-4 py-2 text-sm font-semibold bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                                                className="px-4 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
                                             >
                                                 Enable 2FA
                                             </button>
@@ -735,7 +733,7 @@ export default function SettingsPage() {
                                                 <span className="material-symbols-outlined text-slate-500 dark:text-slate-300 text-xl">devices</span>
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900 dark:text-white text-sm">Active Sessions</p>
+                                                <p className="font-medium text-slate-900 dark:text-white text-sm">Active Sessions</p>
                                                 <p className="text-xs text-slate-500 dark:text-slate-400">Signed in on this device</p>
                                             </div>
                                         </div>
@@ -750,7 +748,7 @@ export default function SettingsPage() {
                             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                                 <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <h2 className="text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                             <span className="material-symbols-outlined text-primary text-xl">group</span>
                                             Team Members
                                         </h2>
@@ -762,7 +760,7 @@ export default function SettingsPage() {
                                 </div>
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left text-sm">
-                                        <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold text-xs border-b border-slate-200 dark:border-slate-700">
+                                        <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-medium text-xs border-b border-slate-200 dark:border-slate-700">
                                             <tr>
                                                 <th className="px-6 py-4">Member</th>
                                                 <th className="px-6 py-4">Role</th>
@@ -785,31 +783,29 @@ export default function SettingsPage() {
                                                     <tr key={member.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                                                         <td className="px-6 py-4">
                                                             <div className="flex items-center gap-3">
-                                                                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                                                                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm">
                                                                     {member.displayName.charAt(0)}
                                                                 </div>
                                                                 <div>
-                                                                    <p className="font-semibold text-slate-900 dark:text-white">{member.displayName}</p>
+                                                                    <p className="font-medium text-slate-900 dark:text-white">{member.displayName}</p>
                                                                     <p className="text-xs text-slate-500">{member.email}</p>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-4">
-                                                            <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
-                                                                member.role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
-                                                                : member.role === 'manager' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                                                                : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'
-                                                            }`}>
+                                                            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${member.role === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+                                                                    : member.role === 'manager' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                                                                        : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'
+                                                                }`}>
                                                                 {member.role}
                                                             </span>
                                                         </td>
                                                         <td className="px-6 py-4 text-slate-600 dark:text-slate-300">{member.department}</td>
                                                         <td className="px-6 py-4">
-                                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${
-                                                                member.status === 'active'
+                                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${member.status === 'active'
                                                                     ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                                                                     : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'
-                                                            }`}>
+                                                                }`}>
                                                                 <span className="w-1.5 h-1.5 rounded-full bg-current" />
                                                                 {member.status}
                                                             </span>
@@ -866,7 +862,7 @@ export default function SettingsPage() {
             {showPasswordModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                        <h3 className="text-xl font-medium text-slate-900 dark:text-white mb-1 flex items-center gap-2">
                             <span className="material-symbols-outlined text-primary">lock</span>
                             Change Password
                         </h3>
@@ -898,7 +894,7 @@ export default function SettingsPage() {
                             <button
                                 onClick={handlePasswordChange}
                                 disabled={passwordLoading || !passwordForm.current || !passwordForm.new}
-                                className="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                                className="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                                 {passwordLoading ? (
                                     <><span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>Updating...</>
                                 ) : 'Update Password'}
@@ -912,7 +908,7 @@ export default function SettingsPage() {
             {showTwoFactorModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                        <h3 className="text-xl font-medium text-slate-900 dark:text-white mb-1 flex items-center gap-2">
                             <span className="material-symbols-outlined text-primary">security</span>
                             Enable Two-Factor Authentication
                         </h3>
@@ -964,7 +960,7 @@ export default function SettingsPage() {
                             <button
                                 onClick={twoFactorStep === 'phone' ? handleSendVerification : handleVerifyCode}
                                 disabled={twoFactorLoading || (twoFactorStep === 'phone' ? !phoneNumber : verificationCode.length !== 6)}
-                                className="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                                className="flex-1 px-4 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                                 {twoFactorLoading ? (
                                     <><span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>{twoFactorStep === 'phone' ? 'Sending...' : 'Verifying...'}</>
                                 ) : (

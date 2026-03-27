@@ -232,7 +232,7 @@ export default function AdminShipmentsPage() {
                 <div className="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm border-collapse">
-                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-700">
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 font-medium border-b border-slate-200 dark:border-slate-700">
                                 <tr>
                                     <th className="px-6 py-4">Shipment / Tracking</th>
                                     <th className="px-6 py-4">Sender & Recipient</th>
@@ -265,7 +265,7 @@ export default function AdminShipmentsPage() {
                                                     <Package className="w-5 h-5" />
                                                 </div>
                                                 <div>
-                                                    <div className="font-bold text-slate-900 dark:text-white uppercase tracking-tight">{shipment.trackingNumber}</div>
+                                                    <div className="font-medium text-slate-900 dark:text-white uppercase tracking-tight">{shipment.trackingNumber}</div>
                                                     <div className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                                                         <span className="capitalize">{shipment.service}</span>
                                                         <span>•</span>
@@ -299,7 +299,7 @@ export default function AdminShipmentsPage() {
                                             <div className="space-y-1">
                                                 {shipment.customsDuty ? (
                                                     <div className="flex items-center gap-2">
-                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${shipment.customsDutyStatus === 'paid'
+                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-medium uppercase ${shipment.customsDutyStatus === 'paid'
                                                             ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
                                                             : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 animate-pulse'
                                                             }`}>
@@ -309,7 +309,7 @@ export default function AdminShipmentsPage() {
                                                 ) : (
                                                     <span className="text-xs text-slate-400 italic">No duty applied</span>
                                                 )}
-                                                <div className="text-[10px] text-slate-500 flex items-center gap-1 uppercase font-semibold">
+                                                <div className="text-[10px] text-slate-500 flex items-center gap-1 uppercase font-medium">
                                                     <span>Shipment:</span>
                                                     <span className={shipment.paymentStatus === 'paid' ? 'text-emerald-600' : 'text-amber-600'}>
                                                         {shipment.paymentStatus}
@@ -362,7 +362,7 @@ export default function AdminShipmentsPage() {
                             className="bg-white dark:bg-surface-dark rounded-2xl w-full max-w-md shadow-2xl overflow-hidden"
                         >
                             <div className="p-6 border-b border-slate-100 dark:border-slate-800">
-                                <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <h2 className="text-xl font-medium text-slate-900 dark:text-white flex items-center gap-2">
                                     <AlertCircle className="w-6 h-6 text-amber-500" />
                                     Apply Customs Duty
                                 </h2>
@@ -371,9 +371,9 @@ export default function AdminShipmentsPage() {
 
                             <div className="p-6 space-y-4">
                                 <div>
-                                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Duty Amount (USD)</label>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Duty Amount (USD)</label>
                                     <div className="relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</div>
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">$</div>
                                         <input
                                             type="number"
                                             value={dutyAmount}
@@ -383,7 +383,7 @@ export default function AdminShipmentsPage() {
                                         />
                                     </div>
                                     <p className="text-xs text-slate-500 mt-2">
-                                        Setting this will automatically place the shipment on **Customs Hold** and notify the user to pay.
+                                        Setting this will automatically place the shipment on <span className="font-medium">Customs Hold</span> and notify the user to pay.
                                     </p>
                                 </div>
                             </div>
@@ -394,14 +394,14 @@ export default function AdminShipmentsPage() {
                                         setDutyModalOpen(false);
                                         setSelectedShipment(null);
                                     }}
-                                    className="flex-1 py-3 font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                                    className="flex-1 py-3 font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={handleApplyDuty}
                                     disabled={submittingDuty || !dutyAmount}
-                                    className="flex-1 py-3 font-bold text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+                                    className="flex-1 py-3 font-medium text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
                                 >
                                     {submittingDuty ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                                     Update Shipment

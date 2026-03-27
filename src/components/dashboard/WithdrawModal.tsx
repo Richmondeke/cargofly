@@ -74,7 +74,7 @@ export default function WithdrawModal({ isOpen, onClose, userId, wallet, onSucce
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
                     <div>
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Withdraw Funds</h2>
+                        <h2 className="text-xl font-medium text-slate-900 dark:text-white">Withdraw Funds</h2>
                         <p className="text-sm text-slate-500 mt-1">Transfer money to your bank account</p>
                     </div>
                     <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
@@ -88,7 +88,7 @@ export default function WithdrawModal({ isOpen, onClose, userId, wallet, onSucce
                         <button
                             type="button"
                             onClick={() => setCurrency('USD')}
-                            className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${currency === 'USD'
+                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${currency === 'USD'
                                 ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
                                 : 'text-slate-500'}`}
                         >
@@ -97,7 +97,7 @@ export default function WithdrawModal({ isOpen, onClose, userId, wallet, onSucce
                         <button
                             type="button"
                             onClick={() => setCurrency('GBP')}
-                            className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${currency === 'GBP'
+                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${currency === 'GBP'
                                 ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
                                 : 'text-slate-500'}`}
                         >
@@ -106,16 +106,16 @@ export default function WithdrawModal({ isOpen, onClose, userId, wallet, onSucce
                     </div>
 
                     <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 text-center">
-                        <p className="text-xs text-slate-500 uppercase tracking-widest font-semibold mb-1">Available Balance</p>
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                        <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-1">Available Balance</p>
+                        <p className="text-2xl font-medium text-slate-900 dark:text-white">
                             {currency === 'USD' ? '$' : '£'}{currency === 'USD' ? wallet?.balanceUSD.toFixed(2) : wallet?.balanceGBP.toFixed(2)}
                         </p>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Amount to Withdraw</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Amount to Withdraw</label>
                         <div className="relative">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">
                                 {currency === 'USD' ? '$' : '£'}
                             </span>
                             <input
@@ -130,7 +130,7 @@ export default function WithdrawModal({ isOpen, onClose, userId, wallet, onSucce
                     </div>
 
                     <div className="space-y-3 pt-2">
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Bank Details</h3>
+                        <h3 className="text-xs font-medium text-slate-400 uppercase tracking-widest">Bank Details</h3>
                         <div>
                             <input
                                 type="text"
@@ -178,7 +178,7 @@ export default function WithdrawModal({ isOpen, onClose, userId, wallet, onSucce
                         <button
                             type="submit"
                             disabled={loading || !amount}
-                            className="flex-1 px-4 py-3 font-bold text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="flex-1 px-4 py-3 font-medium text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {loading ? (
                                 <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>

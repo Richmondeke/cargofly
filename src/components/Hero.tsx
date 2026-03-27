@@ -48,7 +48,12 @@ const slideUpWidget = {
 
 export default function Hero() {
     return (
-        <section className="relative w-full flex justify-center items-center py-40 bg-navy-900">
+        <section className="relative w-full flex justify-center items-center py-40 bg-navy-900 overflow-hidden">
+            {/* Motif Background Overlay */}
+            <div
+                className="absolute inset-0 z-0 opacity-100 pointer-events-none bg-repeat mix-blend-lighten brightness-0 invert"
+                style={{ backgroundImage: "url('/Cargofly motif_transparent.png')", backgroundSize: '240px' }}
+            />
 
             {/* Main Content Frame */}
             <div className="w-full max-w-[1200px] min-h-[700px] flex flex-col justify-center items-center gap-spacing-12 px-spacing-06 relative z-10">

@@ -82,7 +82,7 @@ const AIChat: React.FC = () => {
                                 <span className="material-symbols-outlined text-xl">smart_toy</span>
                             </div>
                             <div>
-                                <h3 className="font-bold text-sm">Logistics AI</h3>
+                                <h3 className="font-medium text-sm">Logistics AI</h3>
                                 <span className="text-[10px] opacity-90 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
                                     Online
@@ -106,8 +106,8 @@ const AIChat: React.FC = () => {
                             >
                                 <div
                                     className={`max-w-[80%] rounded-2xl p-4 text-sm shadow-sm ${msg.sender === 'user'
-                                            ? 'bg-primary text-white rounded-tr-none'
-                                            : 'bg-white dark:bg-navy-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/10 rounded-tl-none'
+                                        ? 'bg-primary text-white rounded-tr-none'
+                                        : 'bg-white dark:bg-navy-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/10 rounded-tl-none'
                                         }`}
                                 >
                                     {msg.text}

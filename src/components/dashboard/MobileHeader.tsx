@@ -31,7 +31,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ onOpenConfig }) => {
                 />
             </div>
 
-            <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex items-center justify-center text-slate-500 font-bold text-sm">
+            <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex items-center justify-center text-slate-500 font-medium text-sm">
                 {userProfile?.displayName?.charAt(0) || 'U'}
             </div>
         </div>

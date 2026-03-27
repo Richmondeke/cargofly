@@ -107,10 +107,8 @@ export default function AdminSupportPage() {
 
     const getPriorityBadge = (priority: Ticket['priority']) => {
         switch (priority) {
-            case 'high': return <span className="px-3 py-1 bg-orange-50 text-orange-600 border border-orange-100 rounded text-[10px] font-black uppercase tracking-wider">High</span>;
-            case 'medium': return <span className="px-3 py-1 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-black uppercase tracking-wider">Normal</span>;
-            case 'low': return <span className="px-3 py-1 bg-slate-50 text-slate-500 border border-slate-100 rounded text-[10px] font-black uppercase tracking-wider">Low</span>;
-            default: return <span className="px-3 py-1 bg-red-50 text-red-600 border border-red-100 rounded text-[10px] font-black uppercase tracking-wider">Critical</span>;
+            case 'low': return <span className="px-3 py-1 bg-slate-50 text-slate-500 border border-slate-100 rounded text-[10px] font-medium uppercase tracking-wider">Low</span>;
+            default: return <span className="px-3 py-1 bg-red-50 text-red-600 border border-red-100 rounded text-[10px] font-medium uppercase tracking-wider">Critical</span>;
         }
     };
 
@@ -141,10 +139,10 @@ export default function AdminSupportPage() {
                                     <div className="p-2 bg-slate-100 dark:bg-white/5 rounded-xl">
                                         <List className="w-5 h-5 text-slate-500" />
                                     </div>
-                                    <div className="text-xs font-black text-slate-400 uppercase tracking-widest">Total Tickets</div>
+                                    <div className="text-xs font-medium text-slate-400 uppercase tracking-widest">Total Tickets</div>
                                 </div>
-                                <div className="text-5xl font-display font-black text-slate-900 dark:text-white tracking-tighter mb-2">{tickets.length}</div>
-                                <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-500">
+                                <div className="text-5xl font-display font-medium text-slate-900 dark:text-white tracking-tighter mb-2">{tickets.length}</div>
+                                <div className="flex items-center gap-1 text-[11px] font-medium text-emerald-500">
                                     <Zap className="w-3 h-3 fill-current" />
                                     +12% from last month
                                 </div>
@@ -159,10 +157,10 @@ export default function AdminSupportPage() {
                                     <div className="p-2 bg-orange-50 dark:bg-orange-950/20 rounded-xl">
                                         <Inbox className="w-5 h-5 text-orange-500" />
                                     </div>
-                                    <div className="text-xs font-black text-slate-400 uppercase tracking-widest">Open</div>
+                                    <div className="text-xs font-medium text-slate-400 uppercase tracking-widest">Open</div>
                                 </div>
-                                <div className="text-5xl font-display font-black text-slate-900 dark:text-white tracking-tighter mb-2">{openCount}</div>
-                                <div className="text-[11px] font-bold text-slate-400">Requiring immediate attention</div>
+                                <div className="text-5xl font-display font-medium text-slate-900 dark:text-white tracking-tighter mb-2">{openCount}</div>
+                                <div className="text-[11px] font-medium text-slate-400">Requiring immediate attention</div>
                             </div>
                         </div>
                     </Card>
@@ -174,10 +172,10 @@ export default function AdminSupportPage() {
                                     <div className="p-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl">
                                         <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                                     </div>
-                                    <div className="text-xs font-black text-slate-400 uppercase tracking-widest">Resolved</div>
+                                    <div className="text-xs font-medium text-slate-400 uppercase tracking-widest">Resolved</div>
                                 </div>
-                                <div className="text-5xl font-display font-black text-slate-900 dark:text-white tracking-tighter mb-2">{resolvedCount}</div>
-                                <div className="text-[11px] font-bold text-slate-400">Average resolution time: 4.2h</div>
+                                <div className="text-5xl font-display font-medium text-slate-900 dark:text-white tracking-tighter mb-2">{resolvedCount}</div>
+                                <div className="text-[11px] font-medium text-slate-400">Average resolution time: 4.2h</div>
                             </div>
                         </div>
                     </Card>
@@ -188,7 +186,7 @@ export default function AdminSupportPage() {
                     {/* Table Header with Title and Search */}
                     <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                         <div>
-                            <h2 className="text-2xl font-display font-black text-slate-900 dark:text-white tracking-tighter mb-1">Support Tickets</h2>
+                            <h2 className="text-2xl font-display font-medium text-slate-900 dark:text-white tracking-tighter mb-1">Support Tickets</h2>
                             <p className="text-sm text-slate-500 font-medium">Manage and track your cargo inquiries and technical issues</p>
                         </div>
 
@@ -205,7 +203,7 @@ export default function AdminSupportPage() {
                             </div>
                             <Button
                                 onClick={() => setShowCreateModal(true)}
-                                className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-11 px-6 rounded-xl flex items-center gap-2 border-none"
+                                className="bg-orange-500 hover:bg-orange-600 text-white font-medium h-11 px-6 rounded-xl flex items-center gap-2 border-none"
                             >
                                 <Plus className="w-4 h-4" />
                                 Create New Ticket
@@ -223,7 +221,7 @@ export default function AdminSupportPage() {
                             <span className="material-symbols-outlined text-6xl text-slate-300 dark:text-slate-600 mb-4 block">
                                 inbox
                             </span>
-                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No tickets found</h3>
+                            <h3 className="text-xl font-medium text-slate-900 dark:text-white mb-2">No tickets found</h3>
                             <p className="text-slate-500 dark:text-slate-400">
                                 {filter === 'all' ? 'No support tickets yet.' : `No ${filter} tickets.`}
                             </p>
@@ -232,12 +230,12 @@ export default function AdminSupportPage() {
                         <table className="w-full">
                             <thead className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                                 <tr>
-                                    <th className="text-left px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Ticket ID</th>
-                                    <th className="text-left px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Subject</th>
-                                    <th className="text-left px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Priority</th>
-                                    <th className="text-left px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Status</th>
-                                    <th className="text-left px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Last Updated</th>
-                                    <th className="text-right px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">Actions</th>
+                                    <th className="text-left px-8 py-5 text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em]">Ticket ID</th>
+                                    <th className="text-left px-8 py-5 text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em]">Subject</th>
+                                    <th className="text-left px-8 py-5 text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em]">Priority</th>
+                                    <th className="text-left px-8 py-5 text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em]">Status</th>
+                                    <th className="text-left px-8 py-5 text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em]">Last Updated</th>
+                                    <th className="text-right px-8 py-5 text-[10px] font-medium text-slate-400 uppercase tracking-[0.15em]">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -248,15 +246,15 @@ export default function AdminSupportPage() {
                                                 {ticket.unreadByAdmin && (
                                                     <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.6)] flex-shrink-0" />
                                                 )}
-                                                <span className="text-xs font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">#TK-{ticket.id.slice(0, 4)}</span>
+                                                <span className="text-xs font-medium text-slate-400 tracking-tighter uppercase whitespace-nowrap">#TK-{ticket.id.slice(0, 4)}</span>
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">
                                             <div className="max-w-[300px]">
-                                                <p className="font-bold text-slate-900 dark:text-white leading-tight mb-0.5">
+                                                <p className="font-medium text-slate-900 dark:text-white leading-tight mb-0.5">
                                                     {ticket.subject}
                                                 </p>
-                                                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                                                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
                                                     {ticket.userName}
                                                 </p>
                                             </div>
@@ -271,7 +269,7 @@ export default function AdminSupportPage() {
                                                     ticket.status === 'open' ? "bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.6)]" :
                                                         ticket.status === 'in-progress' ? "bg-blue-500" : "bg-emerald-500"
                                                 )} />
-                                                <span className="text-xs font-bold text-slate-700 dark:text-white/80 capitalize">
+                                                <span className="text-xs font-medium text-slate-700 dark:text-white/80 capitalize">
                                                     {ticket.status.replace('-', ' ')}
                                                 </span>
                                             </div>
@@ -288,7 +286,7 @@ export default function AdminSupportPage() {
                                                     variant="outline"
                                                     size="sm"
                                                     className={cn(
-                                                        "h-9 px-5 rounded-lg font-bold text-xs transition-all",
+                                                        "h-9 px-5 rounded-lg font-medium text-xs transition-all",
                                                         ticket.status === 'open'
                                                             ? "border-orange-100 text-orange-600 hover:bg-orange-50 hover:text-orange-700"
                                                             : "border-slate-100 text-slate-600 hover:bg-slate-50"
@@ -310,7 +308,7 @@ export default function AdminSupportPage() {
                     {/* Pagination Footer */}
                     {!loading && filteredTickets.length > 0 && (
                         <div className="px-8 py-6 bg-slate-50/30 dark:bg-white/5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                            <div className="text-xs font-medium text-slate-400 uppercase tracking-widest">
                                 Showing <span className="text-slate-900 dark:text-white">1-{Math.min(filteredTickets.length, 10)}</span> of <span className="text-slate-900 dark:text-white">{filteredTickets.length}</span> tickets
                             </div>
 
@@ -333,8 +331,8 @@ export default function AdminSupportPage() {
                     <div className="bg-white dark:bg-surface-dark w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
                             <div>
-                                <h3 className="text-xl font-display font-black text-slate-900 dark:text-white tracking-tight">Initiate Support Channel</h3>
-                                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Create a proactive support ticket for a user</p>
+                                <h3 className="text-xl font-display font-medium text-slate-900 dark:text-white tracking-tight">Initiate Support Channel</h3>
+                                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Create a proactive support ticket for a user</p>
                             </div>
                             <button onClick={() => setShowCreateModal(false)} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
                                 <X className="w-5 h-5" />
@@ -344,19 +342,19 @@ export default function AdminSupportPage() {
                         <div className="p-8 space-y-6">
                             {/* User Selection */}
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Select User</label>
+                                <label className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Select User</label>
                                 {selectedUser ? (
                                     <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-2xl">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                                            <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-medium text-sm">
                                                 {selectedUser.displayName[0]}
                                             </div>
                                             <div>
-                                                <p className="font-bold text-slate-900 dark:text-white text-sm">{selectedUser.displayName}</p>
+                                                <p className="font-medium text-slate-900 dark:text-white text-sm">{selectedUser.displayName}</p>
                                                 <p className="text-xs text-slate-500">{selectedUser.email}</p>
                                             </div>
                                         </div>
-                                        <button onClick={() => setSelectedUser(null)} className="text-[10px] font-bold text-slate-400 hover:text-red-500 uppercase tracking-wider">Change</button>
+                                        <button onClick={() => setSelectedUser(null)} className="text-[10px] font-medium text-slate-400 hover:text-red-500 uppercase tracking-wider">Change</button>
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
@@ -379,11 +377,11 @@ export default function AdminSupportPage() {
                                                         onClick={() => setSelectedUser(u)}
                                                         className="w-full flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-700 text-left border-b last:border-none border-slate-50 dark:border-slate-700 transition-colors"
                                                     >
-                                                        <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center font-bold text-xs text-slate-600 dark:text-slate-300">
+                                                        <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center font-medium text-xs text-slate-600 dark:text-slate-300">
                                                             {u.displayName[0]}
                                                         </div>
                                                         <div>
-                                                            <p className="font-bold text-slate-900 dark:text-white text-xs">{u.displayName}</p>
+                                                            <p className="font-medium text-slate-900 dark:text-white text-xs">{u.displayName}</p>
                                                             <p className="text-[10px] text-slate-500">{u.email}</p>
                                                         </div>
                                                     </button>
@@ -397,7 +395,7 @@ export default function AdminSupportPage() {
                             {/* Ticket Details */}
                             <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Inquiry Subject</label>
+                                    <label className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Inquiry Subject</label>
                                     <input
                                         type="text"
                                         placeholder="Brief title of the issue"
@@ -407,7 +405,7 @@ export default function AdminSupportPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Initial Message</label>
+                                    <label className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Initial Message</label>
                                     <textarea
                                         rows={4}
                                         placeholder="Provide context or instructions for the user..."
@@ -423,14 +421,14 @@ export default function AdminSupportPage() {
                             <Button
                                 variant="outline"
                                 onClick={() => setShowCreateModal(false)}
-                                className="flex-1 h-12 rounded-2xl text-sm font-black uppercase tracking-widest border-slate-200 text-slate-600"
+                                className="flex-1 h-12 rounded-2xl text-sm font-medium uppercase tracking-widest border-slate-200 text-slate-600"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 onClick={handleCreateTicket}
                                 disabled={creating || !selectedUser || !newTicketSubject || !newTicketMessage}
-                                className="flex-[2] h-12 bg-primary text-white rounded-2xl text-sm font-black uppercase tracking-widest shadow-lg shadow-primary/20 disabled:opacity-50"
+                                className="flex-[2] h-12 bg-primary text-white rounded-2xl text-sm font-medium uppercase tracking-widest shadow-lg shadow-primary/20 disabled:opacity-50"
                             >
                                 {creating ? 'Initiating...' : 'Open Support Ticket'}
                             </Button>

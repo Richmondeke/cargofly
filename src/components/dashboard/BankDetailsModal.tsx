@@ -70,8 +70,8 @@ export default function BankDetailsModal({ isOpen, onClose }: BankDetailsModalPr
                                 <Landmark className="w-6 h-6 group-hover:scale-110 transition-transform" />
                             </div>
                             <div>
-                                <h3 className="font-['Work_Sans'] font-black text-xl text-[#1b1c1c] dark:text-white uppercase tracking-tight">Virtual Account</h3>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Global Settlement Network</p>
+                                <h3 className="font-display font-medium text-xl text-[#1b1c1c] dark:text-white uppercase tracking-tight">Virtual Account</h3>
+                                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-0.5">Global Settlement Network</p>
                             </div>
                         </div>
                         <button
@@ -85,16 +85,16 @@ export default function BankDetailsModal({ isOpen, onClose }: BankDetailsModalPr
                     {loading ? (
                         <div className="py-20 flex flex-col items-center justify-center gap-4">
                             <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">Synchronizing Details...</p>
+                            <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest animate-pulse">Synchronizing Details...</p>
                         </div>
                     ) : details ? (
                         <div className="space-y-6">
                             {/* Account Card Look */}
                             <div className="bg-slate-50 dark:bg-white/5 p-6 rounded-3xl border border-slate-100 dark:border-white/5 space-y-4">
                                 <div className="space-y-1">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Account Name</p>
+                                    <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Account Name</p>
                                     <div className="flex justify-between items-center group">
-                                        <p className="font-bold text-slate-900 dark:text-white text-base">{details.account_name}</p>
+                                        <p className="font-medium text-slate-900 dark:text-white text-base">{details.account_name}</p>
                                         <button
                                             onClick={() => copyToClipboard(details.account_name, 'Account Name')}
                                             className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-primary/10 text-primary rounded-lg transition-all"
@@ -105,9 +105,9 @@ export default function BankDetailsModal({ isOpen, onClose }: BankDetailsModalPr
                                 </div>
 
                                 <div className="space-y-1">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Account Number</p>
+                                    <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Account Number</p>
                                     <div className="flex justify-between items-center group">
-                                        <p className="font-['Courier_New'] font-black text-slate-900 dark:text-primary text-xl tracking-wider leading-none">
+                                        <p className="font-mono font-medium text-slate-900 dark:text-primary text-xl tracking-wider leading-none">
                                             {details.account_number}
                                         </p>
                                         <button
@@ -121,14 +121,14 @@ export default function BankDetailsModal({ isOpen, onClose }: BankDetailsModalPr
 
                                 <div className="grid grid-cols-2 gap-6 pt-2">
                                     <div className="space-y-1">
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Bank Name</p>
-                                        <p className="font-bold text-slate-700 dark:text-slate-300 text-sm">{details.bank_name}</p>
+                                        <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Bank Name</p>
+                                        <p className="font-medium text-slate-700 dark:text-slate-300 text-sm">{details.bank_name}</p>
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Currency</p>
+                                        <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest">Currency</p>
                                         <div className="flex items-center gap-1.5">
                                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                            <p className="font-bold text-slate-700 dark:text-slate-300 text-sm">{details.currency}</p>
+                                            <p className="font-medium text-slate-700 dark:text-slate-300 text-sm">{details.currency}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -139,23 +139,23 @@ export default function BankDetailsModal({ isOpen, onClose }: BankDetailsModalPr
                                 {details.routing_number && (
                                     <div className="p-4 bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5 space-y-1 group">
                                         <div className="flex justify-between items-center mb-1">
-                                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Routing No</p>
+                                            <p className="text-[8px] font-medium text-slate-400 uppercase tracking-widest">Routing No</p>
                                             <button onClick={() => copyToClipboard(details.routing_number!, 'Routing Number')}>
                                                 <Copy className="w-3 h-3 text-slate-300 hover:text-primary transition-colors" />
                                             </button>
                                         </div>
-                                        <p className="font-bold text-slate-900 dark:text-white text-xs">{details.routing_number}</p>
+                                        <p className="font-medium text-slate-900 dark:text-white text-xs">{details.routing_number}</p>
                                     </div>
                                 )}
                                 {details.swift_code && (
                                     <div className="p-4 bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5 space-y-1 group">
                                         <div className="flex justify-between items-center mb-1">
-                                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Swift Code</p>
+                                            <p className="text-[8px] font-medium text-slate-400 uppercase tracking-widest">Swift Code</p>
                                             <button onClick={() => copyToClipboard(details.swift_code!, 'Swift Code')}>
                                                 <Copy className="w-3 h-3 text-slate-300 hover:text-primary transition-colors" />
                                             </button>
                                         </div>
-                                        <p className="font-bold text-slate-900 dark:text-white text-xs">{details.swift_code}</p>
+                                        <p className="font-medium text-slate-900 dark:text-white text-xs">{details.swift_code}</p>
                                     </div>
                                 )}
                             </div>
@@ -165,7 +165,7 @@ export default function BankDetailsModal({ isOpen, onClose }: BankDetailsModalPr
                                     <ShieldCheck className="w-4 h-4" />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-[10px] font-black text-indigo-900 dark:text-primary uppercase tracking-widest">Secured Infrastructure</p>
+                                    <p className="text-[10px] font-medium text-indigo-900 dark:text-primary uppercase tracking-widest">Secured Infrastructure</p>
                                     <p className="text-[10px] font-medium text-slate-500 leading-relaxed uppercase tracking-tighter">
                                         This account is unique to you. Funds deposited will be automatically reconciled to your wallet.
                                     </p>
@@ -174,14 +174,14 @@ export default function BankDetailsModal({ isOpen, onClose }: BankDetailsModalPr
                         </div>
                     ) : (
                         <div className="py-12 text-center text-slate-400">
-                            <p className="text-xs uppercase font-black tracking-widest">Error materializing data</p>
+                            <p className="text-xs uppercase font-medium tracking-widest">Error materializing data</p>
                         </div>
                     )}
 
                     <div className="mt-8">
                         <button
                             onClick={onClose}
-                            className="w-full py-4 bg-[#1b1c1c] dark:bg-indigo-600 text-white rounded-2xl font-['Work_Sans'] font-black text-[10px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-navy-900/10"
+                            className="w-full py-4 bg-[#1b1c1c] dark:bg-indigo-600 text-white rounded-2xl font-display font-medium text-[10px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-navy-900/10"
                         >
                             Return to Wallet
                         </button>

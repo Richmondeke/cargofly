@@ -122,7 +122,7 @@ export const StatusPill: React.FC<StatusPillProps> = ({
             ) : (
                 <span className={cn("w-2 h-2 rounded-full mr-2", dotStyles[currentOption.variant])} />
             )}
-            <span className="whitespace-nowrap font-bold text-[11px] uppercase tracking-wider">{currentOption.label}</span>
+            <span className="whitespace-nowrap font-medium text-[11px] uppercase tracking-wider">{currentOption.label}</span>
             {interactive && (
                 <ChevronDown className={cn("w-3 h-3 ml-2 transition-transform", isOpen && "rotate-180")} />
             )}
@@ -173,7 +173,7 @@ export const StatusPill: React.FC<StatusPillProps> = ({
                             className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden text-sm"
                         >
                             <div className="py-2 max-h-64 overflow-y-auto custom-scrollbar">
-                                <div className="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white dark:bg-slate-800 z-10 border-b border-slate-100 dark:border-slate-700 mb-1">
+                                <div className="px-4 py-2 text-[10px] font-medium text-slate-400 uppercase tracking-widest bg-white dark:bg-slate-800 z-10 border-b border-slate-100 dark:border-slate-700 mb-1">
                                     Update Status
                                 </div>
                                 {statusOptions.filter(opt => !['approved', 'rejected', 'under_review', 'success', 'failed'].includes(opt.value)).map((option) => (
@@ -190,7 +190,7 @@ export const StatusPill: React.FC<StatusPillProps> = ({
                                     >
                                         <div className="flex items-center gap-2">
                                             <span className={cn("w-1.5 h-1.5 rounded-full", dotStyles[option.variant])} />
-                                            <span className={cn("font-bold text-[11px] uppercase tracking-wider", (variantStyles[option.variant].split(' ')[1]))}>
+                                            <span className={cn("font-medium text-[11px] uppercase tracking-wider", (variantStyles[option.variant].split(' ')[1]))}>
                                                 {option.label}
                                             </span>
                                         </div>

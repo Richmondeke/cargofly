@@ -14,37 +14,37 @@ type FilterStatus = 'All' | 'In Transit' | 'Customs Hold' | 'Delivered';
 function StatusPill({ status }: { status: string }) {
     const s = status?.toLowerCase() || '';
     if (s.includes('transit')) return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
             <span className="size-1.5 rounded-full bg-blue-500 animate-pulse" />
             In Transit
         </span>
     );
     if (s.includes('delivered') || s.includes('arrived')) return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
             <span className="size-1.5 rounded-full bg-emerald-500" />
             Delivered
         </span>
     );
     if (s.includes('customs') || s.includes('hold')) return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
             <span className="size-1.5 rounded-full bg-amber-500" />
             Pending Customs
         </span>
     );
     if (s.includes('delay') || s.includes('delayed')) return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
             <span className="size-1.5 rounded-full bg-red-500" />
             Delayed
         </span>
     );
     if (s.includes('pending') || s.includes('processing')) return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
             <span className="size-1.5 rounded-full bg-orange-500 animate-pulse" />
             Processing
         </span>
     );
     return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
             <span className="size-1.5 rounded-full bg-slate-400" />
             {status}
         </span>
@@ -163,7 +163,7 @@ export default function ShipmentsPage() {
                 {/* Page Header */}
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+                        <h1 className="text-2xl font-medium text-slate-900 dark:text-white">
                             {filteredUserInfo ? `${filteredUserInfo.displayName}'s Shipments` : 'Active Shipments'}
                         </h1>
                         <p className="text-sm text-primary font-medium mt-0.5">
@@ -173,7 +173,7 @@ export default function ShipmentsPage() {
                         </p>
                     </div>
                     <Link href="/dashboard/new-booking">
-                        <button className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all">
+                        <button className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-medium text-sm shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all">
                             <span className="material-symbols-outlined text-[20px]">add</span>
                             New Shipment
                         </button>
@@ -184,11 +184,11 @@ export default function ShipmentsPage() {
                 {userIdFilter && (
                     <div className="bg-sky-50 dark:bg-sky-900/10 border border-sky-200 dark:border-sky-800/50 p-4 rounded-xl flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-medium text-sm">
                                 {filteredUserInfo?.displayName?.split(' ').map(n => n[0]).join('').slice(0, 2) || '?'}
                             </div>
                             <div>
-                                <p className="font-bold text-slate-900 dark:text-white text-sm">{filteredUserInfo?.displayName || 'Loading...'}</p>
+                                <p className="font-medium text-slate-900 dark:text-white text-sm">{filteredUserInfo?.displayName || 'Loading...'}</p>
                                 <p className="text-xs text-slate-500">{filteredUserInfo?.email || userIdFilter}</p>
                             </div>
                         </div>
@@ -261,7 +261,7 @@ export default function ShipmentsPage() {
                 <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left text-sm whitespace-nowrap">
-                            <thead className="bg-slate-50 dark:bg-slate-800/80 text-[10px] uppercase font-bold text-slate-500 tracking-wider border-b border-slate-100 dark:border-slate-800">
+                            <thead className="bg-slate-50 dark:bg-slate-800/80 text-[10px] uppercase font-medium text-slate-500 tracking-wider border-b border-slate-100 dark:border-slate-800">
                                 <tr>
                                     <th className="px-6 py-4">AWB Number</th>
                                     <th className="px-6 py-4">Route</th>
@@ -284,23 +284,23 @@ export default function ShipmentsPage() {
                                     paginated.map(s => (
                                         <tr key={s.id} className="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                                             <td className="px-6 py-5">
-                                                <div className="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                                <div className="font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
                                                     {s.trackingNumber || s.id}
                                                 </div>
                                                 <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{getCommodity(s)}</div>
                                             </td>
                                             <td className="px-6 py-5">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="font-bold text-slate-700 dark:text-slate-200">{s.origin}</span>
+                                                    <span className="font-medium text-slate-700 dark:text-slate-200">{s.origin}</span>
                                                     <span className="material-symbols-outlined text-slate-400 text-[15px]">arrow_forward</span>
-                                                    <span className="font-bold text-slate-700 dark:text-slate-200">{s.destination}</span>
+                                                    <span className="font-medium text-slate-700 dark:text-slate-200">{s.destination}</span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-5">
                                                 <StatusPill status={s.status} />
                                             </td>
                                             <td className="px-6 py-5">
-                                                <div className="font-semibold text-slate-900 dark:text-white">{s.weight || '—'}</div>
+                                                <div className="font-medium text-slate-900 dark:text-white">{s.weight || '—'}</div>
                                                 <div className="text-[11px] text-slate-400 mt-0.5">{s.totalPrice || ''}</div>
                                             </td>
                                             <td className="px-6 py-5">
@@ -349,7 +349,7 @@ export default function ShipmentsPage() {
                                                     className="object-contain"
                                                 />
                                             </div>
-                                            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">No shipments found</h3>
+                                            <h3 className="text-base font-medium text-slate-900 dark:text-white mb-1">No shipments found</h3>
                                             <p className="text-sm text-slate-400">Try adjusting your filters or search query.</p>
                                         </td>
                                     </tr>
@@ -362,22 +362,22 @@ export default function ShipmentsPage() {
                     {filtered.length > 0 && (
                         <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center bg-white dark:bg-slate-900">
                             <span className="text-sm text-slate-500">
-                                Showing <span className="text-slate-900 dark:text-white font-bold">{(currentPage - 1) * PAGE_SIZE + 1}</span> to{' '}
-                                <span className="text-slate-900 dark:text-white font-bold">{Math.min(currentPage * PAGE_SIZE, filtered.length)}</span> of{' '}
-                                <span className="text-slate-900 dark:text-white font-bold">{filtered.length}</span> shipments
+                                Showing <span className="text-slate-900 dark:text-white font-medium">{(currentPage - 1) * PAGE_SIZE + 1}</span> to{' '}
+                                <span className="text-slate-900 dark:text-white font-medium">{Math.min(currentPage * PAGE_SIZE, filtered.length)}</span> of{' '}
+                                <span className="text-slate-900 dark:text-white font-medium">{filtered.length}</span> shipments
                             </span>
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="px-4 py-2 text-sm font-bold border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                    className="px-4 py-2 text-sm font-medium border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                                 >
                                     Previous
                                 </button>
                                 <button
                                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="px-4 py-2 text-sm font-bold border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                    className="px-4 py-2 text-sm font-medium border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                                 >
                                     Next
                                 </button>

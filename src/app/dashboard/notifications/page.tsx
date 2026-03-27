@@ -48,11 +48,11 @@ const NotificationRow = ({ notification }: { notification: Notification }) => {
                 <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
                         <div className="flex items-center gap-3">
-                            <h3 className={`text-lg font-bold ${notification.isRead ? 'text-white/80' : 'text-white'}`}>
+                            <h3 className={`text-lg font-medium ${notification.isRead ? 'text-white/80' : 'text-white'}`}>
                                 {notification.title}
                             </h3>
                             {!notification.isRead && (
-                                <span className="px-2 py-0.5 bg-gold-500 text-navy-900 text-[10px] font-black rounded uppercase">New</span>
+                                <span className="px-2 py-0.5 bg-gold-500 text-navy-900 text-[10px] font-medium rounded uppercase">New</span>
                             )}
                         </div>
                         <span className="text-sm text-white/40 font-medium">
@@ -65,7 +65,7 @@ const NotificationRow = ({ notification }: { notification: Notification }) => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${colors[notification.type]}`}>
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-wider ${colors[notification.type]}`}>
                         {notification.type}
                     </span>
                 </div>
@@ -93,13 +93,13 @@ export default function NotificationHistoryPage() {
                     <div className="flex gap-4">
                         <button
                             onClick={markAllAsRead}
-                            className="px-6 py-3 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white text-sm font-bold transition-all border border-slate-200 dark:border-white/10"
+                            className="px-6 py-3 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white text-sm font-medium transition-all border border-slate-200 dark:border-white/10"
                         >
                             Mark All as Read
                         </button>
                         <button
                             onClick={clearAll}
-                            className="px-6 py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-bold transition-all border border-red-500/20"
+                            className="px-6 py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-medium transition-all border border-red-500/20"
                         >
                             Clear All
                         </button>
@@ -117,7 +117,7 @@ export default function NotificationHistoryPage() {
                             <div className="w-32 h-32 rounded-full bg-white/5 flex items-center justify-center mb-6">
                                 <span className="material-symbols-outlined text-5xl text-white/20">notifications_off</span>
                             </div>
-                            <h2 className="text-2xl font-bold text-white mb-2">No notifications found</h2>
+                            <h2 className="text-2xl font-medium text-white mb-2">No notifications found</h2>
                             <p className="text-white/40">Your notification history is currently empty.</p>
                         </div>
                     )}

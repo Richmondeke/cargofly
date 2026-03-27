@@ -84,9 +84,9 @@ const NetworkMap = ({ locations, routes }: NetworkMapProps) => {
                 <Marker key={loc.id} position={getCoordinates(loc)}>
                     <Popup>
                         <div className="p-1">
-                            <h3 className="font-bold text-sm">{loc.name}</h3>
+                            <h3 className="font-medium text-sm">{loc.name}</h3>
                             <p className="text-xs text-slate-500 m-0">{loc.city}, {loc.country}</p>
-                            <span className="text-[10px] uppercase font-bold tracking-wider text-primary mt-1 block">{loc.type}</span>
+                            <span className="text-[10px] uppercase font-medium tracking-wider text-primary mt-1 block">{loc.type}</span>
                         </div>
                     </Popup>
                 </Marker>

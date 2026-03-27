@@ -196,8 +196,8 @@ export default function AdminRatesPage() {
                                     <Globe className="w-6 h-6 text-blue-500" />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Total Routes</p>
-                                    <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{routes.length}</p>
+                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">Total Routes</p>
+                                    <p className="text-2xl font-medium text-slate-900 dark:text-white tracking-tighter">{routes.length}</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -209,8 +209,8 @@ export default function AdminRatesPage() {
                                     <TrendingUp className="w-6 h-6 text-emerald-500" />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Active Destinations</p>
-                                    <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">Active Destinations</p>
+                                    <p className="text-2xl font-medium text-slate-900 dark:text-white tracking-tighter">
                                         {routes.filter(r => r.status === 'active').length}
                                     </p>
                                 </div>
@@ -224,8 +224,8 @@ export default function AdminRatesPage() {
                                     <DollarSign className="w-6 h-6 text-white" />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-white/70 uppercase tracking-widest">Currencies</p>
-                                    <p className="text-2xl font-black text-white tracking-tighter">
+                                    <p className="text-xs font-medium text-white/70 uppercase tracking-widest">Currencies</p>
+                                    <p className="text-2xl font-medium text-white tracking-tighter">
                                         {[...new Set(routes.map(r => r.currency))].length}
                                     </p>
                                 </div>
@@ -277,7 +277,7 @@ export default function AdminRatesPage() {
                         <div className="w-20 h-20 bg-slate-50 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Search className="w-8 h-8 text-slate-300" />
                         </div>
-                        <h3 className="text-xl font-black text-slate-900 dark:text-white mb-1">No routes found</h3>
+                        <h3 className="text-xl font-medium text-slate-900 dark:text-white mb-1">No routes found</h3>
                         <p className="text-slate-500 text-sm">Try adjusting your search or filters.</p>
                     </div>
                 ) : (
@@ -291,7 +291,7 @@ export default function AdminRatesPage() {
                                 {/* Top Badges */}
                                 <div className="flex justify-between items-start mb-8">
                                     <span className={cn(
-                                        "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.15em]",
+                                        "px-3 py-1 rounded-full text-[9px] font-medium uppercase tracking-[0.15em]",
                                         route.type === 'international'
                                             ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400"
                                             : route.type === 'regional'
@@ -319,8 +319,8 @@ export default function AdminRatesPage() {
                                 {/* Flow Visualization */}
                                 <div className="flex items-center justify-between mb-8 px-2">
                                     <div className="text-left">
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Origin</p>
-                                        <h4 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{route.origin}</h4>
+                                        <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1">Origin</p>
+                                        <h4 className="text-xl font-medium text-slate-900 dark:text-white tracking-tight">{route.origin}</h4>
                                     </div>
                                     <div className="flex-1 flex flex-col items-center px-4">
                                         <div className="w-full h-[2px] bg-slate-100 dark:bg-white/10 relative">
@@ -328,31 +328,31 @@ export default function AdminRatesPage() {
                                                 <span className="material-symbols-outlined text-primary text-lg animate-pulse">flight</span>
                                             </div>
                                         </div>
-                                        <span className="text-[9px] font-bold text-slate-400 mt-3 uppercase tracking-widest">{route.transitTime} Transit</span>
+                                        <span className="text-[9px] font-medium text-slate-400 mt-3 uppercase tracking-widest">{route.transitTime} Transit</span>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Dest</p>
-                                        <h4 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{route.destination}</h4>
+                                        <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1">Dest</p>
+                                        <h4 className="text-xl font-medium text-slate-900 dark:text-white tracking-tight">{route.destination}</h4>
                                     </div>
                                 </div>
 
                                 {/* Bottom Info Drawer-style */}
                                 <div className="bg-slate-50/50 dark:bg-white/5 rounded-3xl p-5 border border-slate-100 dark:border-white/5 flex items-center justify-between">
                                     <div>
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Base Rate</p>
+                                        <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1">Base Rate</p>
                                         <div className="flex items-baseline gap-1">
-                                            <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                            <span className="text-2xl font-medium text-slate-900 dark:text-white tracking-tighter">
                                                 {route.currency === 'NGN' ? '₦' : '$'}{(route.rate || 0).toLocaleString()}
                                             </span>
-                                            <span className="text-[10px] font-bold text-slate-400">/KG</span>
+                                            <span className="text-[10px] font-medium text-slate-400">/KG</span>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                                        <p className="text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1">Status</p>
                                         <div className="flex items-center gap-1.5 justify-end">
                                             <div className={cn("w-1.5 h-1.5 rounded-full", route.status === 'active' ? 'bg-emerald-500' : 'bg-red-500')} />
                                             <span className={cn(
-                                                "text-[10px] font-black uppercase tracking-widest",
+                                                "text-[10px] font-medium uppercase tracking-widest",
                                                 route.status === 'active' ? 'text-emerald-600' : 'text-red-500'
                                             )}>
                                                 {route.status}
@@ -377,7 +377,7 @@ export default function AdminRatesPage() {
                             className="bg-white dark:bg-navy-900 rounded-3xl p-8 w-full max-w-lg shadow-2xl"
                         >
                             <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-2xl font-black text-slate-900 dark:text-white">Add New Route</h3>
+                                <h3 className="text-2xl font-medium text-slate-900 dark:text-white">Add New Route</h3>
                                 <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-slate-100 dark:hover:bg-white/10 rounded-full text-slate-400">
                                     <X className="w-5 h-5" />
                                 </button>
@@ -386,7 +386,7 @@ export default function AdminRatesPage() {
                             <div className="space-y-4">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">Origin</label>
+                                        <label className="block text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Origin</label>
                                         <input
                                             type="text"
                                             value={newRoute.origin}
@@ -395,7 +395,7 @@ export default function AdminRatesPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">Destination</label>
+                                        <label className="block text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Destination</label>
                                         <input
                                             type="text"
                                             value={newRoute.destination}
@@ -407,7 +407,7 @@ export default function AdminRatesPage() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">Base Rate</label>
+                                        <label className="block text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Base Rate</label>
                                         <input
                                             type="number"
                                             value={newRoute.rate}
@@ -416,7 +416,7 @@ export default function AdminRatesPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">Currency</label>
+                                        <label className="block text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Currency</label>
                                         <select
                                             value={newRoute.currency}
                                             onChange={(e) => setNewRoute({ ...newRoute, currency: e.target.value })}
@@ -430,7 +430,7 @@ export default function AdminRatesPage() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">Type</label>
+                                        <label className="block text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Type</label>
                                         <select
                                             value={newRoute.type}
                                             onChange={(e) => setNewRoute({ ...newRoute, type: e.target.value as any })}
@@ -442,7 +442,7 @@ export default function AdminRatesPage() {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">Transit Time</label>
+                                        <label className="block text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Transit Time</label>
                                         <input
                                             type="text"
                                             value={newRoute.transitTime}

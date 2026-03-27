@@ -88,7 +88,7 @@ export default function ClaimsPage() {
             >
                 <button
                     onClick={() => setShowFileForm(!showFileForm)}
-                    className="px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors flex items-center gap-2"
+                    className="px-6 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition-colors flex items-center gap-2"
                 >
                     <span className="material-symbols-outlined">{showFileForm ? 'close' : 'report_problem'}</span>
                     {showFileForm ? 'Cancel' : 'File a Claim'}
@@ -104,7 +104,7 @@ export default function ClaimsPage() {
                         className="overflow-hidden mb-8"
                     >
                         <form onSubmit={handleSubmit} className="bg-white dark:bg-surface-dark rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
-                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">File New Claim</h3>
+                            <h3 className="text-xl font-medium text-slate-900 dark:text-white mb-6">File New Claim</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Shipment</label>
@@ -146,7 +146,7 @@ export default function ClaimsPage() {
                                 <button
                                     type="submit"
                                     disabled={submitting}
-                                    className="px-8 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all disabled:opacity-50"
+                                    className="px-8 py-3 bg-red-600 text-white rounded-xl font-medium hover:bg-red-700 transition-all disabled:opacity-50"
                                 >
                                     {submitting ? 'Submitting...' : 'Submit Claim'}
                                 </button>
@@ -173,7 +173,7 @@ export default function ClaimsPage() {
                                     <span className="text-sm text-slate-400">•</span>
                                     <span className="text-sm text-slate-400">{claim.createdAt?.toDate ? claim.createdAt.toDate().toLocaleDateString() : 'Date Unknown'}</span>
                                 </div>
-                                <h4 className="font-bold text-lg text-slate-900 dark:text-white mb-1">
+                                <h4 className="font-medium text-lg text-slate-900 dark:text-white mb-1">
                                     {claim.type === 'damage' ? 'Damaged Goods' : claim.type === 'loss' ? 'Lost Package' : 'Delay Compensation'}
                                     <span className="font-normal text-slate-500 mx-2">for Shipment</span>
                                     <span className="font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-base">{claim.shipmentId}</span>
@@ -181,8 +181,8 @@ export default function ClaimsPage() {
                                 <p className="text-slate-600 dark:text-slate-300 text-sm max-w-2xl">{claim.description}</p>
                             </div>
                             <div className="flex flex-col items-end justify-center min-w-[120px]">
-                                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Claim Amount</span>
-                                <span className="text-2xl font-bold text-slate-900 dark:text-white">${claim.amount.toFixed(2)}</span>
+                                <span className="text-xs text-slate-500 uppercase font-medium tracking-wider">Claim Amount</span>
+                                <span className="text-2xl font-medium text-slate-900 dark:text-white">${claim.amount.toFixed(2)}</span>
                             </div>
                         </div>
                     ))}

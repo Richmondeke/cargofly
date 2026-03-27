@@ -10,21 +10,21 @@ const SidebarLink: React.FC<{ to: string; icon: string; label: string; active?: 
     <Link
         href={to}
         onClick={onClick}
-        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${active
-            ? 'bg-[#000066] text-white shadow-inner'
-            : 'text-blue-200/50 hover:text-white hover:bg-white/10'
+        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${active
+            ? 'bg-navy-700 text-white shadow-inner'
+            : 'text-white/40 hover:text-white hover:bg-white/5'
             }`}
     >
         <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
             {icon}
         </span>
-        <span className="font-['Work_Sans'] font-semibold tracking-tight text-sm">{label}</span>
+        <span className="font-medium tracking-tight text-sm">{label}</span>
     </Link>
 );
 
 const SidebarSection: React.FC<{ label: string }> = ({ label }) => (
     <div className="mt-6 mb-2 px-4">
-        <span className="font-['Work_Sans'] font-bold text-[10px] text-white/30 uppercase tracking-widest">{label}</span>
+        <span className="font-medium text-[10px] text-white/30 uppercase tracking-widest">{label}</span>
     </div>
 );
 
@@ -53,8 +53,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
         >
             {/* Background Image Overlay */}
             <div
-                className="absolute inset-0 z-0 opacity-[0.07] pointer-events-none bg-repeat brightness-0 invert"
-                style={{ backgroundImage: "url('/Cargofly motif_transparent.png')", backgroundSize: '200px' }}
+                className="absolute inset-0 z-0 opacity-40 pointer-events-none bg-repeat brightness-0 invert mix-blend-overlay"
+                style={{ backgroundImage: "url('/Cargofly motif_transparent.png')", backgroundSize: '150px' }}
             />
 
             <div className="relative z-10 mb-10 px-4 flex justify-between items-center">
@@ -101,19 +101,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
             <div className="relative z-10 mt-auto space-y-4 px-2 pt-4 border-t border-white/10">
                 <button
                     onClick={() => router.push('/dashboard/new-booking')}
-                    className="w-full bg-[#FFCA00] text-navy-900 py-3 px-4 rounded-xl font-['Work_Sans'] font-semibold text-sm flex items-center justify-center gap-2 shadow-lg hover:bg-[#FFCA00]/90 transition-all active:scale-95"
+                    className="w-full bg-gold-500 text-navy-900 py-3.5 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 shadow-xl shadow-gold-500/10 hover:brightness-110 transition-all active:scale-95 cursor-pointer"
                 >
-                    <span className="material-symbols-outlined">add</span>
+                    <span className="material-symbols-outlined text-[20px]">add</span>
                     New Shipment
                 </button>
 
                 <div className="flex items-center gap-3 px-2">
-                    <div className="size-9 rounded-full bg-white/20 overflow-hidden flex items-center justify-center text-white font-bold" >
+                    <div className="size-9 rounded-full bg-white/20 overflow-hidden flex items-center justify-center text-white font-medium" >
                         {userProfile?.displayName?.charAt(0) || 'U'}
                     </div>
                     <div className="flex flex-col flex-1 overflow-hidden">
                         <span className="text-sm font-medium text-white truncate">{userProfile?.displayName || 'User'}</span>
-                        <span className="text-[10px] text-white/50 uppercase tracking-wider font-bold truncate">{userProfile?.role || 'Guest'}</span>
+                        <span className="text-[10px] text-white/50 uppercase tracking-wider font-medium truncate">{userProfile?.role || 'Guest'}</span>
                     </div>
                     <button
                         onClick={handleSignOut}

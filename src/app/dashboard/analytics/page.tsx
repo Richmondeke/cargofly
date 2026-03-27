@@ -74,26 +74,26 @@ export default function AnalyticsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                             <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Total Shipments</h3>
-                            <p className="text-3xl font-bold text-slate-900 dark:text-white">{stats?.totalShipments}</p>
+                            <p className="text-3xl font-medium text-slate-900 dark:text-white">{stats?.totalShipments}</p>
                         </div>
                         <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                             <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Delivered</h3>
-                            <p className="text-3xl font-bold text-green-500">{stats?.delivered}</p>
+                            <p className="text-3xl font-medium text-green-500">{stats?.delivered}</p>
                         </div>
                         <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                             <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">In Transit</h3>
-                            <p className="text-3xl font-bold text-blue-500">{stats?.inTransit}</p>
+                            <p className="text-3xl font-medium text-blue-500">{stats?.inTransit}</p>
                         </div>
                         <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                             <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Total Spend</h3>
-                            <p className="text-3xl font-bold text-slate-900 dark:text-white">${financials?.totalRevenue.toLocaleString()}</p>
+                            <p className="text-3xl font-medium text-slate-900 dark:text-white">${financials?.totalRevenue.toLocaleString()}</p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                         {/* Shipment Volume Chart */}
                         <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm h-[400px]">
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Shipment Volume (Last 6 Months)</h3>
+                            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6">Shipment Volume (Last 6 Months)</h3>
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={volumeData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -110,7 +110,7 @@ export default function AnalyticsPage() {
 
                         {/* Shipment Status Distribution */}
                         <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm h-[400px]">
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Shipment Status Distribution</h3>
+                            <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-6">Shipment Status Distribution</h3>
                             <div className="flex h-full items-center justify-center pb-12">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>

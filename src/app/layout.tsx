@@ -12,6 +12,8 @@ const humanist = localFont({
   display: "swap",
 });
 
+
+
 export const metadata = {
   title: "Cargofly | Caverton Cargo Division - Premium Aviation Logistics",
   description:

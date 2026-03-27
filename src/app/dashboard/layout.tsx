@@ -37,7 +37,7 @@ export default function DashboardLayout({
 
     return (
         <NotificationProvider>
-            <div className="flex h-screen w-full flex-row overflow-hidden bg-background-light dark:bg-background-dark" style={{ fontFamily: "'Inter', sans-serif" }}>
+            <div className="flex h-screen w-full flex-row overflow-hidden bg-background-light dark:bg-background-dark">
                 <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
                 <main className="flex-1 flex flex-col h-full overflow-hidden relative md:ml-72">
                     {isLoading && <LoadingAnimation />}

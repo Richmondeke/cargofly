@@ -45,7 +45,6 @@ export default function DashboardPage() {
     // Quick Action Modal States
     const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
     const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
-    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -77,35 +76,44 @@ export default function DashboardPage() {
     const recentBookings = shipments.slice(0, 4);
 
     return (
-        <div className="flex-1 overflow-y-auto bg-[#F8FAFC] dark:bg-background-dark min-h-full">
+        <div className="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark min-h-full">
             <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8">
 
                 {/* Announcement Banner */}
-                <section className="relative overflow-hidden rounded-xl bg-slate-900 p-6 sm:p-8 flex items-center justify-between group">
+                <section className="relative overflow-hidden rounded-xl bg-navy p-10 sm:p-14 flex items-center justify-between group min-h-[300px]">
+                    {/* Motif Background Overlay */}
+                    <div
+                        className="absolute inset-0 z-0 pointer-events-none bg-repeat mix-blend-lighten opacity-100"
+                        style={{
+                            backgroundImage: "url('/Cargofly motif_transparent.png')",
+                            backgroundSize: '150px'
+                        }}
+                    />
+
                     <div className="z-10 relative space-y-3">
-                        <span className="inline-block px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded">
+                        <span className="inline-block px-3 py-1 bg-gold-500 text-navy-900 text-[10px] font-medium uppercase tracking-widest rounded">
                             Route Expansion
                         </span>
-                        <h2 className="text-white text-2xl sm:text-3xl font-bold leading-tight">
+                        <h2 className="text-white text-2xl sm:text-3xl font-display font-medium leading-tight">
                             New Route to Singapore <br className="hidden sm:block" />
                             Starting Next Month
                         </h2>
-                        <p className="text-slate-300 max-w-md text-sm">
+                        <p className="text-white/80 max-w-md text-sm">
                             Book your cargo space early to take advantage of introductory low rates for our new daily service.
                         </p>
-                        <div className="flex gap-3 pt-1 flex-wrap">
+                        <div className="flex gap-4 pt-2 flex-wrap">
                             <Link href="/dashboard/new-booking">
-                                <button className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+                                <button className="bg-gold-500 text-navy-900 px-6 py-3 rounded-xl font-medium text-sm hover:brightness-110 transition-all shadow-xl shadow-gold-500/20 active:scale-95 cursor-pointer">
                                     Book This Route
                                 </button>
                             </Link>
-                            <button className="bg-white/10 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-white/20 transition-all">
+                            <button className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-6 py-3 rounded-xl font-medium text-sm hover:bg-white/20 transition-all active:scale-95 cursor-pointer">
                                 Learn More
                             </button>
                         </div>
                     </div>
                     <div
-                        className="absolute right-0 top-0 h-full w-1/3 sm:w-2/5 opacity-20 pointer-events-none transition-transform group-hover:scale-105 duration-700"
+                        className="absolute right-0 top-0 h-full w-1/3 sm:w-2/5 opacity-40 pointer-events-none transition-transform group-hover:scale-105 duration-700 z-10"
                         style={{
                             backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCj32WxKMQJJjPpeGLU41bKxnpgDqvVvH4DxU94dpj2u-QSOXOb9gIIpMEB7z0msS40fh5EnRzayghD3ChwBJe9nf4XDp7EVafYqL_aqT8k3TcP5batWJQvKvh9S8P9ExMPhbcv48N6ErQ2vyR_8dz8CwgI6BzbjwLOjnq8RdpPCzhlDqDUteub66JOuj0mmXCNrM_zWbbj7JLEC2TgGH63pKmvYjgL4HVwHMP1EQryzNajyDK1YxojNTBGclCFA9V6Wt2L1FmjTUmj')",
                             backgroundSize: 'cover',
@@ -115,92 +123,70 @@ export default function DashboardPage() {
                 </section>
 
                 {/* Quick Action Bar */}
-                <section className="flex flex-wrap gap-3 items-center justify-between">
-                    <div className="flex gap-3 flex-wrap">
+                <section className="flex flex-wrap gap-4 items-center justify-between border-b border-navy/5 dark:border-white/5 pb-8">
+                    <div className="flex gap-4 flex-wrap">
                         <Link href="/dashboard/new-booking">
-                            <button className="flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all text-sm">
+                            <button className="flex items-center gap-2 bg-navy text-white px-6 py-3.5 rounded-xl font-medium shadow-xl shadow-navy/20 hover:scale-105 transition-all text-sm active:scale-95 cursor-pointer">
                                 <span className="material-symbols-outlined text-[20px]">add_circle</span>
                                 New Shipment
                             </button>
                         </Link>
-                        <button 
-                            onClick={() => setIsQuoteModalOpen(true)}
-                            className="flex items-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-5 py-3 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-sm"
-                        >
-                            <span className="material-symbols-outlined text-[20px]">request_quote</span>
-                            Request Quote
-                        </button>
-                    </div>
-                    <div className="flex gap-3 flex-wrap">
-                        <button 
+                        <button
                             onClick={() => setIsTrackModalOpen(true)}
-                            className="flex items-center gap-2 text-slate-600 dark:text-slate-400 font-semibold px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all text-sm"
+                            className="flex items-center gap-2 bg-white dark:bg-navy-800 text-navy dark:text-white border border-navy/10 dark:border-navy-600 px-6 py-3.5 rounded-xl font-medium hover:bg-navy/5 dark:hover:bg-navy-700 transition-all text-sm active:scale-95 cursor-pointer shadow-sm"
                         >
                             <span className="material-symbols-outlined text-[20px]">track_changes</span>
                             Track Shipment
                         </button>
-                        <button 
-                            onClick={() => setIsReportModalOpen(true)}
-                            className="flex items-center gap-2 text-slate-600 dark:text-slate-400 font-semibold px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all text-sm"
-                        >
-                            <span className="material-symbols-outlined text-[20px]">download</span>
-                            Download Report
-                        </button>
+                    </div>
+                    <div className="flex gap-4 flex-wrap">
+
                     </div>
                 </section>
 
                 {/* Stats Cards */}
                 <section className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     {/* Total Shipments */}
-                    <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
                         <div>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Shipments</p>
-                            <h3 className="text-3xl font-bold mt-1 text-slate-900 dark:text-white">
-                                {(!mounted || loading) ? <span className="animate-pulse text-slate-300">—</span> : stats.totalShipments}
-                                <span className="text-sm font-normal text-slate-400 ml-1">All time</span>
+                            <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest">Total Shipments</p>
+                            <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white">
+                                {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : stats.totalShipments}
+                                <span className="text-sm font-normal text-navy/40 ml-1">All time</span>
                             </h3>
-                            <div className="mt-2 flex items-center text-emerald-500 text-xs font-bold">
-                                <span className="material-symbols-outlined text-base">trending_up</span>
-                                <span className="ml-1">Active network</span>
-                            </div>
+
                         </div>
-                        <div className="size-14 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600">
+                        <div className="size-14 bg-navy/5 dark:bg-navy-800 rounded-2xl flex items-center justify-center text-navy dark:text-sky-400">
                             <span className="material-symbols-outlined text-3xl">weight</span>
                         </div>
                     </div>
 
                     {/* In Transit */}
-                    <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
                         <div>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Shipments</p>
-                            <h3 className="text-3xl font-bold mt-1 text-slate-900 dark:text-white">
-                                {(!mounted || loading) ? <span className="animate-pulse text-slate-300">—</span> : stats.inTransit}
-                                <span className="text-sm font-normal text-slate-400 ml-1">In Transit</span>
+                            <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest">Active Shipments</p>
+                            <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white">
+                                {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : stats.inTransit}
+                                <span className="text-sm font-normal text-navy/40 ml-1">In Transit</span>
                             </h3>
-                            <div className="mt-2 flex items-center text-primary text-xs font-bold">
-                                <span className="material-symbols-outlined text-base">schedule</span>
-                                <span className="ml-1">Real-time tracking</span>
-                            </div>
+
                         </div>
-                        <div className="size-14 bg-orange-50 dark:bg-orange-900/20 rounded-2xl flex items-center justify-center text-primary">
+                        <div className="size-14 bg-gold-50 dark:bg-gold-900/20 rounded-2xl flex items-center justify-center text-gold-600">
                             <span className="material-symbols-outlined text-3xl">local_shipping</span>
                         </div>
                     </div>
 
                     {/* Pending / Quotes */}
-                    <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
                         <div>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pending</p>
-                            <h3 className="text-3xl font-bold mt-1 text-slate-900 dark:text-white">
-                                {(!mounted || loading) ? <span className="animate-pulse text-slate-300">—</span> : ((stats as any).pending || 0)}
-                                <span className="text-sm font-normal text-slate-400 ml-1">Awaiting Action</span>
+                            <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest">Pending</p>
+                            <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white">
+                                {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : ((stats as any).pending || 0)}
+                                <span className="text-sm font-normal text-navy/40 ml-1">Awaiting Action</span>
                             </h3>
-                            <div className="mt-2 flex items-center text-slate-400 text-xs font-bold">
-                                <span className="material-symbols-outlined text-base">pending</span>
-                                <span className="ml-1">Needs attention</span>
-                            </div>
+
                         </div>
-                        <div className="size-14 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-600 dark:text-slate-300">
+                        <div className="size-14 bg-navy/5 dark:bg-navy-800 rounded-2xl flex items-center justify-center text-navy dark:text-sky-400">
                             <span className="material-symbols-outlined text-3xl">request_quote</span>
                         </div>
                     </div>
@@ -210,10 +196,10 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                     {/* Active Shipments List */}
-                    <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col">
-                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                            <h3 className="font-bold text-lg text-slate-900 dark:text-white">Active Shipments</h3>
-                            <Link href="/dashboard/shipments" className="text-primary text-sm font-semibold hover:underline">
+                    <section className="bg-white dark:bg-navy-900 rounded-xl border border-navy/10 dark:border-navy-700 overflow-hidden flex flex-col shadow-sm">
+                        <div className="p-6 border-b border-navy/5 dark:border-navy-800 flex items-center justify-between">
+                            <h3 className="font-display font-medium text-lg text-navy dark:text-white">Active Shipments</h3>
+                            <Link href="/dashboard/shipments" className="text-navy-700 dark:text-sky-400 text-sm font-medium hover:underline">
                                 View All
                             </Link>
                         </div>
@@ -232,12 +218,12 @@ export default function DashboardPage() {
                                 </div>
                             ) : activeShipments.length > 0 ? (
                                 <div className="divide-y divide-slate-100 dark:divide-slate-800">
-                                    {activeShipments.slice(0, 5).map(s => {
+                                    {activeShipments.map((s) => {
                                         const statusStyle = getStatusIcon(s.status);
                                         return (
                                             <div
                                                 key={s.id}
-                                                className="p-5 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                                                className="p-5 flex items-center gap-4 hover:bg-navy/5 dark:hover:bg-navy-800/50 transition-colors cursor-pointer"
                                                 onClick={() => { setSelectedShipment(s); setIsDrawerOpen(true); }}
                                             >
                                                 <div className={`size-10 ${statusStyle.bg} ${statusStyle.text} rounded-lg flex items-center justify-center flex-shrink-0`}>
@@ -245,16 +231,16 @@ export default function DashboardPage() {
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex justify-between items-start gap-2">
-                                                        <p className="text-sm font-bold truncate text-slate-900 dark:text-white">
+                                                        <p className="text-sm font-medium truncate text-navy dark:text-white">
                                                             {s.trackingNumber || s.id}
                                                         </p>
                                                         <StatusBadge status={s.status} />
                                                     </div>
-                                                    <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
-                                                        <span className="font-semibold">{s.origin}</span>
-                                                        <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
-                                                        <span className="font-semibold">{s.destination}</span>
-                                                        <span className="mx-1">•</span>
+                                                    <div className="flex items-center gap-1.5 text-xs text-navy/50 dark:text-navy-400 mt-1">
+                                                        <span className="font-medium">{s.origin}</span>
+                                                        <span className="material-symbols-outlined text-[13px] opacity-40">arrow_forward_ios</span>
+                                                        <span className="font-medium">{s.destination}</span>
+                                                        <span className="mx-1 opacity-20">•</span>
                                                         <span>ETA: {s.eta || 'TBD'}</span>
                                                     </div>
                                                 </div>
@@ -272,18 +258,18 @@ export default function DashboardPage() {
                     </section>
 
                     {/* Recent Bookings Table */}
-                    <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-                        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                            <h3 className="font-bold text-lg text-slate-900 dark:text-white">Recent Bookings</h3>
+                    <section className="bg-white dark:bg-navy-900 rounded-xl border border-navy/10 dark:border-navy-700 overflow-hidden flex flex-col shadow-sm">
+                        <div className="p-6 border-b border-navy/5 dark:border-navy-800 flex items-center justify-between">
+                            <h3 className="font-display font-medium text-lg text-navy dark:text-white">Recent Bookings</h3>
                             <Link href="/dashboard/shipments">
-                                <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
-                                    <span className="material-symbols-outlined text-slate-500">filter_list</span>
+                                <button className="p-2 hover:bg-navy/5 dark:hover:bg-navy-800/50 rounded-lg transition-colors">
+                                    <span className="material-symbols-outlined text-navy-400">filter_list</span>
                                 </button>
                             </Link>
                         </div>
-                        <div className="overflow-x-auto">
+                        <div className="overflow-x-auto flex-1">
                             <table className="w-full text-left">
-                                <thead className="bg-slate-50 dark:bg-slate-800/50 text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+                                <thead className="bg-navy/5 dark:bg-navy-800/50 text-[10px] uppercase font-medium text-navy-500/70 dark:text-sky-400/50 tracking-wider">
                                     <tr>
                                         <th className="px-6 py-4">Booking ID</th>
                                         <th className="px-6 py-4">Route</th>
@@ -291,12 +277,12 @@ export default function DashboardPage() {
                                         <th className="px-6 py-4">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-800">
+                                <tbody className="text-sm divide-y divide-navy/5 dark:divide-navy-800">
                                     {loading ? (
                                         [1, 2, 3, 4].map(i => (
                                             <tr key={i}>
                                                 <td colSpan={4} className="px-6 py-4">
-                                                    <div className="h-5 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+                                                    <div className="h-5 bg-navy/5 dark:bg-navy-800 rounded animate-pulse" />
                                                 </td>
                                             </tr>
                                         ))
@@ -304,16 +290,16 @@ export default function DashboardPage() {
                                         recentBookings.map(s => (
                                             <tr
                                                 key={s.id}
-                                                className="hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors"
+                                                className="hover:bg-navy/5 dark:hover:bg-navy-800/50 cursor-pointer transition-colors"
                                                 onClick={() => { setSelectedShipment(s); setIsDrawerOpen(true); }}
                                             >
-                                                <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+                                                <td className="px-6 py-4 font-medium text-navy dark:text-white">
                                                     {s.trackingNumber ? s.trackingNumber.slice(0, 12) : s.id.slice(0, 8)}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                                <td className="px-6 py-4 text-navy-700 dark:text-sky-400/80">
                                                     {s.origin} → {s.destination}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-500">
+                                                <td className="px-6 py-4 text-navy/50 dark:text-navy-400">
                                                     {s.weight || '—'}
                                                 </td>
                                                 <td className="px-6 py-4">
@@ -332,28 +318,24 @@ export default function DashboardPage() {
                             </table>
                         </div>
                     </section>
+                </div>
+
+                <ShipmentDetailsDrawer
+                    isOpen={isDrawerOpen}
+                    onClose={() => setIsDrawerOpen(false)}
+                    shipment={selectedShipment}
+                />
+
+                {/* Quick Action Modals */}
+                <QuoteModal
+                    isOpen={isQuoteModalOpen}
+                    onClose={() => setIsQuoteModalOpen(false)}
+                />
+                <TrackModal
+                    isOpen={isTrackModalOpen}
+                    onClose={() => setIsTrackModalOpen(false)}
+                />
             </div>
-
-            <ShipmentDetailsDrawer
-                isOpen={isDrawerOpen}
-                onClose={() => setIsDrawerOpen(false)}
-                shipment={selectedShipment}
-            />
-
-            {/* Quick Action Modals */}
-            <QuoteModal 
-                isOpen={isQuoteModalOpen} 
-                onClose={() => setIsQuoteModalOpen(false)} 
-            />
-            <TrackModal 
-                isOpen={isTrackModalOpen} 
-                onClose={() => setIsTrackModalOpen(false)} 
-            />
-            <ReportModal 
-                isOpen={isReportModalOpen} 
-                onClose={() => setIsReportModalOpen(false)} 
-            />
-        </div>
         </div>
     );
 }

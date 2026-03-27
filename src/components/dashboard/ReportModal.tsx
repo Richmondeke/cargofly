@@ -21,7 +21,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
         await new Promise(resolve => setTimeout(resolve, 2000));
         setIsDownloading(false);
         setIsSuccess(true);
-        
+
         // Reset and close after a delay
         setTimeout(() => {
             setIsSuccess(false);
@@ -37,14 +37,14 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                         <CheckCircle2 size={40} />
                     </div>
                     <div>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white">Report Ready!</h3>
+                        <h3 className="text-xl font-medium text-slate-900 dark:text-white">Report Ready!</h3>
                         <p className="text-slate-500 dark:text-slate-400 mt-2">Your report has been generated and <br /> downloaded successfully.</p>
                     </div>
                 </div>
             ) : (
                 <div className="space-y-6">
                     <div className="space-y-3">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Select Report Type</label>
+                        <label className="text-[10px] font-medium uppercase tracking-widest text-slate-500 block">Select Report Type</label>
                         <div className="grid grid-cols-2 gap-3">
                             {[
                                 { id: 'shipments', label: 'Shipments', desc: 'Detailed log of all cargo movements' },
@@ -55,13 +55,12 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                                 <button
                                     key={type.id}
                                     onClick={() => setReportType(type.id)}
-                                    className={`p-4 rounded-xl border-2 text-left transition-all ${
-                                        reportType === type.id
+                                    className={`p-4 rounded-xl border-2 text-left transition-all ${reportType === type.id
                                             ? 'border-primary bg-primary/5'
                                             : 'border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
-                                    }`}
+                                        }`}
                                 >
-                                    <h4 className={`text-sm font-bold ${reportType === type.id ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
+                                    <h4 className={`text-sm font-medium ${reportType === type.id ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
                                         {type.label}
                                     </h4>
                                     <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">{type.desc}</p>
@@ -71,7 +70,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                     </div>
 
                     <div className="space-y-3">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Select Timeframe</label>
+                        <label className="text-[10px] font-medium uppercase tracking-widest text-slate-500 block">Select Timeframe</label>
                         <div className="relative">
                             <Calendar size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                             <select
@@ -101,14 +100,14 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                     <div className="pt-2 flex gap-3">
                         <button
                             onClick={onClose}
-                            className="flex-1 px-6 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all uppercase tracking-wider"
+                            className="flex-1 px-6 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all uppercase tracking-wider"
                         >
                             Cancel
                         </button>
                         <button
                             onClick={handleDownload}
                             disabled={isDownloading}
-                            className="flex-1 px-6 py-4 bg-primary text-white rounded-2xl font-bold text-sm hover:brightness-110 shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-wider"
+                            className="flex-1 px-6 py-4 bg-primary text-white rounded-2xl font-medium text-sm hover:brightness-110 shadow-lg shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-wider"
                         >
                             {isDownloading ? (
                                 <>

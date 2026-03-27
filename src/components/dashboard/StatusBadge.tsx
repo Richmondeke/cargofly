@@ -34,7 +34,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) =
     return (
         <Badge
             variant={variant}
-            className={cn("inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-tight rounded-md border-none",
+            className={cn("inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium uppercase tracking-tight rounded-md border-none",
                 variant === 'success' && "bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400",
                 variant === 'amber' && "bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400",
                 variant === 'info' && "bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400",

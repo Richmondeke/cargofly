@@ -109,7 +109,7 @@ export default function SupportPage() {
                                 action={
                                     <Link
                                         href="/dashboard/support/new"
-                                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all"
+                                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-all"
                                     >
                                         <span className="material-symbols-outlined">add</span>
                                         Create Ticket
@@ -129,11 +129,11 @@ export default function SupportPage() {
                                                 </div>
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1">
-                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">#{ticket.id}</span>
+                                                        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-tighter">#{ticket.id}</span>
                                                         <span className="w-1 h-1 rounded-full bg-slate-300" />
-                                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{ticket.category}</span>
+                                                        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-widest">{ticket.category}</span>
                                                     </div>
-                                                    <h4 className="text-lg font-black text-slate-900 dark:text-white group-hover:text-primary transition-colors tracking-tight">
+                                                    <h4 className="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors tracking-tight">
                                                         {ticket.subject}
                                                     </h4>
                                                     <div className="flex items-center gap-4 mt-2">
