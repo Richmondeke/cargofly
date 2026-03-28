@@ -68,7 +68,7 @@ function LoginContent() {
             <div className="text-center mb-8">
                 <Link href="/" className="inline-flex items-center gap-3 mb-6">
                     <Image
-                        src="/logo-light.png"
+                        src="/logo-dark.png"
                         alt="Cargofly"
                         width={140}
                         height={40}

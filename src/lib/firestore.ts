@@ -21,6 +21,7 @@ import {
     getDownloadURL
 } from "firebase/storage";
 import { db, storage } from "./firebase";
+import { pushNotification } from "./notification-service";
 
 // Types
 export interface ShipmentAddress {
@@ -116,19 +117,7 @@ export interface TrackingEvent {
     createdBy?: string;
 }
 
-export interface BlogPost {
-    id?: string;
-    title: string;
-    slug: string;
-    content: string;
-    excerpt: string;
-    category: string;
-    author: string;
-    image: string;
-    publishedAt: Timestamp;
-    updatedAt: Timestamp;
-    isPublished: boolean;
-}
+// Shipping Tracking handled below
 
 // Upload a blog cover image
 export async function uploadBlogImage(file: File): Promise<string> {
@@ -186,68 +175,6 @@ export async function createShipment(
 // Helper to get random item
 export const getRandomItem = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-const MOCK_LOCATIONS = [
-    { city: "Lagos", country: "Nigeria" },
-    { city: "London", country: "United Kingdom" },
-    { city: "New York", country: "USA" },
-    { city: "Dubai", country: "UAE" }
-];
-
-// Generate Mock Shipment
-function generateMockShipment(trackingNumber: string): Shipment {
-    // existing implementation unchanged
-    const origin = MOCK_LOCATIONS[0];
-    const dest = MOCK_LOCATIONS[1];
-    const now = new Date();
-    const created = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000); // 2 days ago
-
-    return {
-        // existing mock shipment fields
-        id: `mock_${trackingNumber}`,
-        trackingNumber: trackingNumber.toUpperCase(),
-        userId: "demo-user",
-        status: "in_transit",
-        currentLocation: "Frankfurt, Germany", // Transit hub
-        progress: 50,
-        packages: [{
-            weight: 5.5,
-            dimensions: { length: 30, width: 20, height: 15 },
-            description: "General Cargo",
-            pieces: 1,
-            isFragile: false,
-            requiresSignature: true
-        }],
-        sender: {
-            name: "Sender Name",
-            street: "123 Origin St",
-            city: origin.city,
-            state: "State",
-            postalCode: "10001",
-            country: origin.country,
-            phone: "+1234567890"
-        },
-        recipient: {
-            name: "Recipient Name",
-            street: "456 Dest Rd",
-            city: dest.city,
-            state: "State",
-            postalCode: "20002",
-            country: dest.country,
-            phone: "+0987654321"
-        },
-        service: "express",
-        estimatedDelivery: Timestamp.now(), // Due today/tomorrow
-        price: {
-            base: 150,
-            fuel: 20,
-            total: 170,
-            currency: "USD"
-        },
-        paymentStatus: "paid",
-        createdAt: Timestamp.fromDate(created),
-        updatedAt: Timestamp.now()
-    };
-}
 
 // Get shipment by tracking number
 export async function getShipmentByTracking(trackingNumber: string): Promise<Shipment | null> {
@@ -264,20 +191,14 @@ export async function getShipmentByTracking(trackingNumber: string): Promise<Shi
             return { id: doc.id, ...doc.data() } as Shipment;
         }
     } catch (e) {
-        console.warn("Firestore fetch failed, falling back to mock:", e);
+        console.error("Firestore fetch failed:", e);
     }
 
-    // Fallback: Mock Data for specific formats or ALWAYS for demo if requested
-    console.log("Generating mock data for:", trackingNumber);
-    return generateMockShipment(trackingNumber);
+    return null;
 }
 
 // Get shipment by ID
 export async function getShipmentById(shipmentId: string): Promise<Shipment | null> {
-    if (shipmentId.startsWith("mock_")) {
-        const trackingNumber = shipmentId.replace("mock_", "");
-        return generateMockShipment(trackingNumber);
-    }
 
     try {
         const docRef = doc(db, "shipments", shipmentId);
@@ -330,7 +251,6 @@ export async function applyCustomsDutyWithStatus(
     description: string,
     updatedBy?: string
 ): Promise<void> {
-    if (shipmentId.startsWith("mock_")) return;
 
     const batch = writeBatch(db);
     const shipmentRef = doc(db, "shipments", shipmentId);
@@ -361,6 +281,21 @@ export async function applyCustomsDutyWithStatus(
     batch.set(eventRef, eventData);
 
     await batch.commit();
+
+    // Push customs hold notification to shipment owner
+    try {
+        const shipmentSnap = await getDoc(shipmentRef);
+        if (shipmentSnap.exists()) {
+            const shipmentData = shipmentSnap.data();
+            await pushNotification(shipmentData.userId, {
+                title: 'Customs Duty Required',
+                message: `Your shipment ${shipmentData.trackingNumber} has been placed on customs hold. A duty of $${amount.toFixed(2)} is required to proceed.`,
+                type: 'alert',
+            });
+        }
+    } catch (e) {
+        console.error("Failed to send customs notification:", e);
+    }
 }
 
 // Get shipments with pending customs duties for a user
@@ -403,42 +338,11 @@ export async function addTrackingEvent(
     shipmentId: string,
     event: Omit<TrackingEvent, "id">
 ): Promise<void> {
-    if (shipmentId.startsWith("mock_")) return; // Don't write to DB for mock
     await addDoc(collection(db, "shipments", shipmentId, "tracking_events"), event);
 }
 
 // Get tracking events for a shipment
 export async function getTrackingEvents(shipmentId: string): Promise<TrackingEvent[]> {
-    // If it's a mock shipment, return mock events
-    if (shipmentId.startsWith("mock_")) {
-        const now = new Date();
-        return [
-            {
-                id: "evt_3",
-                shipmentId,
-                status: "in_transit",
-                location: "Frankfurt, Germany",
-                description: "Arrived at transit hub",
-                timestamp: Timestamp.now()
-            },
-            {
-                id: "evt_2",
-                shipmentId,
-                status: "picked_up",
-                location: "Lagos, Nigeria",
-                description: "Picked up by courier",
-                timestamp: Timestamp.fromDate(new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000))
-            },
-            {
-                id: "evt_1",
-                shipmentId,
-                status: "pending",
-                location: "Lagos, Nigeria",
-                description: "Shipment created",
-                timestamp: Timestamp.fromDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000))
-            }
-        ];
-    }
 
     try {
         const q = query(
@@ -462,7 +366,6 @@ export async function updateShipmentStatus(
     description: string,
     updatedBy?: string
 ): Promise<void> {
-    if (shipmentId.startsWith("mock_")) return; // Don't write for mock
 
     const batch = writeBatch(db);
     const shipmentRef = doc(db, "shipments", shipmentId);
@@ -506,6 +409,21 @@ export async function updateShipmentStatus(
     batch.set(eventRef, eventData);
 
     await batch.commit();
+
+    // Push notification to shipment owner
+    try {
+        const shipmentSnap = await getDoc(shipmentRef);
+        if (shipmentSnap.exists()) {
+            const shipmentData = shipmentSnap.data();
+            await pushNotification(shipmentData.userId, {
+                title: `Shipment ${getStatusDisplay(status)}`,
+                message: `Your shipment ${shipmentData.trackingNumber} is now: ${getStatusDisplay(status)}.`,
+                type: 'shipment',
+            });
+        }
+    } catch (e) {
+        console.error("Failed to send shipment status notification:", e);
+    }
 }
 
 
@@ -514,9 +432,6 @@ export async function uploadConsignmentMedia(
     shipmentId: string,
     file: File
 ): Promise<void> {
-    if (shipmentId.startsWith("mock_")) {
-        throw new Error("Cannot upload media to mock shipments");
-    }
 
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
@@ -604,6 +519,13 @@ export async function fundWallet(userId: string, amount: number, reference?: str
         walletBalance: currentBalance + amount,
         updatedAt: serverTimestamp(),
     });
+
+    // Notify user of funding
+    await pushNotification(userId, {
+        title: 'Wallet Funded',
+        message: `Your wallet has been credited with $${amount.toLocaleString()}.`,
+        type: 'alert',
+    });
 }
 
 // Pay with Wallet
@@ -632,6 +554,13 @@ export async function payWithWallet(userId: string, amount: number, shipmentId: 
         walletBalance: currentBalance - amount,
         updatedAt: serverTimestamp(),
     });
+
+    // Notify user of payment
+    await pushNotification(userId, {
+        title: 'Payment Successful',
+        message: `Your payment of $${amount.toLocaleString()} for shipment #${shipmentId} was successful.`,
+        type: 'shipment',
+    });
 }
 
 // Get Wallet Transactions
@@ -643,47 +572,4 @@ export async function getWalletTransactions(userId: string): Promise<WalletTrans
 
     const snapshot = await getDocs(q);
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as WalletTransaction);
-}
-
-// Blog Service
-export async function createBlogPost(post: Omit<BlogPost, "id">): Promise<string> {
-    const docRef = await addDoc(collection(db, "blog_posts"), post);
-    return docRef.id;
-}
-
-export async function getBlogPosts(onlyPublished: boolean = true): Promise<BlogPost[]> {
-    let q = query(
-        collection(db, "blog_posts"),
-        orderBy("publishedAt", "desc")
-    );
-
-    if (onlyPublished) {
-        q = query(q, where("isPublished", "==", true));
-    }
-
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as BlogPost));
-}
-
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-    const q = query(collection(db, "blog_posts"), where("slug", "==", slug));
-    const snapshot = await getDocs(q);
-    if (!snapshot.empty) {
-        const doc = snapshot.docs[0];
-        return { id: doc.id, ...doc.data() } as BlogPost;
-    }
-    return null;
-}
-
-export async function updateBlogPost(id: string, updates: Partial<BlogPost>): Promise<void> {
-    const postRef = doc(db, "blog_posts", id);
-    await updateDoc(postRef, {
-        ...updates,
-        updatedAt: serverTimestamp()
-    });
-}
-
-export async function deleteBlogPost(id: string): Promise<void> {
-    // Note: deleteDoc is not imported yet, I'll add it or just use doc and delete
-    // Actually, I'll use the existing pattern
 }

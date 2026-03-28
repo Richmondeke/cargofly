@@ -1,3 +1,6 @@
+import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { db } from './firebase';
+
 /**
  * Notification Service
  * Handles all notification channels: Email (Resend), SMS (Twilio), Push (FCM)
@@ -141,6 +144,30 @@ export function formatPhoneE164(phone: string, countryCode = '+234'): string {
     // Remove leading 0 if present and add country code
     const cleaned = digits.startsWith('0') ? digits.slice(1) : digits;
     return countryCode + cleaned;
+}
+
+/**
+ * Push an in-app notification to Firestore
+ */
+export async function pushNotification(
+    userId: string,
+    notification: {
+        title: string;
+        message: string;
+        type: 'shipment' | 'system' | 'alert';
+        timestamp?: Timestamp | null;
+    }
+): Promise<void> {
+    try {
+        await addDoc(collection(db, 'users', userId, 'notifications'), {
+            ...notification,
+            isRead: false,
+            userId,
+            timestamp: notification.timestamp ?? serverTimestamp(),
+        });
+    } catch (e) {
+        console.error('Failed to push notification:', e);
+    }
 }
 
 /**

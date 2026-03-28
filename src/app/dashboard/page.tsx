@@ -128,7 +128,7 @@ export default function DashboardPage() {
                 <section className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-navy/5 dark:border-white/5 pb-8">
                     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                         <Link href="/dashboard/new-booking" className="w-full sm:w-auto">
-                            <button className="w-full flex items-center justify-center gap-3 bg-navy dark:bg-navy-700 text-white h-14 px-8 rounded-2xl font-medium shadow-xl shadow-navy/20 hover:scale-[1.02] transition-all text-sm active:scale-[0.98] cursor-pointer">
+                            <button className="w-full flex items-center justify-center gap-3 bg-navy dark:bg-navy-700 text-white h-14 px-8 rounded-2xl font-medium shadow-xl shadow-navy/20 hover:scale-[1.02] transition-all text-sm active:scale-[0.98] cursor-pointer whitespace-nowrap">
                                 <span className="material-symbols-outlined text-[20px]">add_circle</span>
                                 New Shipment
                             </button>
@@ -150,15 +150,14 @@ export default function DashboardPage() {
                 <section className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     {/* Total Shipments */}
                     <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
-                        <div>
-                            <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest">Total Shipments</p>
-                            <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white">
+                        <div className="min-w-0">
+                            <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest truncate">Total Shipments</p>
+                            <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white flex items-baseline gap-1">
                                 {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : stats.totalShipments}
-                                <span className="text-sm font-normal text-navy/40 ml-1">All time</span>
+                                <span className="text-xs font-normal text-navy/40 dark:text-white/40">Total</span>
                             </h3>
-
                         </div>
-                        <div className="size-14 bg-navy/5 dark:bg-navy-800 rounded-2xl flex items-center justify-center text-navy dark:text-sky-400">
+                        <div className="size-14 bg-navy/5 dark:bg-navy-800 rounded-2xl flex-shrink-0 flex items-center justify-center text-navy dark:text-sky-400 group-hover:scale-110 transition-transform">
                             <span className="material-symbols-outlined text-3xl">weight</span>
                         </div>
                     </div>
@@ -251,9 +250,9 @@ export default function DashboardPage() {
                                     })}
                                 </div>
                             ) : (
-                                <div className="p-10 text-center text-slate-400 text-sm">
-                                    <span className="material-symbols-outlined text-4xl block mb-2 opacity-40">local_shipping</span>
-                                    No active shipments at the moment.
+                                <div className="p-10 flex flex-col items-center justify-center text-slate-400 text-sm bg-slate-50/50 dark:bg-navy-800/20 rounded-xl border border-dashed border-slate-200 dark:border-navy-700">
+                                    <span className="material-symbols-outlined text-4xl mb-3 opacity-20">local_shipping</span>
+                                    <p>No active shipments at the moment.</p>
                                 </div>
                             )}
                         </div>

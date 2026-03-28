@@ -76,6 +76,18 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && (resource.data.userId == request.auth.uid || isAdmin());
     }
     
+    // --- Blog Collection ---
+    match /blogs/{blogId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // --- Announcements Collection ---
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
     // --- Default Deny ---
     match /{document=**} {
       allow read, write: if false;

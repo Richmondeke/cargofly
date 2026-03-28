@@ -41,6 +41,22 @@ export async function POST(req: NextRequest) {
                         status: "confirmed",
                         updatedAt: serverTimestamp()
                     });
+
+                    // Push notification to user
+                    const shipmentData = shipmentDoc.data();
+                    if (shipmentData.userId) {
+                        try {
+                            const { pushNotification } = await import("@/lib/notification-service");
+                            await pushNotification(shipmentData.userId, {
+                                title: 'Payment Confirmed',
+                                message: `Payment for shipment ${trackingNumber} has been confirmed. Your shipment is now being processed.`,
+                                type: 'shipment'
+                            });
+                        } catch (e) {
+                            console.error("Failed to send webhook notification:", e);
+                        }
+                    }
+
                     console.log(`Shipment ${trackingNumber} marked as PAID via Korapay webhook`);
                 } else {
                     console.warn(`No shipment found for reference: ${trackingNumber}`);

@@ -81,6 +81,8 @@ export async function initializeWallet(userId: string) {
     }
 }
 
+import { pushNotification } from "./notification-service";
+
 /**
  * Records a transaction and updates balance in an atomic transaction
  */
@@ -94,7 +96,7 @@ export async function executeWalletPayment(
     const walletRef = doc(db, "wallets", userId);
     const txnRef = collection(db, "wallets", userId, "transactions");
 
-    return await runTransaction(db, async (transaction) => {
+    const result = await runTransaction(db, async (transaction) => {
         const walletDoc = await transaction.get(walletRef);
         if (!walletDoc.exists()) {
             throw new Error("Wallet not found");
@@ -129,47 +131,17 @@ export async function executeWalletPayment(
 
         return newTxnDoc.id;
     });
-}
 
-/**
- * Mock Deposit for testing purposes
- */
-export async function mockDeposit(userId: string, amount: number, currency: 'USD' | 'GBP') {
-    const walletRef = doc(db, "wallets", userId);
-    const txnRef = collection(db, "wallets", userId, "transactions");
-
-    await runTransaction(db, async (transaction) => {
-        const walletDoc = await transaction.get(walletRef);
-        const data = walletDoc.exists() ? walletDoc.data() as Wallet : { balanceUSD: 0, balanceGBP: 0 };
-
-        const balanceField = currency === 'USD' ? 'balanceUSD' : 'balanceGBP';
-        const currentBalance = data[balanceField] || 0;
-
-        if (!walletDoc.exists()) {
-            transaction.set(walletRef, {
-                balanceUSD: currency === 'USD' ? amount : 0,
-                balanceGBP: currency === 'GBP' ? amount : 0,
-                updatedAt: serverTimestamp()
-            });
-        } else {
-            transaction.update(walletRef, {
-                [balanceField]: currentBalance + amount,
-                updatedAt: serverTimestamp()
-            });
-        }
-
-        const newTxnDoc = doc(txnRef);
-        transaction.set(newTxnDoc, {
-            type: 'deposit',
-            amount: amount,
-            currency,
-            description: 'Mock Deposit (Testing)',
-            status: 'success',
-            method: 'bank',
-            createdAt: serverTimestamp()
-        });
+    // Notify user of payment success
+    await pushNotification(userId, {
+        title: 'Payment Successful',
+        message: `Your payment of ${currency === 'USD' ? '$' : '£'}${amount.toLocaleString()} for ${description} was successful.`,
+        type: 'alert'
     });
+
+    return result;
 }
+
 
 /**
  * Withdraws funds from the wallet and records the transaction
@@ -183,7 +155,7 @@ export async function withdrawFunds(
     const walletRef = doc(db, "wallets", userId);
     const txnRef = collection(db, "wallets", userId, "transactions");
 
-    return await runTransaction(db, async (transaction) => {
+    const result = await runTransaction(db, async (transaction) => {
         const walletDoc = await transaction.get(walletRef);
         if (!walletDoc.exists()) {
             throw new Error("Wallet not found");
@@ -217,4 +189,13 @@ export async function withdrawFunds(
 
         return newTxnDoc.id;
     });
+
+    // Notify user of withdrawal
+    await pushNotification(userId, {
+        title: 'Withdrawal Processed',
+        message: `Your withdrawal of ${currency === 'USD' ? '$' : '£'}${amount.toLocaleString()} has been processed.`,
+        type: 'alert'
+    });
+
+    return result;
 }

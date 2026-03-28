@@ -97,14 +97,6 @@ export default function AdminShipmentsPage() {
                 "Admin Office",
                 `Status updated to ${newStatus} by Admin`
             );
-            // Push real notification to shipment owner
-            if (shipment?.userId) {
-                await pushNotification(shipment.userId, {
-                    title: `Shipment ${newStatus.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`,
-                    message: `Your shipment ${shipment.trackingNumber} has been updated to "${getStatusDisplay(newStatus as ShipmentStatus)}".`,
-                    type: 'shipment',
-                });
-            }
             toast.success(`Shipment status updated to ${newStatus}`);
             // No need for immediate fetchShipments() as optimistic update handles it, 
             // but we call it to sync with server timestamps/progress
@@ -144,14 +136,7 @@ export default function AdminShipmentsPage() {
                 `Customs duty of $${amount} applied. Shipment placed on hold.`
             );
 
-            // Push customs hold notification to shipment owner
-            if (selectedShipment.userId) {
-                await pushNotification(selectedShipment.userId, {
-                    title: 'Customs Duty Required',
-                    message: `Your shipment ${selectedShipment.trackingNumber} has been placed on customs hold. A duty of $${amount.toFixed(2)} is required to proceed.`,
-                    type: 'alert',
-                });
-            }
+
             toast.success("Customs duty applied and shipment placed on hold");
             setDutyModalOpen(false);
             setDutyAmount("");

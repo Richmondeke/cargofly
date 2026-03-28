@@ -22,14 +22,14 @@ const footerLinks = {
         { name: "Drivers", href: "/drivers" },
     ],
     resources: [
-        { name: "Insights", href: "/insights" },
-        { name: "Support", href: "/support" },
-        { name: "Newsletter", href: "/newsletter" },
+        { name: "Blog", href: "/blog" },
+        { name: "Support", href: "/contact" },
+        { name: "Newsletter", href: "/#newsletter" },
     ],
     legal: [
-        { name: "Cookie Usage", href: "/cookies" },
-        { name: "Privacy Policy", href: "/privacy" },
-        { name: "Terms and Conditions", href: "/terms" },
+        { name: "Cookie Usage", href: "/cookie-usage" },
+        { name: "Privacy Policy", href: "/privacy-policy" },
+        { name: "Terms and Conditions", href: "/terms-conditions" },
     ],
 };
 

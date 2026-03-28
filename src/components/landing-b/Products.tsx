@@ -3,78 +3,108 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Plane, Shield } from "lucide-react";
 
 export default function Products() {
     return (
-        <section id="solutions" className="py-24 bg-white text-navy-900 px-6">
-            <div className="max-w-7xl mx-auto">
+        <section id="solutions" className="py-32 bg-white text-navy-900 px-6 relative overflow-hidden">
+            {/* Soft Background Radial */}
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_-20%,rgba(1,111,255,0.03),transparent)] pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.7 }}
-                    className="mb-16 md:mb-24"
+                    transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+                    className="mb-20 text-center md:text-left"
                 >
-                    <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">Our Solutions</h2>
-                    <p className="text-xl text-gray-600 max-w-2xl">
-                        Digital-first logistics infrastructure built for the complexities of modern trade.
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600/10 border border-blue-600/20 text-blue-600 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
+                        The Portfolio
+                    </div>
+                    <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-[0.9]">
+                        Comprehensive <span className="text-blue-600">Solutions</span>
+                    </h2>
+                    <p className="text-xl md:text-2xl text-gray-500 max-w-3xl font-medium leading-relaxed">
+                        Industry-grade logistics infrastructure built for the complexities of continental trade.
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 [perspective:1000px]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     {/* Air Freight Product Card */}
                     <motion.div
-                        initial={{ opacity: 0, rotateX: -10, y: 50 }}
-                        whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                        whileHover={{
-                            scale: 1.02,
-                            translateZ: 30,
-                            rotateX: 1,
-                            rotateY: -1,
-                            boxShadow: "0 30px 60px -12px rgba(0, 51, 153, 0.15)"
-                        }}
-                        className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 flex flex-col items-start cursor-default transition-all duration-300 group overflow-hidden"
+                        transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+                        className="group relative bg-white rounded-[3.5rem] p-4 border border-gray-100 shadow-premium hover:shadow-premium-xl transition-all duration-700"
                     >
-                        <div className="relative w-full aspect-video mb-8 rounded-2xl overflow-hidden border border-gray-100 shadow-inner group-hover:scale-[1.05] transition-transform duration-700">
+                        <div className="relative w-full aspect-[4/3] rounded-[3rem] overflow-hidden mb-10">
                             <Image
-                                src="/images/illustrations/aircraft_hangar.jpg"
+                                src="/brain/82ddc111-7b1a-490b-b6ed-cd272f40a686/air_freight_dashboard_premium_1774668109150.png"
                                 alt="Air Freight Solutions"
                                 fill
                                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
                             />
+                            <div className="absolute inset-0 bg-gradient-to-t from-navy-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         </div>
-                        <h3 className="text-3xl font-bold mb-4 group-hover:text-blue-600 transition-colors">Air Freight Management</h3>
-                        <p className="text-gray-600 mb-10 flex-1 text-lg leading-relaxed">
-                            Take complete control of your air cargo. Book flights, manage manifest documents, and track shipments across multiple airlines in one unified dashboard.
-                        </p>
-                        <Link
-                            href="/dashboard/new-booking"
-                            className="group relative inline-flex items-center gap-2 bg-navy-900 text-white px-8 py-3.5 rounded-full overflow-hidden transition-all duration-300 hover:bg-blue-600 hover:text-white hover:shadow-lg hover:shadow-blue-600/20 font-semibold"
-                        >
-                            <span className="relative z-10">Start Booking</span>
-                            <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform text-blue-600 group-hover:text-white" />
-                            <div className="absolute inset-0 bg-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                        </Link>
+
+                        <div className="px-8 pb-10">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="p-3 rounded-2xl bg-blue-600/10 text-blue-600">
+                                    <Plane className="w-5 h-5" />
+                                </div>
+                                <h3 className="text-3xl font-bold tracking-tight text-navy-900">CargoOS Platform</h3>
+                            </div>
+                            <p className="text-lg text-gray-500 mb-10 font-medium leading-relaxed">
+                                Take complete digital control of your air cargo. Manifest management, real-time slot allocation, and automated ledgering in one unified portal.
+                            </p>
+                            <Link
+                                href="/dashboard/new-booking"
+                                className="inline-flex items-center gap-3 bg-navy-900 text-gold-400 px-10 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-navy-800 transition-all shadow-xl"
+                            >
+                                Access Console
+                                <ArrowRight className="w-4 h-4" />
+                            </Link>
+                        </div>
                     </motion.div>
 
-                    {/* Charter Services Placeholder */}
+                    {/* Charter Solutions Card */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-50px" }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        whileHover={{
-                            scale: 1.01,
-                            translateZ: 10,
-                            backgroundColor: "rgba(1, 111, 255, 0.05)"
-                        }}
-                        className="bg-gray-100/50 rounded-3xl p-8 md:p-12 border border-gray-100 border-dashed flex flex-col items-center justify-center text-center inset-0 transition-all duration-300 cursor-default"
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.8, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
+                        className="group relative bg-white rounded-[3.5rem] p-4 border border-gray-100 shadow-premium hover:shadow-premium-xl transition-all duration-700"
                     >
-                        <h3 className="text-2xl font-semibold text-gray-500 mb-2">Charter Solutions</h3>
-                        <p className="text-gray-600">Dedicated cargo capacity for your most critical logistics needs. Coming soon.</p>
+                        <div className="relative w-full aspect-[4/3] rounded-[3rem] overflow-hidden mb-10">
+                            <Image
+                                src="/brain/82ddc111-7b1a-490b-b6ed-cd272f40a686/charter_jet_cargo_premium_1774668251009.png"
+                                alt="Charter Solutions"
+                                fill
+                                className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-navy-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                        </div>
+
+                        <div className="px-8 pb-10">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="p-3 rounded-2xl bg-gold-400/10 text-gold-600">
+                                    <Shield className="w-5 h-5" />
+                                </div>
+                                <h3 className="text-3xl font-bold tracking-tight text-navy-900">Global Charter</h3>
+                            </div>
+                            <p className="text-lg text-gray-500 mb-10 font-medium leading-relaxed">
+                                Dedicated heavy-lift capacity for mission-critical cargo. Specialized nose-loading Boeing 747-8F access for oversized equipment and AOG.
+                            </p>
+                            <button
+                                disabled
+                                className="inline-flex items-center gap-3 bg-gray-100 text-gray-400 px-10 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest cursor-not-allowed group-hover:bg-gray-200 transition-all"
+                            >
+                                Capacity Locked
+                                <ArrowRight className="w-4 h-4 opacity-30" />
+                            </button>
+                        </div>
                     </motion.div>
                 </div>
             </div>

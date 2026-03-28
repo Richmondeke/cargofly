@@ -188,22 +188,3 @@ export function useNotifications() {
     return context;
 }
 
-/**
- * Helper: call this from anywhere (e.g. shipment status updates or admin actions)
- * to push a real notification to a user's Firestore sub-collection.
- */
-export async function pushNotification(
-    userId: string,
-    notification: Omit<FirestoreNotification, 'userId' | 'isRead' | 'timestamp'> & { timestamp?: Timestamp | null }
-): Promise<void> {
-    try {
-        await addDoc(collection(db, 'users', userId, 'notifications'), {
-            ...notification,
-            isRead: false,
-            userId,
-            timestamp: notification.timestamp ?? serverTimestamp(),
-        });
-    } catch (e) {
-        console.error('Failed to push notification:', e);
-    }
-}

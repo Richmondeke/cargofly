@@ -20,6 +20,8 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthLayout from "@/components/auth/AuthLayout";
+import SuccessModal from "@/components/auth/SuccessModal";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
     const { signUp } = useAuth();
@@ -30,16 +32,26 @@ export default function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
         setIsLoading(true);
 
+        if (accountType === "business") {
+            const personalProviders = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'aol.com', 'zoho.com', 'protonmail.com'];
+            const domain = email.split('@')[1]?.toLowerCase();
+            if (personalProviders.includes(domain)) {
+                setError("Please use a business email address for business registration.");
+                setIsLoading(false);
+                return;
+            }
+        }
+
         try {
             await signUp(email, password, name);
-            // Redirect will be handled by auth state change or router push if needed
-            window.location.href = "/dashboard";
+            setShowSuccess(true);
         } catch (err: any) {
             console.error("Registration error:", err);
             setError(err.message || "Failed to create account. Please try again.");
@@ -56,20 +68,19 @@ export default function RegisterPage() {
         >
             <div className="text-center mb-8">
                 <Link href="/" className="inline-flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20">
-                        <Image
-                            src="/images/iconmark-blue.png"
-                            alt="Cargofly Logo"
-                            width={24}
-                            height={24}
-                            className="w-6 h-auto brightness-0 invert"
-                        />
-                    </div>
+                    <Image
+                        src="/logo-dark.png"
+                        alt="Cargofly"
+                        width={140}
+                        height={40}
+                        className="h-10 w-auto"
+                        priority
+                    />
                 </Link>
-                <h1 className="text-2xl font-bold text-slate-900 mb-2">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                     Create an account
                 </h1>
-                <p className="text-slate-500 text-sm">
+                <p className="text-slate-500 dark:text-slate-400 text-sm">
                     Enter your details to get started
                 </p>
             </div>
@@ -213,6 +224,16 @@ export default function RegisterPage() {
                     Sign in
                 </Link>
             </p>
+
+            <SuccessModal
+                isOpen={showSuccess}
+                onClose={() => window.location.href = "/dashboard"}
+                title="Account Created Successfully"
+                message={accountType === 'business'
+                    ? "Your business account has been created. Let's finish setting up your company profile."
+                    : "Welcome to Cargofly! Your account is ready. You can now start booking shipments."
+                }
+            />
         </AuthLayout>
     );
 }

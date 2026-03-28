@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { getBlogPostBySlug, BlogPost } from "@/lib/firestore";
+import { getBlogPostBySlug, BlogPost } from "@/lib/blog-service";
 import { Calendar, User, ArrowLeft, Loader2, AlertCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -40,9 +40,8 @@ export default function BlogPostDetail() {
         fetchPost();
     }, [slug]);
 
-    const formatDate = (timestamp: any) => {
-        if (!timestamp) return "";
-        const date = timestamp.toDate();
+    const formatDate = (date: Date | undefined) => {
+        if (!date) return "";
         return new Intl.DateTimeFormat('en-US', {
             month: 'long',
             day: 'numeric',

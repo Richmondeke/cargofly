@@ -7,7 +7,7 @@ import PaymentModal from "@/components/dashboard/PaymentModal";
 import WithdrawModal from "@/components/dashboard/WithdrawModal";
 import BankDetailsModal from "@/components/dashboard/BankDetailsModal";
 import { useAuth } from "@/contexts/AuthContext";
-import { subscribeToWallet, getTransactions, mockDeposit, initializeWallet, Wallet, WalletTransaction } from "@/lib/wallet-service";
+import { subscribeToWallet, getTransactions, initializeWallet, Wallet, WalletTransaction } from "@/lib/wallet-service";
 import { getPendingCustomsDuties, Shipment } from "@/lib/firestore";
 import toast from 'react-hot-toast';
 import { Package } from 'lucide-react';
@@ -63,21 +63,6 @@ export default function WalletPage() {
         setPaymentModalOpen(true);
     };
 
-    const handleMockDeposit = async () => {
-        if (!user?.uid) return;
-        setActionLoading(true);
-        try {
-            await mockDeposit(user.uid, 1000, 'USD');
-            fetchTransactions();
-            setModalContent({ title: 'Deposit Successful', message: 'A mock deposit of $1,000 has been added to your account for testing.' });
-            setSuccessModalOpen(true);
-        } catch (error: any) {
-            setModalContent({ title: 'Deposit Failed', message: error.message });
-            setSuccessModalOpen(true);
-        } finally {
-            setActionLoading(false);
-        }
-    };
 
     const handleAction = (action: string) => {
         setActionLoading(true);
@@ -89,7 +74,7 @@ export default function WalletPage() {
     };
 
     /* ─── Derived values ─────────────────────────────────── */
-    const ngnBalance = wallet ? (wallet.balanceUSD * 1650) : 4850200; // rough conversion for display
+    const ngnBalance = wallet ? (wallet.balanceUSD * 1650) : 0; // rough conversion for display
     const usdBalance = wallet?.balanceUSD ?? 0;
     const eurBalance = wallet?.balanceGBP ?? 0; // repurpose field until EUR added
 
@@ -122,7 +107,7 @@ export default function WalletPage() {
                         <p className="font-display font-medium tracking-tight text-slate-500 text-sm mt-1">Manage accounts, payments and withdrawals</p>
                     </div>
                     <button
-                        onClick={handleMockDeposit}
+                        onClick={() => toast.success('Funding feature coming soon')}
                         disabled={actionLoading}
                         className="bg-white dark:bg-[#1e293b] text-[#1b1c1c] dark:text-white border border-slate-200 dark:border-slate-800 py-3 px-6 rounded-xl font-display font-medium text-sm flex items-center gap-2 shadow-sm hover:bg-slate-50 transition-all active:scale-95 disabled:opacity-50"
                     >

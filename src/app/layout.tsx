@@ -37,12 +37,21 @@ export const metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Cargofly",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Cargofly Landing Page",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Cargofly | Premium Aviation Logistics",
     description:
       "Where luxury meets logistics. Premium cargo services for discerning clients.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,

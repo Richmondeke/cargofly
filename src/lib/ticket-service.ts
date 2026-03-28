@@ -173,6 +173,8 @@ export async function getTicketById(ticketId: string): Promise<Ticket | null> {
     } as Ticket;
 }
 
+import { pushNotification } from './notification-service';
+
 /**
  * Update ticket status
  */
@@ -182,6 +184,13 @@ export async function updateTicketStatus(
     assignedTo?: string
 ): Promise<void> {
     const ticketRef = doc(db, 'tickets', ticketId);
+
+    // Get ticket data to find userId
+    const ticketSnap = await getDoc(ticketRef);
+    if (!ticketSnap.exists()) return;
+    const ticketData = ticketSnap.data() as Ticket;
+    const userId = ticketData.userId;
+
     const updates: Record<string, unknown> = {
         status,
         updatedAt: Timestamp.now(),
@@ -192,6 +201,15 @@ export async function updateTicketStatus(
     }
 
     await updateDoc(ticketRef, updates);
+
+    // Notify user of status change
+    if (userId) {
+        await pushNotification(userId, {
+            title: `Ticket ${ticketId} Updated`,
+            message: `The status of your support ticket has been changed to ${status}.`,
+            type: 'system'
+        });
+    }
 }
 
 /**
@@ -221,13 +239,27 @@ export async function addMessage(
 
     // Update ticket timestamps and unread status
     const ticketRef = doc(db, 'tickets', ticketId);
-    const unreadField = data.senderRole === 'customer' ? 'unreadByAdmin' : 'unreadByUser';
+    const isFromAdmin = data.senderRole !== 'customer';
+    const unreadField = !isFromAdmin ? 'unreadByAdmin' : 'unreadByUser';
 
     await updateDoc(ticketRef, {
         lastMessageAt: now,
         updatedAt: now,
         [unreadField]: true,
     });
+
+    // If from admin, notify the user
+    if (isFromAdmin) {
+        const ticketSnap = await getDoc(ticketRef);
+        if (ticketSnap.exists()) {
+            const ticketData = ticketSnap.data() as Ticket;
+            await pushNotification(ticketData.userId, {
+                title: 'New Support Message',
+                message: `An agent has replied to your ticket: ${ticketId}`,
+                type: 'system'
+            });
+        }
+    }
 
     return messageDoc.id;
 }

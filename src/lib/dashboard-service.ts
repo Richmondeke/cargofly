@@ -353,6 +353,8 @@ function formatStatus(status: ShipmentStatus): string {
     return map[status] || status;
 }
 
+import { pushNotification, notifyShipmentUpdate } from "./notification-service";
+
 export async function updateShipmentStatus(
     shipmentId: string,
     status: ShipmentStatus,
@@ -362,6 +364,13 @@ export async function updateShipmentStatus(
     userId?: string
 ): Promise<void> {
     const shipmentRef = doc(db, "shipments", shipmentId);
+
+    // Get shipment data first to find recipient UID and info
+    const shipmentSnap = await getDoc(shipmentRef);
+    if (!shipmentSnap.exists()) return;
+    const shipmentData = shipmentSnap.data() as Shipment;
+    const ownerId = shipmentData.userId;
+
     const updateData: any = {
         status,
         updatedAt: serverTimestamp(),
@@ -383,6 +392,30 @@ export async function updateShipmentStatus(
     }
 
     await updateDoc(shipmentRef, updateData);
+
+    // Notify the user (shipment owner)
+    if (ownerId) {
+        // 1. In-App Notification
+        await pushNotification(ownerId, {
+            title: `Shipment Update: ${status}`,
+            message: `Your shipment ${shipmentId} is now ${status}${location ? ` @ ${location}` : ''}.`,
+            type: 'shipment'
+        });
+
+        // 2. External Notifications (Email/SMS)
+        const userSettings = await getUserSettings(ownerId);
+        if (userSettings) {
+            const preferences = userSettings.notificationPreferences || { email: true, sms: false, push: true };
+            await notifyShipmentUpdate(
+                ownerId,
+                preferences,
+                shipmentId,
+                status,
+                userSettings.email,
+                userSettings.phone
+            );
+        }
+    }
 
     // Log the activity
     if (userId) {

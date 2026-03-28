@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { getBlogPosts, BlogPost } from "@/lib/firestore";
+import { getBlogPosts, BlogPost } from "@/lib/blog-service";
 import { Calendar, User, ArrowRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -19,8 +19,9 @@ const DUMMY_POSTS: BlogPost[] = [
         category: "Industry",
         author: "Capt. Sarah Jenkins",
         image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800",
-        publishedAt: { toDate: () => new Date() } as any,
-        updatedAt: { toDate: () => new Date() } as any,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        publishedAt: new Date(),
         isPublished: true
     },
     {
@@ -32,8 +33,9 @@ const DUMMY_POSTS: BlogPost[] = [
         category: "Logistics",
         author: "Marcus Chen",
         image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
-        publishedAt: { toDate: () => new Date(Date.now() - 86400000) } as any,
-        updatedAt: { toDate: () => new Date(Date.now() - 86400000) } as any,
+        createdAt: new Date(Date.now() - 86400000),
+        updatedAt: new Date(Date.now() - 86400000),
+        publishedAt: new Date(Date.now() - 86400000),
         isPublished: true
     },
     {
@@ -45,8 +47,9 @@ const DUMMY_POSTS: BlogPost[] = [
         category: "Company",
         author: "David Olumide",
         image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800",
-        publishedAt: { toDate: () => new Date(Date.now() - 172800000) } as any,
-        updatedAt: { toDate: () => new Date(Date.now() - 172800000) } as any,
+        createdAt: new Date(Date.now() - 172800000),
+        updatedAt: new Date(Date.now() - 172800000),
+        publishedAt: new Date(Date.now() - 172800000),
         isPublished: true
     }
 ];
@@ -58,6 +61,7 @@ export default function BlogIndex() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
+                // blog-service.ts returns BlogPost[] with dates already converted
                 const publishedPosts = await getBlogPosts(true);
                 setPosts(publishedPosts);
             } catch (error) {
@@ -74,9 +78,8 @@ export default function BlogIndex() {
         return posts.length > 0 ? posts : DUMMY_POSTS;
     }, [posts]);
 
-    const formatDate = (timestamp: any) => {
-        if (!timestamp) return "";
-        const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
+    const formatDate = (date: Date | undefined) => {
+        if (!date) return "";
         return new Intl.DateTimeFormat('en-US', {
             month: 'long',
             day: 'numeric',

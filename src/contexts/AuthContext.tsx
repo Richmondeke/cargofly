@@ -16,6 +16,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
     updateProfile,
+    sendPasswordResetEmail,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
@@ -38,6 +39,7 @@ interface AuthContextType {
     signUp: (email: string, password: string, displayName: string) => Promise<void>;
     signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
+    resetPassword: (email: string) => Promise<void>;
     refreshBalance: () => Promise<void>;
 }
 
@@ -196,6 +198,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUserProfile(null);
     }
 
+    // Password Reset
+    async function resetPassword(email: string) {
+        await sendPasswordResetEmail(auth, email);
+    }
+
     const value: AuthContextType = {
         user,
         userProfile,
@@ -204,6 +211,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signUp,
         signInWithGoogle,
         signOut,
+        resetPassword,
         refreshBalance,
     };
 
