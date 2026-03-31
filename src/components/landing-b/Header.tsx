@@ -23,32 +23,64 @@ export default function Header() {
     return (
         <div className="fixed top-0 left-0 right-0 z-[60]">
             {/* Announcement Banner */}
-            <div className="bg-white py-1.5 overflow-hidden whitespace-nowrap border-b border-navy-900/10 relative">
-                <div className="flex animate-marquee-slow">
-                    <div className="flex items-center gap-16 px-8">
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Now Delivering to Ghana</span>
-                        <span className="text-navy-900/60 font-medium text-[10px]">•</span>
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Inter-island shipping throughout Hawai'i</span>
-                        <span className="text-navy-900/60 font-medium text-[10px]">•</span>
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Exclusive Charters Available 24/7</span>
-                        <span className="text-navy-900/60 font-medium text-[10px]">•</span>
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Secure Logistics Solutions for Global Trade</span>
+            <div className="bg-navy-950 py-2.5 overflow-hidden whitespace-nowrap border-b border-white/5 relative group cursor-default">
+                {/* Glossy overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent pointer-events-none" />
+
+                <div className="flex animate-marquee-slow hover:pause">
+                    <div className="flex items-center gap-12 px-8">
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                            <span className="text-white/90 font-black text-[10px] uppercase tracking-[0.25em]">Now Delivering to Ghana</span>
+                        </div>
+                        <span className="text-white/20 font-light text-xs">|</span>
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                            <span className="text-white/80 font-bold text-[10px] uppercase tracking-[0.25em]">Inter-island shipping throughout Hawai&apos;i</span>
+                        </div>
+                        <span className="text-white/20 font-light text-xs">|</span>
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-300" />
+                            <span className="text-white/80 font-bold text-[10px] uppercase tracking-[0.25em]">Exclusive Charters Available 24/7</span>
+                        </div>
+                        <span className="text-white/20 font-light text-xs">|</span>
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-200" />
+                            <span className="text-white/80 font-bold text-[10px] uppercase tracking-[0.25em]">Secure Logistics for Global Trade</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-16 px-8" aria-hidden="true">
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Now Delivering to Ghana</span>
-                        <span className="text-navy-900/60 font-medium text-[10px]">•</span>
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Inter-island shipping throughout Hawai'i</span>
-                        <span className="text-navy-900/60 font-medium text-[10px]">•</span>
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Exclusive Charters Available 24/7</span>
-                        <span className="text-navy-900/60 font-medium text-[10px]">•</span>
-                        <span className="text-navy-900 font-bold text-xs uppercase tracking-widest">Secure Logistics Solutions for Global Trade</span>
+
+                    {/* Mirror for continuous flow */}
+                    <div className="flex items-center gap-12 px-8" aria-hidden="true">
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                            <span className="text-white/90 font-black text-[10px] uppercase tracking-[0.25em]">Now Delivering to Ghana</span>
+                        </div>
+                        <span className="text-white/20 font-light text-xs">|</span>
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                            <span className="text-white/80 font-bold text-[10px] uppercase tracking-[0.25em]">Inter-island shipping throughout Hawai&apos;i</span>
+                        </div>
+                        <span className="text-white/20 font-light text-xs">|</span>
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-300" />
+                            <span className="text-white/80 font-bold text-[10px] uppercase tracking-[0.25em]">Exclusive Charters Available 24/7</span>
+                        </div>
+                        <span className="text-white/20 font-light text-xs">|</span>
+                        <div className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-200" />
+                            <span className="text-white/80 font-bold text-[10px] uppercase tracking-[0.25em]">Secure Logistics for Global Trade</span>
+                        </div>
                     </div>
                 </div>
                 <style jsx>{`
                     .animate-marquee-slow {
                         display: flex;
                         width: max-content;
-                        animation: marquee-slow 40s linear infinite;
+                        animation: marquee-slow 35s linear infinite;
+                    }
+                    .animate-marquee-slow:hover {
+                        animation-play-state: paused;
                     }
                     @keyframes marquee-slow {
                         0% { transform: translateX(0); }
@@ -56,6 +88,7 @@ export default function Header() {
                     }
                 `}</style>
             </div>
+
 
             <motion.header
                 initial={{ y: -100 }}
