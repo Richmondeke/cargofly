@@ -45,8 +45,7 @@ export default function Newsletter() {
                     transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
                     className="relative bg-blue-600 rounded-[3rem] overflow-hidden p-12 md:p-20 text-center border border-white/20 shadow-2xl shadow-blue-600/40"
                 >
-                    {/* Background Pattern */}
-                    <div className="absolute inset-0 bg-pattern-dark opacity-100 pointer-events-none" />
+
 
 
 

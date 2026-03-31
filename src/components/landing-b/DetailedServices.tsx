@@ -44,8 +44,7 @@ const topTags = [
 export default function DetailedServices() {
     return (
         <section id="detailed-services" className="bg-white text-navy-900 py-32 px-6 overflow-hidden relative">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 bg-pattern-light opacity-100 pointer-events-none" />
+
 
 
 

@@ -48,7 +48,7 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
         >
             {/* Background Effects */}
             <div className="absolute inset-0 bg-blue-600 pointer-events-none transition-opacity duration-300" />
-            <div className="absolute inset-0 bg-pattern-dark opacity-100 pointer-events-none" />
+
 
 
 
