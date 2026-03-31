@@ -58,8 +58,9 @@ export const metadata = {
     follow: true,
   },
   icons: {
-    icon: "/favicon.png",
+    icon: "/favicon_cargofly.ico",
   },
+
 };
 
 
