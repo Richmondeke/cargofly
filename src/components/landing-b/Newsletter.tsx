@@ -55,19 +55,8 @@ export default function Newsletter() {
 
 
                     <div className="relative z-10 max-w-2xl mx-auto">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-[0.2em] mb-10"
-                        >
-                            <Mail className="w-3.5 h-3.5" />
-                            Technical Briefing
-                        </motion.div>
-
                         <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter mb-8 leading-[0.9]">
-                            Subscribe to <span className="text-white">Market Intelligence</span>
+                            Subscribe to our <span className="text-white">newsletter</span>
                         </h2>
 
                         <p className="text-lg md:text-xl text-white/90 mb-12 font-medium leading-relaxed">
@@ -94,17 +83,13 @@ export default function Newsletter() {
                                     </>
                                 ) : (
                                     <>
-                                        Secure Access <Send className="w-4 h-4" />
+                                        Subscribe <Send className="w-4 h-4" />
                                     </>
                                 )}
                             </button>
                         </form>
-
-                        <div className="flex items-center justify-center gap-2 text-white/60 text-xs font-bold uppercase tracking-widest">
-                            <ShieldCheck className="w-4 h-4 text-white" />
-                            256-Bit Data Protection Guaranteed
-                        </div>
                     </div>
+
                 </motion.div>
 
             </div>
