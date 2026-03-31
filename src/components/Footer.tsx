@@ -65,30 +65,17 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
                                 className="object-contain brightness-0 invert"
                             />
                         </TransitionLink>
-                        <p className="text-white/80 text-sm font-body mb-8 max-w-sm leading-relaxed">
+                        <p className="text-white/80 text-sm font-body max-w-sm leading-relaxed">
                             The pinnacle of West African aviation logistics. Premium cargo services, real-time tracking, and white-glove delivery.
                         </p>
-                        <div className="flex gap-4">
-                            {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => {
-                                const urls = [
-                                    "https://facebook.com/cargofly",
-                                    "https://twitter.com/cargofly",
-                                    "https://instagram.com/cargofly",
-                                    "https://linkedin.com/company/cargofly"
-                                ];
-                                return (
-                                    <TransitionLink key={i} href={urls[i]} className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-blue-600 transition-all">
-                                        <Icon className="w-4 h-4" />
-                                    </TransitionLink>
-                                );
-                            })}
-                        </div>
+
                     </div>
 
                     {/* Quick Links Group */}
                     <div className="lg:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-8">
                         <div>
-                            <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-spacing-06 font-bold">Company</h4>
+                            <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-8 font-bold">
+                                Company</h4>
                             <ul className="space-y-4">
                                 {footerLinks.company.map((link) => (
                                     <li key={link.name}>
@@ -104,7 +91,8 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
                         </div>
 
                         <div>
-                            <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-spacing-06 font-bold">Resources</h4>
+                            <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-8 font-bold">
+                                Resources</h4>
                             <ul className="space-y-4">
                                 {footerLinks.resources.map((link) => (
                                     <li key={link.name}>
@@ -120,7 +108,8 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
                         </div>
 
                         <div className="hidden md:block">
-                            <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-spacing-06 font-bold">Legal</h4>
+                            <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-8 font-bold">
+                                Legal</h4>
                             <ul className="space-y-4">
                                 {footerLinks.legal.map((link) => (
                                     <li key={link.name}>
@@ -138,7 +127,8 @@ export default function Footer({ isLanding }: { isLanding?: boolean }) {
 
                     {/* Contact Column */}
                     <div className="lg:col-span-3">
-                        <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-spacing-06 font-bold">Contact Us</h4>
+                        <h4 className="font-display text-xs uppercase tracking-[0.2em] text-white/50 mb-8 font-bold">Contact Us</h4>
+
                         <ul className="space-y-5">
                             <li className="flex items-start gap-3">
                                 <MapPin className="w-4 h-4 text-white/60 mt-1 flex-shrink-0" />

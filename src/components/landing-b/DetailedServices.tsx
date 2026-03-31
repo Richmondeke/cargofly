@@ -57,11 +57,7 @@ export default function DetailedServices() {
                     transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
                     className="mb-20 text-center md:text-left"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-600/10 text-blue-600 text-[10px] font-bold uppercase tracking-[0.2em] mb-8 border border-blue-600/20">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
 
-                        Logistics Intelligence
-                    </div>
 
                     <h2 className="text-6xl md:text-8xl font-bold mb-8 tracking-tighter leading-[0.9] text-navy-900">
                         Operational <span className="text-blue-600 italic">Precision</span>
