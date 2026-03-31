@@ -46,7 +46,8 @@ export default function Newsletter() {
                     className="relative bg-blue-600 rounded-[3rem] overflow-hidden p-12 md:p-20 text-center border border-white/20 shadow-2xl shadow-blue-600/40"
                 >
                     {/* Background Pattern */}
-                    <div className="absolute inset-0 bg-pattern-dark opacity-[0.35] pointer-events-none" />
+                    <div className="absolute inset-0 bg-pattern-dark opacity-100 pointer-events-none" />
+
 
 
                     {/* Decorative Elements */}
