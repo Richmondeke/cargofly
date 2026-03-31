@@ -109,14 +109,14 @@ export default function Hero() {
                         <div className="relative bg-navy-950/40 backdrop-blur-3xl rounded-[36px] border border-white/10 p-4 md:p-8 shadow-2xl">
                             <div className="flex bg-white/5 backdrop-blur-md rounded-2xl p-1.5 relative overflow-hidden w-full md:w-fit mx-auto border border-white/10 mb-8">
                                 <button
-                                    className={`flex-1 md:px-12 py-3.5 text-xs font-black tracking-[0.15em] uppercase transition-all duration-500 rounded-xl flex items-center justify-center gap-2.5 ${activeTab === 'track' ? 'bg-white text-navy-900 shadow-xl' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+                                    className={`flex-1 md:px-12 py-3.5 text-xs font-black tracking-[0.15em] uppercase transition-all duration-500 rounded-xl flex items-center justify-center gap-2.5 ${activeTab === 'track' ? 'bg-navy-900 text-white shadow-xl border border-blue-600/30' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
                                     onClick={() => setActiveTab('track')}
                                 >
                                     <Search className="w-4 h-4" strokeWidth={3} />
                                     <span>Track Shipment</span>
                                 </button>
                                 <button
-                                    className={`flex-1 md:px-12 py-3.5 text-xs font-black tracking-[0.15em] uppercase transition-all duration-500 rounded-xl flex items-center justify-center gap-2.5 ${activeTab === 'book' ? 'bg-white text-navy-900 shadow-xl' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+                                    className={`flex-1 md:px-12 py-3.5 text-xs font-black tracking-[0.15em] uppercase transition-all duration-500 rounded-xl flex items-center justify-center gap-2.5 ${activeTab === 'book' ? 'bg-navy-900 text-white shadow-xl border border-blue-600/30' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
                                     onClick={() => setActiveTab('book')}
                                 >
                                     <Plane className="w-4 h-4" strokeWidth={3} />
