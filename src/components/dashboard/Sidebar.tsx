@@ -93,7 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
                         <SidebarSection label="Administration" />
                         <SidebarLink to="/dashboard/admin" icon="admin_panel_settings" label="Admin Panel" active={pathname === '/dashboard/admin'} onClick={onClose} />
                         <SidebarLink to="/dashboard/admin/shipments" icon="flight" label="All Shipments" active={pathname === '/dashboard/admin/shipments'} onClick={onClose} />
-                                                <SidebarLink to="/dashboard/admin/rates" icon="currency_exchange" label="Rates Management" active={pathname === '/dashboard/admin/rates'} onClick={onClose} />
+                        <SidebarLink to="/dashboard/admin/rates" icon="currency_exchange" label="Rates Management" active={pathname === '/dashboard/admin/rates'} onClick={onClose} />
                         <SidebarLink to="/dashboard/admin/support" icon="support_agent" label="Support Console" active={pathname?.startsWith('/dashboard/admin/support')} onClick={onClose} />
                         <SidebarLink to="/dashboard/admin/blog" icon="rss_feed" label="Blog Manager" active={pathname === '/dashboard/admin/blog'} onClick={onClose} />
                     </>
@@ -103,7 +103,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
             <div className="relative z-10 mt-auto space-y-4 px-2 pt-4 border-t border-white/10">
                 <button
                     onClick={() => router.push('/dashboard/new-booking')}
-                    className="w-full bg-gold-500 text-navy-900 py-3.5 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 shadow-xl shadow-gold-500/10 hover:brightness-110 transition-all active:scale-95 cursor-pointer"
+                    className="w-full bg-gold-500 text-black py-3.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-xl shadow-gold-500/10 hover:brightness-110 transition-all active:scale-95 cursor-pointer"
                 >
                     <span className="material-symbols-outlined text-[20px]">add</span>
                     New Shipment

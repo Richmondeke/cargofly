@@ -90,7 +90,7 @@ export default function DashboardPage() {
                 <section className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-navy/5 dark:border-white/5 pb-8">
                     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                         <Link href="/dashboard/new-booking" className="w-full sm:w-auto">
-                            <button className="w-full flex items-center justify-center gap-3 bg-navy dark:bg-navy-700 text-white h-14 px-8 rounded-2xl font-medium shadow-xl shadow-navy/20 hover:scale-[1.02] transition-all text-sm active:scale-[0.98] cursor-pointer whitespace-nowrap">
+                            <button className="w-full flex items-center justify-center gap-3 bg-navy dark:bg-navy-700 text-white h-14 px-8 rounded-2xl font-bold shadow-xl shadow-navy/20 hover:scale-[1.02] transition-all text-sm active:scale-[0.98] cursor-pointer whitespace-nowrap">
                                 <span className="material-symbols-outlined text-[20px]">add_circle</span>
                                 New Shipment
                             </button>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
                         <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer active:scale-[0.98]">
                             <div className="min-w-0">
                                 <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest truncate">Flight Operations</p>
-                                <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white flex items-baseline gap-1">
+                                <h3 className="text-3xl font-display font-bold mt-1 text-black dark:text-white flex items-baseline gap-1">
                                     {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : stats.totalShipments}
                                 </h3>
                             </div>
@@ -130,7 +130,7 @@ export default function DashboardPage() {
                         <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer active:scale-[0.98]">
                             <div>
                                 <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest">In Transit</p>
-                                <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white">
+                                <h3 className="text-3xl font-display font-bold mt-1 text-black dark:text-white">
                                     {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : stats.inTransit}
                                 </h3>
                             </div>
@@ -145,7 +145,7 @@ export default function DashboardPage() {
                         <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer active:scale-[0.98]">
                             <div>
                                 <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest">Pending Action</p>
-                                <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white">
+                                <h3 className="text-3xl font-display font-bold mt-1 text-black dark:text-white">
                                     {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : ((stats as any).pending || 0)}
                                 </h3>
                             </div>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
                         <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer active:scale-[0.98]">
                             <div>
                                 <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest">Total Spent</p>
-                                <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white">
+                                <h3 className="text-3xl font-display font-bold mt-1 text-black dark:text-white">
                                     {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : `$${(stats.totalRevenue || 0).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`}
                                 </h3>
                             </div>
@@ -177,7 +177,7 @@ export default function DashboardPage() {
                     {/* Active Shipments List */}
                     <section className="bg-white dark:bg-navy-900 rounded-xl border border-navy/10 dark:border-navy-700 overflow-hidden flex flex-col shadow-sm">
                         <div className="p-6 border-b border-navy/5 dark:border-navy-800 flex items-center justify-between">
-                            <h3 className="font-display font-medium text-lg text-navy dark:text-white">Active Shipments</h3>
+                            <h3 className="font-display font-bold text-lg text-black dark:text-white">Active Shipments</h3>
                             <Link href="/dashboard/shipments" className="text-navy-700 dark:text-sky-400 text-sm font-medium hover:underline">
                                 View All
                             </Link>
@@ -210,7 +210,7 @@ export default function DashboardPage() {
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex justify-between items-start gap-2">
-                                                        <p className="text-sm font-medium truncate text-navy dark:text-white">
+                                                        <p className="text-sm font-bold truncate text-black dark:text-white">
                                                             {s.trackingNumber || s.id}
                                                         </p>
                                                         <StatusBadge status={s.status} />
@@ -239,7 +239,7 @@ export default function DashboardPage() {
                     {/* Recent Bookings Table */}
                     <section className="bg-white dark:bg-navy-900 rounded-xl border border-navy/10 dark:border-navy-700 overflow-hidden flex flex-col shadow-sm">
                         <div className="p-6 border-b border-navy/5 dark:border-navy-800 flex items-center justify-between">
-                            <h3 className="font-display font-medium text-lg text-navy dark:text-white">Recent Bookings</h3>
+                            <h3 className="font-display font-bold text-lg text-black dark:text-white">Recent Bookings</h3>
                             <Link href="/dashboard/shipments">
                                 <button className="p-2 hover:bg-navy/5 dark:hover:bg-navy-800/50 rounded-lg transition-colors">
                                     <span className="material-symbols-outlined text-navy-400">filter_list</span>
@@ -274,7 +274,7 @@ export default function DashboardPage() {
                                                     className="hover:bg-navy/5 dark:hover:bg-navy-800/50 cursor-pointer transition-colors"
                                                     onClick={() => { setSelectedShipment(s); setIsDrawerOpen(true); }}
                                                 >
-                                                    <td className="px-6 py-4 font-medium text-navy dark:text-white">
+                                                    <td className="px-6 py-4 font-bold text-black dark:text-white">
                                                         {s.trackingNumber ? s.trackingNumber.slice(0, 12) : s.id.slice(0, 8)}
                                                     </td>
                                                     <td className="px-6 py-4 text-navy-700 dark:text-sky-400/80">
