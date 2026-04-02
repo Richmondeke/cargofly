@@ -261,13 +261,6 @@ function TrackingContent({ id }: { id: string }) {
                                 <span className="text-slate-900 dark:text-white">{shipment.packages.reduce((sum, p) => sum + p.weight, 0).toFixed(2)} kg</span>
                             </div>
                             <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700">
-                                <span className="text-slate-500 dark:text-slate-400 text-sm">Dimensions</span>
-                                <span className="text-slate-900 dark:text-white">
-                                    {shipment.packages[0].dimensions.length}x{shipment.packages[0].dimensions.width}x{shipment.packages[0].dimensions.height} cm
-                                    {shipment.packages.length > 1 && ` (+${shipment.packages.length - 1} more)`}
-                                </span>
-                            </div>
-                            <div className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-700">
                                 <span className="text-slate-500 dark:text-slate-400 text-sm">Contents</span>
                                 <span className="text-slate-900 dark:text-white">
                                     {shipment.packages[0].description}
@@ -293,7 +286,9 @@ function TrackingContent({ id }: { id: string }) {
                                     <p className="text-xs text-slate-500 line-clamp-1">{pkg.description}</p>
                                     <div className="mt-3 flex items-center gap-3 text-[10px] font-bold text-slate-400">
                                         <span className="flex items-center gap-1"><Package className="w-3 h-3" /> {pkg.weight}kg</span>
-                                        <span className="flex items-center gap-1"><Info className="w-3 h-3" /> {pkg.dimensions.length}x{pkg.dimensions.width}x{pkg.dimensions.height}cm</span>
+                                        {pkg.dimensions && (
+                                            <span className="flex items-center gap-1"><Info className="w-3 h-3" /> {pkg.dimensions.length}x{pkg.dimensions.width}x{pkg.dimensions.height}cm</span>
+                                        )}
                                     </div>
                                 </div>
                             ))}

@@ -55,9 +55,6 @@ export default function NewBookingPage() {
 
     const [packages, setPackages] = useState([{
         weight: '',
-        length: '',
-        width: '',
-        height: '',
         description: '',
         isFragile: searchParams.get('cargoType')?.toLowerCase() === 'fragile',
     }]);
@@ -101,24 +98,20 @@ export default function NewBookingPage() {
         }
     }, [searchParams]);
 
-    const handlePackageChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = e.target;
+    const handlePackageChange = (index: number, field: string, value: any) => {
         setPackages(prev => {
             const newPackages = [...prev];
             newPackages[index] = {
                 ...newPackages[index],
-                [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+                [field]: value,
             };
             return newPackages;
         });
     };
 
     const addPackage = () => {
-        setPackages(prev => [...prev, {
+        setPackages([...packages, {
             weight: '',
-            length: '',
-            width: '',
-            height: '',
             description: '',
             isFragile: false,
         }]);
@@ -165,12 +158,9 @@ export default function NewBookingPage() {
                 destination: formData.destination,
                 serviceType: formData.serviceType,
                 packageDetails: packages.map(p => ({
-                    weight: parseFloat(p.weight) || 0,
-                    length: parseFloat(p.length) || 0,
-                    width: parseFloat(p.width) || 0,
-                    height: parseFloat(p.height) || 0,
+                    weight: parseFloat(p.weight),
                     description: p.description,
-                    isFragile: p.isFragile,
+                    isFragile: p.isFragile
                 })),
                 sender: {
                     name: formData.senderName,
@@ -184,7 +174,7 @@ export default function NewBookingPage() {
                 },
                 price: {
                     base: basePrice,
-                    fuel: 25,
+                    fuel: 0,
                     total: totalPrice,
                     currency: currency,
                 },
@@ -288,7 +278,7 @@ export default function NewBookingPage() {
         if (!currentRoute) {
             const base = formData.serviceType === 'express' ? 250 : (formData.serviceType === 'standard' ? 150 : 100);
             const weightP = weightToUse * 10;
-            const total = base + weightP + 25;
+            const total = base + weightP;
             return {
                 base,
                 total: isNaN(total) ? 275 : total,
@@ -299,7 +289,7 @@ export default function NewBookingPage() {
         const rate = currentRoute.rate || 0;
         const multiplier = formData.serviceType === 'express' ? 1.5 : (formData.serviceType === 'standard' ? 1 : 0.8);
         const base = rate * weightToUse * multiplier;
-        const total = base + 25;
+        const total = base;
 
         return {
             base,
@@ -480,10 +470,6 @@ export default function NewBookingPage() {
                                 <div className="space-y-6">
                                     {/* Section: Shipment Specifications - per package */}
                                     {packages.map((pkg, index) => {
-                                        const l = parseFloat((pkg as any).length) || 0;
-                                        const w = parseFloat((pkg as any).width) || 0;
-                                        const h = parseFloat((pkg as any).height) || 0;
-                                        const volume = (l * w * h) / 1000000; // cm³ → m³
                                         return (
                                             <div key={index} className="space-y-4">
                                                 {/* Shipment Specifications */}
@@ -505,22 +491,7 @@ export default function NewBookingPage() {
                                                             </button>
                                                         )}
                                                     </div>
-                                                    <div className="px-6 pb-6 grid grid-cols-1 gap-5 md:grid-cols-3">
-                                                        {/* Number of Pieces */}
-                                                        <div className="flex flex-col gap-2">
-                                                            <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Number of Pieces</label>
-                                                            <div className="relative">
-                                                                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">dataset</span>
-                                                                <input
-                                                                    type="number"
-                                                                    name="pieces"
-                                                                    value={(pkg as any).pieces || ''}
-                                                                    onChange={(e) => handlePackageChange(index, e as any)}
-                                                                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
-                                                                    placeholder="e.g. 10"
-                                                                />
-                                                            </div>
-                                                        </div>
+                                                    <div className="px-6 pb-6 grid grid-cols-1 gap-5 md:grid-cols-2">
                                                         {/* Total Weight */}
                                                         <div className="flex flex-col gap-2">
                                                             <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Total Weight (kg)</label>
@@ -530,7 +501,7 @@ export default function NewBookingPage() {
                                                                     type="number"
                                                                     name="weight"
                                                                     value={pkg.weight}
-                                                                    onChange={(e) => handlePackageChange(index, e as any)}
+                                                                    onChange={(e) => handlePackageChange(index, 'weight', e.target.value)}
                                                                     className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
                                                                     placeholder="e.g. 500"
                                                                 />
@@ -544,7 +515,7 @@ export default function NewBookingPage() {
                                                                 <select
                                                                     name="description"
                                                                     value={pkg.description}
-                                                                    onChange={(e) => handlePackageChange(index, e as any)}
+                                                                    onChange={(e) => handlePackageChange(index, 'description', e.target.value)}
                                                                     className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none appearance-none text-sm"
                                                                 >
                                                                     <option value="">Select Type</option>
@@ -560,46 +531,14 @@ export default function NewBookingPage() {
                                                     </div>
                                                 </section>
 
-                                                {/* Dimensions per Piece */}
-                                                <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 shadow-sm overflow-hidden">
-                                                    <div className="p-6 pb-4 flex items-center justify-between">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="material-symbols-outlined text-primary">straighten</span>
-                                                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Dimensions per Piece (cm)</h3>
-                                                        </div>
-                                                        <span className="text-xs font-medium text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">Metric System</span>
-                                                    </div>
-                                                    <div className="px-6 pb-4 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                                                        {['length', 'width', 'height'].map((dim) => (
-                                                            <div key={dim} className="flex flex-col gap-2">
-                                                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 capitalize">{dim}</label>
-                                                                <input
-                                                                    type="number"
-                                                                    name={dim}
-                                                                    value={(pkg as any)[dim]}
-                                                                    onChange={(e) => handlePackageChange(index, e as any)}
-                                                                    className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 py-3 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
-                                                                    placeholder="0"
-                                                                />
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    {/* Volume Calculation */}
-                                                    <div className="px-6 pb-6 mt-2">
-                                                        <div className="flex items-center justify-between rounded-lg bg-primary/5 border border-primary/10 p-4">
-                                                            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Total Volume Calculation:</span>
-                                                            <span className="text-lg font-bold text-primary">{volume.toFixed(4)} m³</span>
-                                                        </div>
-                                                    </div>
-                                                    {/* Fragile toggle */}
-                                                    <div className="px-6 pb-6 flex items-center gap-3">
-                                                        <Checkbox
-                                                            checked={pkg.isFragile}
-                                                            onChange={(e) => handlePackageChange(index, { target: { name: 'isFragile', type: 'checkbox', checked: e.target.checked } } as any)}
-                                                        />
-                                                        <label className="text-sm font-semibold text-slate-600 dark:text-slate-300 cursor-pointer">Fragile handling required</label>
-                                                    </div>
-                                                </section>
+                                                {/* Fragile toggle */}
+                                                <div className="px-6 pb-6 flex items-center gap-3">
+                                                    <Checkbox
+                                                        checked={pkg.isFragile}
+                                                        onChange={(e) => handlePackageChange(index, 'isFragile', e.target.checked)}
+                                                    />
+                                                    <label className="text-sm font-semibold text-slate-600 dark:text-slate-300 cursor-pointer">Fragile handling required</label>
+                                                </div>
                                             </div>
                                         );
                                     })}
@@ -617,9 +556,9 @@ export default function NewBookingPage() {
                                     <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4">
                                         <span className="material-symbols-outlined text-primary mt-0.5">lightbulb</span>
                                         <div className="flex flex-col gap-1">
-                                            <p className="text-sm font-bold text-primary">Pro-Tip: Dimensional Weight</p>
+                                            <p className="text-sm font-bold text-primary">Pro-Tip: Cargo Description</p>
                                             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                                Airlines charge based on the greater of actual weight or dimensional weight. Ensure your measurements are accurate to avoid additional handling fees at the warehouse.
+                                                Accurate descriptions help us ensure your cargo is handled with the correct priority and safety protocols during flight.
                                             </p>
                                         </div>
                                     </div>
@@ -803,12 +742,8 @@ export default function NewBookingPage() {
                                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-5">Final Quote</h3>
                                             <div className="space-y-3 mb-6">
                                                 <div className="flex justify-between items-center text-sm">
-                                                    <span className="text-slate-500">Base Freight</span>
+                                                    <span className="text-slate-500">Service Fee</span>
                                                     <span className="font-semibold text-slate-900 dark:text-white">{currency === 'NGN' ? '₦' : '$'}{basePrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                                                </div>
-                                                <div className="flex justify-between items-center text-sm">
-                                                    <span className="text-slate-500">Fuel Surcharge</span>
-                                                    <span className="font-semibold text-slate-900 dark:text-white">{currency === 'NGN' ? '₦' : '$'}25.00</span>
                                                 </div>
                                                 <div className="border-t border-slate-100 dark:border-slate-800 pt-3 mt-3">
                                                     <div className="flex justify-between items-end">
@@ -951,10 +886,9 @@ export default function NewBookingPage() {
                                             </div>
                                             <div className="space-y-5">
                                                 <div>
-                                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Weight & Volume</p>
+                                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Weight</p>
                                                     <p className="text-slate-900 dark:text-slate-200 font-medium">
-                                                        {packages.reduce((s, p) => s + (parseFloat(p.weight) || 0), 0)} kg •{' '}
-                                                        {packages.reduce((s, p) => s + ((parseFloat((p as any).length) || 0) * (parseFloat((p as any).width) || 0) * (parseFloat((p as any).height) || 0)) / 1000000, 0).toFixed(2)} m³
+                                                        {packages.reduce((s, p) => s + (parseFloat(p.weight) || 0), 0)} kg
                                                     </p>
                                                 </div>
                                                 <div>
@@ -1026,6 +960,6 @@ export default function NewBookingPage() {
                     type={notification.type}
                 />
             </div>
-        </div>
+        </div >
     );
 }

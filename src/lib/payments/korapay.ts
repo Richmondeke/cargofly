@@ -10,6 +10,9 @@ export class KorapayProvider implements PaymentProvider {
     private readonly secretKey: string;
 
     constructor(secretKey: string) {
+        if (!secretKey) {
+            throw new Error("Korapay initialization failed: secretKey is required.");
+        }
         this.secretKey = secretKey;
     }
 

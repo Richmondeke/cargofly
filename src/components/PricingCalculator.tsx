@@ -21,7 +21,6 @@ export default function PricingCalculator() {
     const [origin, setOrigin] = useState("Lagos");
     const [destination, setDestination] = useState("");
     const [weight, setWeight] = useState("");
-    const [dimensions, setDimensions] = useState({ length: "", width: "", height: "" });
     const [service, setService] = useState<"express" | "standard" | "economy">("standard");
     const [isCalculating, setIsCalculating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -104,11 +103,6 @@ export default function PricingCalculator() {
                 destination,
                 serviceType: quote.serviceId as any,
                 weight: parseFloat(weight),
-                dimensions: {
-                    length: parseFloat(dimensions.length) || 0,
-                    width: parseFloat(dimensions.width) || 0,
-                    height: parseFloat(dimensions.height) || 0,
-                },
                 price: quote.price,
                 cargoType,
             });
@@ -174,7 +168,7 @@ export default function PricingCalculator() {
                         </div>
                     </div>
 
-                    {/* Weight & Dimensions */}
+                    {/* Weight & Cargo Type */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="relative">
                             <Scale className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
@@ -238,42 +232,6 @@ export default function PricingCalculator() {
                                 </motion.div>
                             )}
                         </AnimatePresence>
-
-                        <div className="grid grid-cols-3 gap-2">
-                            <div className="relative">
-                                <input
-                                    type="number"
-                                    value={dimensions.length}
-                                    onChange={(e) =>
-                                        setDimensions({ ...dimensions, length: e.target.value })
-                                    }
-                                    placeholder="L (cm)"
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 md:py-4 px-2 md:px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-[10px] md:text-sm"
-                                />
-                            </div>
-                            <div className="relative">
-                                <input
-                                    type="number"
-                                    value={dimensions.width}
-                                    onChange={(e) =>
-                                        setDimensions({ ...dimensions, width: e.target.value })
-                                    }
-                                    placeholder="W (cm)"
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 md:py-4 px-2 md:px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-[10px] md:text-sm"
-                                />
-                            </div>
-                            <div className="relative">
-                                <input
-                                    type="number"
-                                    value={dimensions.height}
-                                    onChange={(e) =>
-                                        setDimensions({ ...dimensions, height: e.target.value })
-                                    }
-                                    placeholder="H (cm)"
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 md:py-4 px-2 md:px-3 text-white placeholder:text-white/30 focus:outline-none focus:border-gold-500/50 transition-all font-body text-center text-[10px] md:text-sm"
-                                />
-                            </div>
-                        </div>
                     </div>
 
                     {/* Service Selection */}

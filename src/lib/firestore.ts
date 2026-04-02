@@ -40,7 +40,7 @@ export interface ShipmentPackage {
     id?: string; // Internal parcel ID
     parcelId?: string; // User-facing tracking ID for Agent sub-users
     weight: number;
-    dimensions: {
+    dimensions?: {
         length: number;
         width: number;
         height: number;

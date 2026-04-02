@@ -101,7 +101,6 @@ export interface Quote {
     serviceType: "express" | "standard" | "economy";
     weight: number;
     cargoType?: string;
-    dimensions: { length: number; width: number; height: number };
     price: number;
     expiresAt: Timestamp;
     createdAt: Timestamp;
@@ -840,9 +839,6 @@ export async function createBooking(
         serviceType: string;
         packageDetails: {
             weight: number;
-            length: number;
-            width: number;
-            height: number;
             description: string;
             isFragile: boolean;
         }[];
@@ -903,11 +899,6 @@ export async function createBooking(
         },
         packages: bookingData.packageDetails.map(p => ({
             weight: p.weight,
-            dimensions: {
-                length: p.length,
-                width: p.width,
-                height: p.height,
-            },
             description: p.description,
             pieces: 1,
             isFragile: p.isFragile,

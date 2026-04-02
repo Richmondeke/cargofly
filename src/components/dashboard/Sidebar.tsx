@@ -49,13 +49,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
 
     const sidebarContent = (
         <aside
-            className={`fixed left-0 top-0 h-screen w-72 bg-[#000080] flex flex-col py-8 px-4 z-50 transition-transform duration-300 ease-in-out md:translate-x-0 overflow-hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+            className={`fixed left-0 top-0 h-screen w-72 bg-[#003399] flex flex-col py-8 px-4 z-50 transition-transform duration-300 ease-in-out md:translate-x-0 overflow-hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
+
             {/* Background Image Overlay */}
             <div
-                className="absolute inset-0 z-0 opacity-40 pointer-events-none bg-repeat brightness-0 invert mix-blend-overlay"
-                style={{ backgroundImage: "url('/Cargofly motif_transparent.png')", backgroundSize: '150px' }}
+                className="absolute inset-0 z-0 opacity-100 pointer-events-none bg-repeat"
+                style={{ backgroundImage: "url('/Cargofly motif_transparent.png')", backgroundSize: '300px' }}
             />
+
 
             <div className="relative z-10 mb-10 px-4 flex justify-between items-center">
                 <Link href="/dashboard" className="flex items-center gap-2">

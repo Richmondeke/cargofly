@@ -69,7 +69,6 @@ export default function QuotesPage() {
                                 </div>
                                 <div className="flex gap-6 text-sm text-slate-500">
                                     <span>{quote.weight} kg</span>
-                                    <span>{quote.dimensions?.length}x{quote.dimensions?.width}x{quote.dimensions?.height} cm</span>
                                     <span className={new Date() > (quote.expiresAt?.toDate ? quote.expiresAt.toDate() : new Date()) ? 'text-red-500' : 'text-green-500'}>
                                         Expires: {quote.expiresAt?.toDate ? quote.expiresAt.toDate().toLocaleDateString() : 'Unknown'}
                                     </span>

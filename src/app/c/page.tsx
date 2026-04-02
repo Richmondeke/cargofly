@@ -74,7 +74,7 @@ export default function LandingPageVariantC() {
               Global Logistics, <span className="text-gold-500">Simplified.</span>
             </h1>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Track your shipments in real-time or book freight across oceans, skies, and roads with a single click.
+              Track your shipments in real-time or book freight across oceans and skies with a single click.
             </p>
           </motion.div>
           <motion.div
@@ -95,7 +95,7 @@ export default function LandingPageVariantC() {
                 className={"px-8 py-3 text-sm font-bold tracking-wide uppercase transition-all duration-300 min-w-[180px] rounded-xl flex items-center justify-center gap-2 " + (activeTab === 'book' ? 'bg-white text-primary shadow-md' : 'text-white/80 hover:text-white hover:bg-white/5')}
                 onClick={() => setActiveTab('book')}
               >
-                <span className="material-symbols-outlined text-lg">local_shipping</span>
+                <span className="material-symbols-outlined text-lg">flight</span>
                 Book Freight
               </button>
             </div>

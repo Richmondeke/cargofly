@@ -82,46 +82,51 @@ export default function DashboardPage() {
             <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8">
 
                 {/* Announcement Banner */}
-                <section className="relative overflow-hidden rounded-xl bg-navy p-10 sm:p-14 flex items-center justify-between group min-h-[300px]">
+                <section className="relative overflow-hidden rounded-2xl bg-[#003399] p-10 sm:p-14 flex items-center justify-between group min-h-[340px]">
                     {/* Motif Background Overlay */}
                     <div
-                        className="absolute inset-0 z-0 pointer-events-none bg-repeat mix-blend-lighten opacity-100"
+                        className="absolute inset-0 z-0 pointer-events-none bg-repeat opacity-100"
                         style={{
                             backgroundImage: "url('/Cargofly motif_transparent.png')",
-                            backgroundSize: '150px'
+                            backgroundSize: '300px'
                         }}
                     />
 
-                    <div className="z-10 relative space-y-4 w-full sm:w-auto">
-                        <span className="inline-block px-3 py-1 bg-gold-500 text-navy-900 text-[10px] font-medium uppercase tracking-widest rounded">
+                    <div className="z-10 relative space-y-6 w-full sm:w-auto">
+                        <span className="inline-block px-3 py-1 bg-gold-500 text-navy-900 text-[10px] font-bold uppercase tracking-[0.2em] rounded">
                             Route Expansion
                         </span>
-                        <h2 className="text-white text-2xl sm:text-3xl font-display font-medium leading-tight">
+                        <h2 className="text-white text-4xl sm:text-5xl font-display font-medium leading-[1.1] tracking-tight">
                             New Route to Ghana <br className="hidden sm:block" />
                             Starting Next Month
                         </h2>
-                        <p className="text-white/80 max-w-md text-sm">
+                        <p className="text-white/80 max-w-md text-lg leading-relaxed">
                             Book your cargo space early to take advantage of introductory low rates for our new daily service.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                        <div className="flex flex-col sm:flex-row gap-4 pt-4">
                             <Link href="/dashboard/new-booking" className="w-full sm:w-auto">
-                                <button className="w-full bg-gold-500 text-navy-900 px-8 py-4 rounded-2xl font-medium text-sm hover:brightness-110 transition-all shadow-xl shadow-gold-500/20 active:scale-95 cursor-pointer">
+                                <button className="w-full bg-gold-500 text-navy-900 px-10 py-4.5 rounded-2xl font-bold text-sm hover:brightness-110 transition-all shadow-2xl shadow-gold-500/30 active:scale-95 cursor-pointer">
                                     Book This Route
                                 </button>
                             </Link>
-                            <button className="w-full sm:w-auto bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl font-medium text-sm hover:bg-white/20 transition-all active:scale-95 cursor-pointer">
+                            <button className="w-full sm:w-auto bg-white/10 backdrop-blur-xl text-white border border-white/20 px-10 py-4.5 rounded-2xl font-bold text-sm hover:bg-white/20 transition-all active:scale-95 cursor-pointer">
                                 Learn More
                             </button>
                         </div>
                     </div>
                     <div
-                        className="absolute right-0 top-0 h-full w-1/3 sm:w-2/5 opacity-100 pointer-events-none transition-transform group-hover:scale-105 duration-700 z-10"
+                        className="absolute right-0 top-0 h-full w-1/3 sm:w-1/2 opacity-100 pointer-events-none transition-transform group-hover:scale-105 duration-700 z-10"
                         style={{
-                            backgroundImage: "url('/images/hero-aircraft.png')",
+                            backgroundImage: "url('/Cargofly.jpg')",
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
+                            maskImage: 'linear-gradient(to left, black 60%, transparent 100%)',
+                            WebkitMaskImage: 'linear-gradient(to left, black 60%, transparent 100%)'
                         }}
-                    />
+                    >
+                        {/* Shadow overlay to blend with the blue side */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#003399]/40 to-transparent" />
+                    </div>
                 </section>
 
                 {/* Quick Action Bar */}
@@ -152,13 +157,13 @@ export default function DashboardPage() {
                     <Link href="/dashboard/shipments" className="block">
                         <div className="bg-white dark:bg-navy-900 p-6 rounded-xl border border-navy/10 dark:border-navy-700 flex items-center justify-between shadow-sm hover:shadow-md transition-all group cursor-pointer active:scale-[0.98]">
                             <div className="min-w-0">
-                                <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest truncate">Global Shipments</p>
+                                <p className="text-[10px] font-medium text-navy-700/50 dark:text-sky-400/50 uppercase tracking-widest truncate">Flight Operations</p>
                                 <h3 className="text-3xl font-display font-medium mt-1 text-navy dark:text-white flex items-baseline gap-1">
                                     {(!mounted || loading) ? <span className="animate-pulse text-navy-100">—</span> : stats.totalShipments}
                                 </h3>
                             </div>
                             <div className="size-14 bg-navy/5 dark:bg-navy-800 rounded-2xl flex-shrink-0 flex items-center justify-center text-navy dark:text-sky-400 group-hover:scale-110 transition-transform">
-                                <span className="material-symbols-outlined text-3xl">local_shipping</span>
+                                <span className="material-symbols-outlined text-3xl">flight</span>
                             </div>
                         </div>
                     </Link>
