@@ -81,7 +81,7 @@ export default function FinancialPage() {
             >
                 <button
                     onClick={handleExport}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-all shadow-md active:scale-95"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:-translate-y-1 hover:scale-[1.02] transition-all active:scale-[0.98] cursor-pointer"
                 >
                     <span className="material-symbols-outlined text-lg">download</span>
                     Export Report
@@ -90,43 +90,43 @@ export default function FinancialPage() {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="p-3 rounded-xl bg-sky-100 dark:bg-sky-900/30">
-                            <span className="material-symbols-outlined text-sky-600 dark:text-sky-400">payments</span>
+                        <div className="p-3 rounded-xl bg-sky-100 dark:bg-sky-900/30 group-hover:bg-primary/10 transition-colors">
+                            <span className="material-symbols-outlined text-sky-600 dark:text-sky-400 group-hover:text-primary transition-colors">payments</span>
                         </div>
-                        <span className="text-sm text-slate-500 font-medium">Total Revenue</span>
+                        <span className="text-sm text-slate-500 font-bold uppercase tracking-tight">Total Revenue</span>
                     </div>
                     {loading ? (
                         <div className="h-8 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
                     ) : (
-                        <p className="text-2xl font-medium text-slate-900 dark:text-white">{formatCurrency(stats.totalRevenue)}</p>
+                        <p className="text-2xl font-black text-black dark:text-white">{formatCurrency(stats.totalRevenue)}</p>
                     )}
                 </div>
-                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="p-3 rounded-xl bg-gold-100 dark:bg-gold-500/20">
-                            <span className="material-symbols-outlined text-gold-600 dark:text-gold-400">pending</span>
+                        <div className="p-3 rounded-xl bg-gold-100 dark:bg-gold-500/20 group-hover:bg-gold-500/30 transition-colors">
+                            <span className="material-symbols-outlined text-gold-600 dark:text-gold-400 group-hover:text-gold-700 transition-colors">pending</span>
                         </div>
-                        <span className="text-sm text-slate-500 font-medium">Pending Payments</span>
+                        <span className="text-sm text-slate-500 font-bold uppercase tracking-tight">Pending Payments</span>
                     </div>
                     {loading ? (
                         <div className="h-8 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
                     ) : (
-                        <p className="text-2xl font-medium text-slate-900 dark:text-white">{formatCurrency(stats.pendingPayments)}</p>
+                        <p className="text-2xl font-black text-black dark:text-white">{formatCurrency(stats.pendingPayments)}</p>
                     )}
                 </div>
-                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
+                <div className="bg-white dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="p-3 rounded-xl bg-gold-100 dark:bg-gold-900/30">
-                            <span className="material-symbols-outlined text-gold-600 dark:text-gold-400">receipt_long</span>
+                        <div className="p-3 rounded-xl bg-gold-100 dark:bg-gold-900/30 group-hover:bg-gold-500/20 transition-colors">
+                            <span className="material-symbols-outlined text-gold-600 dark:text-gold-400 group-hover:text-gold-700 transition-colors">receipt_long</span>
                         </div>
-                        <span className="text-sm text-slate-500 font-medium">Paid Invoices</span>
+                        <span className="text-sm text-slate-500 font-bold uppercase tracking-tight">Paid Invoices</span>
                     </div>
                     {loading ? (
                         <div className="h-8 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
                     ) : (
-                        <p className="text-2xl font-medium text-slate-900 dark:text-white">{stats.paidInvoices}</p>
+                        <p className="text-2xl font-black text-black dark:text-white">{stats.paidInvoices}</p>
                     )}
                 </div>
             </div>
@@ -210,10 +210,10 @@ export default function FinancialPage() {
                                 ))
                             ) : invoices.length > 0 ? (
                                 invoices.slice(0, 5).map((inv) => (
-                                    <tr key={inv.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                        <td className="px-6 py-5 font-medium text-primary">{inv.invoiceNumber}</td>
-                                        <td className="px-6 py-5 text-slate-900 dark:text-white">{inv.customerName}</td>
-                                        <td className="px-6 py-5 font-medium">{formatCurrency(inv.amount)}</td>
+                                    <tr key={inv.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:pl-8 transition-all duration-300 group cursor-pointer">
+                                        <td className="px-6 py-5 font-bold text-primary group-hover:scale-105 transition-transform origin-left">{inv.invoiceNumber}</td>
+                                        <td className="px-6 py-5 text-black dark:text-white font-bold">{inv.customerName}</td>
+                                        <td className="px-6 py-5 font-black text-black dark:text-white">{formatCurrency(inv.amount)}</td>
                                         <td className="px-6 py-5">
                                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${inv.status === 'paid'
                                                 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'

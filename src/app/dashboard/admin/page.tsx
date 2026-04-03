@@ -106,7 +106,7 @@ export default function AdminPage() {
                         <div
                             key={idx}
                             onClick={() => router.push(stat.path)}
-                            className="bg-white dark:bg-[#1e293b] p-6 rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] border border-slate-100 dark:border-white/5 relative overflow-hidden group cursor-pointer hover:shadow-lg transition-all active:scale-[0.98]"
+                            className="bg-white dark:bg-[#1e293b] p-6 rounded-2xl shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] border border-slate-100 dark:border-white/5 relative overflow-hidden group cursor-pointer hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 active:scale-[0.98]"
                         >
                             <div className={`absolute top-0 left-0 w-1 h-full bg-${stat.color}-500 opacity-0 group-hover:opacity-100 transition-opacity`} />
                             <div className="flex justify-between items-start mb-4">
@@ -114,8 +114,8 @@ export default function AdminPage() {
                                     <span className={`material-symbols-outlined text-lg text-${stat.color}-600 dark:text-${stat.color}-400`}>{stat.icon}</span>
                                 </div>
                             </div>
-                            <p className="text-slate-400 text-[10px] font-medium uppercase tracking-widest mb-1">{stat.label}</p>
-                            <h3 className="text-2xl font-medium text-slate-900 dark:text-white tracking-tighter">
+                            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">{stat.label}</p>
+                            <h3 className="text-2xl font-black text-black dark:text-white tracking-tighter">
                                 {loading ? '...' : stat.value}
                             </h3>
                         </div>
@@ -157,9 +157,9 @@ export default function AdminPage() {
                                             <tr
                                                 key={idx}
                                                 onClick={() => router.push(`/dashboard/admin/shipments?search=${shipment.id}`)}
-                                                className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group cursor-pointer"
+                                                className="hover:bg-slate-50 dark:hover:bg-white/5 hover:pl-8 transition-all duration-300 group cursor-pointer"
                                             >
-                                                <td className="px-6 py-5 text-sm font-medium text-slate-900 dark:text-blue-300 group-hover:text-primary transition-colors">{shipment.id.slice(0, 10)}</td>
+                                                <td className="px-6 py-5 text-sm font-bold text-black dark:text-blue-300 group-hover:text-primary transition-colors">{shipment.id.slice(0, 10)}</td>
                                                 <td className="px-6 py-5">
                                                     <div className="flex items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300">
                                                         <span>{shipment.origin}</span>
@@ -205,7 +205,7 @@ export default function AdminPage() {
                                             ))
                                         ) : (
                                             users.map((u, idx) => (
-                                                <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+                                                <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-white/5 hover:pl-8 transition-all duration-300 group">
                                                     <td className="px-6 py-5">
                                                         <div className="flex items-center gap-3">
                                                             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-xs">
@@ -273,7 +273,7 @@ export default function AdminPage() {
                                                 </td>
                                             </tr>
                                         ) : activities.map((act, idx) => (
-                                            <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+                                            <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-white/5 hover:pl-8 transition-all duration-300 group">
                                                 <td className="px-6 py-4">
                                                     <div className="flex flex-col gap-1">
                                                         <p className="text-xs font-medium text-slate-900 dark:text-white uppercase tracking-tight">{act.action}</p>
@@ -307,7 +307,7 @@ export default function AdminPage() {
                             </div>
                         </section>
 
-                        <section className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg border border-slate-200 dark:border-white/5 bg-navy-900 flex flex-col" onClick={() => router.push('/dashboard/admin/announcements')}>
+                        <section className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 border border-slate-200 dark:border-white/5 bg-navy-900 flex flex-col" onClick={() => router.push('/dashboard/admin/announcements')}>
                             <div className="h-48 overflow-hidden relative">
                                 <img
                                     src="/images/hero-plane.png"

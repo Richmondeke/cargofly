@@ -18,6 +18,24 @@
             "order": "DESCENDING"
           }
         ]
+      },
+      {
+        "collectionGroup": "blogs",
+        "queryScope": "COLLECTION_GROUP",
+        "fields": [
+          {
+            "fieldPath": "isPublished",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "createdAt",
+            "order": "DESCENDING"
+          },
+          {
+            "fieldPath": "__name__",
+            "order": "DESCENDING"
+          }
+        ]
       }
     ],
     "fieldOverrides": []

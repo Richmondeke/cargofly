@@ -21,6 +21,7 @@ import { db } from "./firebase";
 export interface Wallet {
     balanceUSD: number;
     balanceNGN: number;
+    kycStatus?: 'none' | 'pending' | 'verified';
     updatedAt: Timestamp;
 }
 
@@ -364,5 +365,15 @@ export async function convertCurrency(
         });
 
         return txnDoc.id;
+    });
+}
+/**
+ * Updates the KYC status for a user's wallet
+ */
+export async function updateKYCStatus(userId: string, status: Wallet['kycStatus']) {
+    const walletRef = doc(db, "wallets", userId);
+    await updateDoc(walletRef, {
+        kycStatus: status,
+        updatedAt: serverTimestamp()
     });
 }

@@ -174,7 +174,7 @@ export default function ShipmentsPage() {
                         </p>
                     </div>
                     <Link href="/dashboard/new-booking">
-                        <button className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-medium text-sm shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all">
+                        <button className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-xl shadow-primary/20 hover:-translate-y-1 hover:scale-[1.02] transition-all active:scale-[0.98] cursor-pointer">
                             <span className="material-symbols-outlined text-[20px]">add</span>
                             New Shipment
                         </button>
@@ -288,9 +288,9 @@ export default function ShipmentsPage() {
                                     ))
                                 ) : paginated.length > 0 ? (
                                     paginated.map(s => (
-                                        <tr key={s.id} className="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <tr key={s.id} className="group hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:pl-8 transition-all duration-300">
                                             <td className="px-6 py-5">
-                                                <div className="font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                                <div className="font-bold text-black dark:text-white group-hover:text-primary transition-colors">
                                                     {s.trackingNumber || s.id}
                                                 </div>
                                                 <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{getCommodity(s)}</div>
@@ -321,21 +321,21 @@ export default function ShipmentsPage() {
                                                 <div className="flex items-center justify-end gap-1">
                                                     <Link
                                                         href={`/dashboard/track/${s.id.replace('#', '').replace('CF-', '')}`}
-                                                        className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                                        className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-110 transition-all"
                                                         title="Track on map"
                                                     >
                                                         <span className="material-symbols-outlined text-[20px]">location_on</span>
                                                     </Link>
                                                     <button
                                                         onClick={() => { setSelectedShipment(s); setIsDrawerOpen(true); }}
-                                                        className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                                        className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-110 transition-all"
                                                         title="View documents"
                                                     >
                                                         <span className="material-symbols-outlined text-[20px]">description</span>
                                                     </button>
                                                     <button
                                                         onClick={() => { setSelectedShipment(s); setIsDrawerOpen(true); }}
-                                                        className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                                        className="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-110 transition-all"
                                                         title="More options"
                                                     >
                                                         <span className="material-symbols-outlined text-[20px]">more_vert</span>

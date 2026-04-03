@@ -70,7 +70,7 @@ export default function SupportPage() {
                         className="w-full sm:w-auto"
                     >
                         <Link href="/dashboard/support/new" className="flex items-center gap-2">
-                            <Plus className="w-4 h-4" />
+                            <Plus className="w-5 h-5" />
                             New Ticket
                         </Link>
                     </Button>
@@ -82,9 +82,9 @@ export default function SupportPage() {
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all ${filter === f
-                                ? 'bg-primary text-white'
-                                : 'bg-white dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                            className={`px-5 py-2.5 rounded-xl font-bold text-sm tracking-tight transition-all duration-300 ${filter === f
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02]'
+                                : 'bg-white dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:scale-[1.02]'
                                 }`}
                         >
                             {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -120,7 +120,7 @@ export default function SupportPage() {
                         <div className="grid grid-cols-1 gap-6">
                             {filteredTickets.map((ticket) => (
                                 <Link key={ticket.id} href={`/dashboard/support/${ticket.id}`} className="group block">
-                                    <Card variant="default" className="p-6 group-hover:border-primary/50 group-hover:shadow-xl transition-all border-none shadow-md shadow-slate-200/40 dark:shadow-none">
+                                    <Card variant="default" className="p-6 group-hover:border-primary/50 group-hover:shadow-2xl group-hover:-translate-y-1 transition-all duration-500 border-none shadow-md shadow-slate-200/40 dark:shadow-none cursor-pointer">
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                             <div className="flex gap-4 items-start text-left">
                                                 <div className="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl group-hover:bg-primary/5 transition-colors">
@@ -132,7 +132,7 @@ export default function SupportPage() {
                                                         <span className="w-1 h-1 rounded-full bg-slate-300" />
                                                         <span className="text-[10px] font-medium text-slate-500 uppercase tracking-widest">{ticket.category}</span>
                                                     </div>
-                                                    <h4 className="text-lg font-medium text-slate-900 dark:text-white group-hover:text-primary transition-colors tracking-tight">
+                                                    <h4 className="text-lg font-bold text-black dark:text-white group-hover:text-primary transition-colors tracking-tight">
                                                         {ticket.subject}
                                                     </h4>
                                                     <div className="flex items-center gap-4 mt-2">

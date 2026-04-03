@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSearchParams } from 'next/navigation';
+import { subscribeToWallet, Wallet } from '@/lib/wallet-service';
 import { getUserSettings, updateUserSettings, getTeamMembers, inviteTeamMember, TeamMember } from '@/lib/dashboard-service';
 import EmptyState from '@/components/common/EmptyState';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { UserPlus } from 'lucide-react';
+import { UserPlus, Loader2 } from 'lucide-react';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import KYCVerification from '@/components/dashboard/KYCVerification';
 import {
     requestPushPermission,
     getNotificationPermission,
@@ -107,11 +110,21 @@ function InviteModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (
 /* ─────────────────────────────────────────────────────────────────────────── */
 /*  Main Page                                                                   */
 /* ─────────────────────────────────────────────────────────────────────────── */
-type SettingsSection = 'profile' | 'company' | 'notifications' | 'security' | 'team';
+type SettingsSection = 'profile' | 'company' | 'notifications' | 'security' | 'team' | 'kyc';
 
 export default function SettingsPage() {
+    return (
+        <Suspense fallback={<div className="p-8"><Loader2 className="w-8 h-8 animate-spin" /></div>}>
+            <SettingsContent />
+        </Suspense>
+    );
+}
+
+function SettingsContent() {
     const { user, userProfile } = useAuth();
+    const searchParams = useSearchParams();
     const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
+    const [wallet, setWallet] = useState<Wallet | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [pushStatus, setPushStatus] = useState<'checking' | 'unsupported' | 'denied' | 'granted' | 'default'>('checking');
@@ -204,6 +217,21 @@ export default function SettingsPage() {
         }
         checkPushStatus();
     }, []);
+
+    useEffect(() => {
+        if (!user?.uid) return;
+        const unsubscribe = subscribeToWallet(user.uid, (data) => {
+            setWallet(data);
+        });
+        return () => unsubscribe();
+    }, [user?.uid]);
+
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (tab === 'kyc') {
+            setActiveSection('kyc');
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         if (pushStatus !== 'granted') return;
@@ -327,6 +355,7 @@ export default function SettingsPage() {
         { id: 'company', label: 'Company Details', icon: 'business' },
         { id: 'notifications', label: 'Notifications', icon: 'notifications' },
         { id: 'security', label: 'Security', icon: 'shield' },
+        { id: 'kyc', label: 'KYC Verification', icon: 'verified_user' },
         ...(userProfile?.role === 'admin' ? [{ id: 'team' as SettingsSection, label: 'Team Members', icon: 'group', adminOnly: true }] : []),
     ];
 
@@ -823,6 +852,40 @@ export default function SettingsPage() {
                                             )}
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ── KYC VERIFICATION ── */}
+                        {activeSection === 'kyc' && (
+                            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700">
+                                    <h2 className="text-lg font-medium text-slate-900 dark:text-white flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-xl">verified_user</span>
+                                        Identity Verification (KYC)
+                                    </h2>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Verified accounts enjoy higher limits and faster processing</p>
+                                </div>
+                                <div className="p-6">
+                                    {wallet?.kycStatus === 'verified' ? (
+                                        <div className="text-center py-10 bg-green-50 dark:bg-green-900/10 rounded-2xl border border-green-100 dark:border-green-900/20">
+                                            <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto text-green-600 mb-4">
+                                                <CheckCircle2 className="w-10 h-10" />
+                                            </div>
+                                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Account Verified</h3>
+                                            <p className="text-slate-500 dark:text-slate-400 mt-2">Your account has been fully verified. Thank you!</p>
+                                        </div>
+                                    ) : wallet?.kycStatus === 'pending' ? (
+                                        <div className="text-center py-10 bg-blue-50 dark:bg-blue-900/10 rounded-2xl border border-blue-100 dark:border-blue-900/20">
+                                            <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto text-blue-600 mb-4">
+                                                <Loader2 className="w-10 h-10 animate-spin" />
+                                            </div>
+                                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Verification Pending</h3>
+                                            <p className="text-slate-500 dark:text-slate-400 mt-2">We are currently reviewing your documents. This usually takes 24-48 hours.</p>
+                                        </div>
+                                    ) : (
+                                        <KYCVerification userId={user?.uid || ''} onComplete={() => setActiveSection('profile')} />
+                                    )}
                                 </div>
                             </div>
                         )}
