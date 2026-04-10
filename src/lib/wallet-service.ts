@@ -13,6 +13,7 @@ import {
     serverTimestamp,
     onSnapshot,
     runTransaction,
+    updateDoc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 

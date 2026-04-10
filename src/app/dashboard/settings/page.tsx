@@ -8,7 +8,7 @@ import { getUserSettings, updateUserSettings, getTeamMembers, inviteTeamMember, 
 import EmptyState from '@/components/common/EmptyState';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { UserPlus, Loader2 } from 'lucide-react';
+import { UserPlus, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import KYCVerification from '@/components/dashboard/KYCVerification';
 import {
@@ -29,7 +29,7 @@ import { Label } from "@/components/ui/Label";
 import { Select } from "@/components/ui/Select";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { SuccessModal } from "@/components/common/SuccessModal";
-import { AlertCircle } from "lucide-react";
+
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 /*  Invite Modal (unchanged)                                                    */
