@@ -78,21 +78,6 @@ export default function ServiceCard({
                     ))}
                 </ul>
 
-                {/* CTA */}
-                <Link href={href}>
-                    <motion.button
-                        whileHover={{ x: 4 }}
-                        className={cn(
-                            "flex items-center gap-2 text-sm font-semibold uppercase tracking-wider transition-colors",
-                            featured
-                                ? "text-navy-900 dark:text-gold-400 hover:text-navy-800 dark:hover:text-gold-300"
-                                : "text-navy-900/70 dark:text-white/60 hover:text-navy-900 dark:hover:text-gold-400"
-                        )}
-                    >
-                        Learn More
-                        <ArrowRight className="w-4 h-4" />
-                    </motion.button>
-                </Link>
             </div>
 
             {/* Hover Glow Effect */}

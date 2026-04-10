@@ -67,12 +67,6 @@ export default function Products() {
                                     Access Console
                                     <ArrowRight className="w-4 h-4" />
                                 </Link>
-                                <Link
-                                    href="/products/cargo-os"
-                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white border border-gray-200 text-navy-900 px-10 py-5 rounded-[2rem] font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all"
-                                >
-                                    Learn More
-                                </Link>
                             </div>
                         </div>
                     </motion.div>

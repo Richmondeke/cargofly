@@ -6,6 +6,7 @@ import { X, Package, Truck, MapPin, DollarSign, AlertCircle, Image as ImageIcon,
 import Image from 'next/image';
 import { DashboardShipment } from '@/lib/dashboard-service';
 import { StatusPill } from './StatusPill';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ShipmentDetailsDrawerProps {
     isOpen: boolean;
@@ -24,8 +25,50 @@ export function ShipmentDetailsDrawer({
     onUploadMedia,
     onRefresh
 }: ShipmentDetailsDrawerProps) {
+    const { user } = useAuth();
     const [uploading, setUploading] = useState(false);
     const [verifying, setVerifying] = useState(false);
+    const [paying, setPaying] = useState(false);
+
+    const handleInitializePayment = async () => {
+        if (!shipment || !user || paying) return;
+        setPaying(true);
+        try {
+            // Extract numeric amount from string if necessary
+            const amount = typeof shipment.totalPrice === 'string'
+                ? parseFloat(shipment.totalPrice.replace(/[^0-9.]/g, ''))
+                : shipment.totalPrice || 0;
+
+            const response = await fetch('/api/payments/initialize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: amount,
+                    currency: shipment.totalPrice?.toString().includes('₦') ? 'NGN' : 'USD',
+                    customer: {
+                        name: user.displayName || 'Customer',
+                        email: user.email
+                    },
+                    description: `Payment for Shipment #${shipment.trackingNumber}`,
+                    metadata: {
+                        trackingNumber: shipment.trackingNumber,
+                        userId: user.uid
+                    }
+                })
+            });
+
+            const result = await response.json();
+            if (result.status && result.data?.checkout_url) {
+                window.location.href = result.data.checkout_url;
+            } else {
+                throw new Error(result.message || "Failed to initialize payment");
+            }
+        } catch (error) {
+            console.error("Payment initialization failed:", error);
+        } finally {
+            setPaying(false);
+        }
+    };
 
     const handleVerifyPayment = React.useCallback(async () => {
         if (!shipment?.trackingNumber || verifying) return;
@@ -280,7 +323,23 @@ export function ShipmentDetailsDrawer({
                         </div>
 
                         {/* Footer */}
-                        <div className="p-6 border-t border-navy/10 dark:border-white/10 bg-navy-50/50 dark:bg-navy-950/50">
+                        <div className="p-6 border-t border-navy/10 dark:border-white/10 bg-navy-50/50 dark:bg-navy-950/50 space-y-3">
+                            {shipment.paymentStatus !== 'paid' && (
+                                <button
+                                    onClick={handleInitializePayment}
+                                    disabled={paying}
+                                    className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl text-sm transition-all shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                                >
+                                    {paying ? (
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    ) : (
+                                        <>
+                                            <DollarSign className="w-4 h-4" />
+                                            PAY NOW
+                                        </>
+                                    )}
+                                </button>
+                            )}
                             <button
                                 onClick={onClose}
                                 className="w-full py-4 bg-navy dark:bg-white text-white dark:text-navy-900 font-medium rounded-2xl text-sm transition-all shadow-xl shadow-navy/10 dark:shadow-white/5 hover:-translate-y-0.5 cursor-pointer"

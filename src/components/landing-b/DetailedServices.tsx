@@ -103,11 +103,6 @@ export default function DetailedServices() {
                                     <p className="text-xl text-navy-900/60 leading-relaxed font-medium mb-8">
                                         {category.description}
                                     </p>
-
-                                    <div className="flex items-center gap-3 text-blue-600 font-bold text-sm uppercase tracking-widest group-hover:gap-5 transition-all">
-                                        Learn More
-                                        <ArrowRight className="w-4 h-4" />
-                                    </div>
                                 </div>
                             </motion.div>
                         </Link>
